@@ -10,9 +10,8 @@
 ## 1. 开通 Cloud Studio
 - 方式一：腾讯云控制台顶部搜索「Cloud Studio」→ 进入产品页 → 用同一账号登录
 - 方式二：直接访问 cloudstudio.net → 用腾讯云/微信登录
-- 首次进入选一个**免费工作空间**模板：**开发环境选「Node.js」，Node 版本选 22（或最新 LTS）**
-  - ⚠️ 本项目需要 **Node >= 22.5**（内置 SQLite 要求）；**别选 Node 18/20**
-  - 若模板列表没有 Node：选「空白/自定义」，进终端后 `nvm install 22 && nvm use 22 && node -v` 确认
+- 首次进入选一个**免费工作空间**模板：开发环境选 **Node.js**（如只有 **ws node18** 也没问题，本项目 Node ≥ 18 即可）
+  - 依赖 better-sqlite3 自带预编译二进制，Node 18 无需任何额外配置
   - 其它模板（Python/Java 等）与本项目无关，不用管
 
 ## 2. 从 GitHub 导入仓库
