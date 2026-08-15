@@ -1,0 +1,45 @@
+# 部署指南 A · CloudStudio（国内免费）
+
+> CloudStudio 是腾讯云旗下的在线开发空间（就是你上一个网站用的平台）。
+> 免费工作空间可能**休眠**（长时间无访问会停），需要"保活"——本文第 5 步给方案。
+
+## 0. 前置
+- 你已注册腾讯云账号（console.cloud.tencent.com 登录）
+- 代码已推到 GitHub（见 `deploy-github-push.md` 或仓库根 README）
+
+## 1. 开通 Cloud Studio
+- 方式一：腾讯云控制台顶部搜索「Cloud Studio」→ 进入产品页 → 用同一账号登录
+- 方式二：直接访问 cloudstudio.net → 用腾讯云/微信登录
+- 首次进入选一个**免费工作空间**模板：选 **Node.js** 或「Web 前端」类模板（若没有就选空白/全栈模板，能开终端就行）
+
+## 2. 从 GitHub 导入仓库
+- 在 Cloud Studio 工作空间列表 →「新建工作空间」→ 来源选 **GitHub 仓库** → 选 `chenzunxuan06/lexirise`
+- 或在工作空间终端里直接克隆：
+  ```bash
+  git clone https://github.com/chenzunxuan06/lexirise.git && cd lexirise
+  ```
+
+## 3. 一键部署
+在空间终端执行（项目根目录，即含 package.json 的目录）：
+```bash
+bash scripts/deploy-linux.sh
+```
+脚本会：装依赖 → 构建 → PM2 启动（端口 3000）。
+
+## 4. 公网访问
+- Cloud Studio 一般提供「端口转发 / 公网访问」：在空间面板找到端口 3000 → 开启公网访问 → 得到一个形如 `https://xxxx.cloudstudio.work` 的地址
+- 把这个地址收藏/分享即可
+- ⚠️ 数据库在空间磁盘里，**备份**：在服务器上配置定时执行 `node scripts/backup_db.mjs`（cron），把备份文件下载到本地（管理后台也能一键下载 .db）
+
+## 5. 保活（免费空间休眠问题）
+空间休眠后访问会慢/需要重新唤醒。方案：
+- **定时唤醒**：用任意免费定时服务（如 UptimeRobot、cron-job.org）每 5~10 分钟 GET 一次你的公网地址 —— 同时还能监控网站存活
+- 或 Cloud Studio 付费版/升级空间免除（看你自己预算）
+
+## 6. 常见问题
+| 问题 | 解决 |
+| --- | --- |
+| 端口被占用 | `pm2 kill` 后重新 `pm2 start ecosystem.config.cjs` |
+| 公网打不开 | 确认 3000 端口公网访问已开启；`curl localhost:3000` 先本地验证 |
+| 数据丢了？ | 工作空间重置会丢数据 —— **务必定时备份**（第 4 步） |
+| 升级/迁移 | 备份 user.db → 新空间放回 `data/user.db` → 重启 |

@@ -90,6 +90,25 @@ export default function AdminPage() {
         <div className="empty-state">
           <p>⛔ 无权限访问管理后台</p>
           <p style={{ fontSize: 13 }}>需要管理员账号。请联系网站所有者。</p>
+          <button
+            className="start-btn"
+            style={{ marginTop: 14 }}
+            onClick={async () => {
+              const r = await fetch("/api/admin/promote", { method: "POST" });
+              const d = await r.json();
+              if (r.ok) {
+                sync.notify();
+                window.location.reload();
+              } else {
+                setError(d.error || "无法成为管理员");
+              }
+            }}
+          >
+            🎉 我是第一个用户，成为管理员
+          </button>
+          <p style={{ fontSize: 12, color: "var(--text-soft)", marginTop: 10 }}>
+            仅当系统还没有管理员时可用（首个注册用户引导）
+          </p>
         </div>
       </div>
     );
