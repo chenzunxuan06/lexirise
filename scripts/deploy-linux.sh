@@ -6,7 +6,12 @@ set -e
 cd "$(dirname "$0")/.."
 
 echo "== 0/4 检查 Node 版本 (需要 >=22.5) =="
-node -v || { echo "请先安装 Node.js >=22.5"; exit 1; }
+node -v || { echo "请先安装 Node.js >=22.5（如: nvm install 22 && nvm use 22）"; exit 1; }
+V=$(node -p "process.versions.node.split('.')[0]")
+if [ "$V" -lt 22 ]; then
+  echo "❌ 当前 Node 版本过低（node:sqlite 需要 >=22.5）。请升级: nvm install 22 && nvm use 22"
+  exit 1
+fi
 
 echo "== 1/4 安装依赖 =="
 npm ci --omit=dev || npm install
