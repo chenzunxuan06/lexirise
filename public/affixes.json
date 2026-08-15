@@ -1,0 +1,5614 @@
+{
+ "desc": "词跃 LexiRise 词根词缀词典（面向初中生，沪教牛津版词库）",
+ "prefixes": [
+  {
+   "key": "un",
+   "meaning": "不、无；做相反动作",
+   "en": "not; reverse",
+   "count": 4,
+   "examples": [
+    {
+     "id": 321,
+     "w": "unlock",
+     "def": "发现；揭示",
+     "g": 7,
+     "hint": "un-(打开) + lock(锁) → 开锁"
+    },
+    {
+     "id": 777,
+     "w": "unfamiliar",
+     "def": "陌生的；不熟悉的",
+     "g": 8,
+     "hint": "un-(不) + familiar(熟悉的) → 不熟悉的"
+    },
+    {
+     "id": 938,
+     "w": "uncomfortable",
+     "def": "不自在的",
+     "g": 8,
+     "hint": "un-(不) + comfort(舒适) + -able(能……的) → 不舒服的"
+    },
+    {
+     "id": 1113,
+     "w": "unnecessary",
+     "def": "不需要的；不必要的；多余的",
+     "g": 8,
+     "hint": "un-(不) + necessary(必要的) → 不必要的"
+    }
+   ]
+  },
+  {
+   "key": "re",
+   "meaning": "再、又；回、向后",
+   "en": "again; back",
+   "count": 20,
+   "examples": [
+    {
+     "id": 243,
+     "w": "reflection",
+     "def": "映像；映照出的影像",
+     "g": 7,
+     "hint": "re-(回) + flect(弯曲) + -ion → 光线折回 → 反射；倒影"
+    },
+    {
+     "id": 380,
+     "w": "receive",
+     "def": "接待；招待",
+     "g": 7,
+     "hint": "re-(回) + ceive(拿) → 拿回来 → 收到"
+    },
+    {
+     "id": 491,
+     "w": "return",
+     "def": "回去；返回",
+     "g": 7,
+     "hint": "re-(回) + turn(转) → 转回来 → 返回"
+    },
+    {
+     "id": 549,
+     "w": "receive",
+     "def": "拿到；接到；收到",
+     "g": 7,
+     "hint": "re-(回) + ceive(拿) → 拿回来 → 收到"
+    },
+    {
+     "id": 554,
+     "w": "research",
+     "def": "研究；调查",
+     "g": 7,
+     "hint": "re-(再) + search(搜索) → 反复搜索 → 研究"
+    },
+    {
+     "id": 608,
+     "w": "review",
+     "def": "评论",
+     "g": 7,
+     "hint": "re-(再) + view(看) → 再看一遍 → 复习；评论"
+    },
+    {
+     "id": 636,
+     "w": "record",
+     "def": "记录",
+     "g": 8,
+     "hint": "re-(回) + cord(心) → 记在心里 → 记录"
+    },
+    {
+     "id": 666,
+     "w": "represent",
+     "def": "代表",
+     "g": 8,
+     "hint": "re-(再) + present(呈现) → 再次呈现 → 代表"
+    },
+    {
+     "id": 792,
+     "w": "remains",
+     "def": "遗迹；遗址",
+     "g": 8,
+     "hint": "remain(保持；剩余) + -s(名词复数) → 剩余物"
+    },
+    {
+     "id": 824,
+     "w": "repeat",
+     "def": "重复",
+     "g": 8,
+     "hint": "re-(再) + pet(追求) → 再做一次 → 重复"
+    },
+    {
+     "id": 866,
+     "w": "relieve",
+     "def": "方便；解手",
+     "g": 8,
+     "hint": "re-(加强) + lieve(减轻) → 减轻、缓解"
+    },
+    {
+     "id": 926,
+     "w": "remind",
+     "def": "提醒；使想起",
+     "g": 8,
+     "hint": "re-(再) + mind(记住) → 再次提醒 → 提醒"
+    }
+   ]
+  },
+  {
+   "key": "dis",
+   "meaning": "不、无；分开、分离",
+   "en": "not; apart",
+   "count": 6,
+   "examples": [
+    {
+     "id": 138,
+     "w": "disappear",
+     "def": "消失；不见",
+     "g": 7,
+     "hint": "dis-(相反) + appear(出现) → 消失"
+    },
+    {
+     "id": 400,
+     "w": "discover",
+     "def": "了解到；查明",
+     "g": 7,
+     "hint": "dis-(去掉) + cover(覆盖) → 揭开覆盖 → 发现"
+    },
+    {
+     "id": 459,
+     "w": "disaster",
+     "def": "灾难；灾害",
+     "g": 7,
+     "hint": "dis-(坏的) + aster(星星) → 灾星 → 灾难"
+    },
+    {
+     "id": 887,
+     "w": "disease",
+     "def": "病；疾病",
+     "g": 8,
+     "hint": "dis-(不) + ease(轻松) → 不轻松 → 疾病"
+    },
+    {
+     "id": 1116,
+     "w": "disappoint",
+     "def": "使失望",
+     "g": 8,
+     "hint": "dis-(去掉) + appoint(任命) → 撤掉任命 → 使失望"
+    },
+    {
+     "id": 1158,
+     "w": "displace",
+     "def": "排出；挤出；取代；替代",
+     "g": 9,
+     "hint": "dis-(离开) + place(地方) → 使离开原处 → 取代；移开"
+    }
+   ]
+  },
+  {
+   "key": "im",
+   "meaning": "不、无（用于 b/m/p 前）",
+   "en": "not",
+   "count": 2,
+   "examples": [
+    {
+     "id": 297,
+     "w": "impossible",
+     "def": "不可能的",
+     "g": 7,
+     "hint": "im-(不) + possible(可能) → 不可能的"
+    },
+    {
+     "id": 923,
+     "w": "impression",
+     "def": "印象",
+     "g": 8,
+     "hint": "im-(向内) + press(压) + -ion → 压进心里 → 印象"
+    }
+   ]
+  },
+  {
+   "key": "in",
+   "meaning": "不、无；向内、进入",
+   "en": "not; into",
+   "count": 8,
+   "examples": [
+    {
+     "id": 237,
+     "w": "influence",
+     "def": "影响；对……起作用",
+     "g": 7,
+     "hint": "in-(向内) + flu(流动) + -ence → 流入 → 影响"
+    },
+    {
+     "id": 316,
+     "w": "insect",
+     "def": "昆虫",
+     "g": 7,
+     "hint": "in-(进入) + sect(切) → 切成一段段的 → 昆虫"
+    },
+    {
+     "id": 506,
+     "w": "income",
+     "def": "收入；收益；所得",
+     "g": 7,
+     "hint": "in-(向内) + come(来) → 进来的钱 → 收入"
+    },
+    {
+     "id": 568,
+     "w": "inspire",
+     "def": "激励；鼓舞",
+     "g": 7,
+     "hint": "in-(向内) + spire(呼吸) → 吸入 → 鼓舞、激励"
+    },
+    {
+     "id": 600,
+     "w": "increase",
+     "def": "增长；增多；增加",
+     "g": 7,
+     "hint": "in-(加强) + cre(增长) → 增长、增加"
+    },
+    {
+     "id": 768,
+     "w": "independent",
+     "def": "自主的",
+     "g": 8,
+     "hint": "in-(不) + depend(依靠) + -ent → 不依靠的 → 独立的"
+    },
+    {
+     "id": 1174,
+     "w": "indeed",
+     "def": "确实（强调肯定的陈述或答复）",
+     "g": 9,
+     "hint": "in-(在) + deed(行为、事实) → 事实上 → 确实"
+    },
+    {
+     "id": 1420,
+     "w": "increase",
+     "def": "（使）增长；增多；增加",
+     "g": 9,
+     "hint": "in-(加强) + cre(增长) → 增长、增加"
+    }
+   ]
+  },
+  {
+   "key": "ir",
+   "meaning": "不、无（用于 r 前）",
+   "en": "not",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "il",
+   "meaning": "不、无（用于 l 前）",
+   "en": "not",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "non",
+   "meaning": "不、非、无",
+   "en": "not",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "mis",
+   "meaning": "错误地、坏",
+   "en": "wrongly",
+   "count": 1,
+   "examples": [
+    {
+     "id": 1075,
+     "w": "mistake",
+     "def": "错误；失误",
+     "g": 8,
+     "hint": "mis-(错误) + take(拿) → 拿错 → 错误"
+    }
+   ]
+  },
+  {
+   "key": "pre",
+   "meaning": "在……之前；预先",
+   "en": "before",
+   "count": 5,
+   "examples": [
+    {
+     "id": 624,
+     "w": "prehistoric",
+     "def": "史前的",
+     "g": 8,
+     "hint": "pre-(在……之前) + historic(历史的) → 史前的"
+    },
+    {
+     "id": 733,
+     "w": "*prediction",
+     "def": "预言；预测",
+     "g": 8,
+     "hint": "pre-(预先) + dict(说) + -ion → 预先说出 → 预测"
+    },
+    {
+     "id": 808,
+     "w": "*pretend",
+     "def": "假装；佯装",
+     "g": 8,
+     "hint": "pre-(向前) + tend(伸展) → 向前伸展 → 假装"
+    },
+    {
+     "id": 1001,
+     "w": "*preserve",
+     "def": "维持……的原状；保存",
+     "g": 8,
+     "hint": "pre-(预先) + serv(保存) → 预先保存 → 保护、保存"
+    },
+    {
+     "id": 1401,
+     "w": "president",
+     "def": "总统",
+     "g": 9,
+     "hint": "pre-(在前) + sid(坐) + -ent → 坐在前面的人 → 总统；主席"
+    }
+   ]
+  },
+  {
+   "key": "post",
+   "meaning": "在……之后",
+   "en": "after",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "inter",
+   "meaning": "在……之间；相互",
+   "en": "between; among",
+   "count": 3,
+   "examples": [
+    {
+     "id": 695,
+     "w": "interview",
+     "def": "采访",
+     "g": 8,
+     "hint": "inter-(相互) + view(看) → 相互看 → 采访、面试"
+    },
+    {
+     "id": 727,
+     "w": "international",
+     "def": "国际的",
+     "g": 8,
+     "hint": "inter-(之间) + nation(国家) + -al → 国家之间的 → 国际的"
+    },
+    {
+     "id": 1383,
+     "w": "international",
+     "def": "国际的",
+     "g": 9,
+     "hint": "inter-(之间) + nation(国家) + -al → 国家之间的 → 国际的"
+    }
+   ]
+  },
+  {
+   "key": "trans",
+   "meaning": "横过、越过；转变",
+   "en": "across; change",
+   "count": 1,
+   "examples": [
+    {
+     "id": 462,
+     "w": "transport",
+     "def": "运输；运送",
+     "g": 7,
+     "hint": "trans-(横过) + port(搬运) → 搬运过去 → 运输"
+    }
+   ]
+  },
+  {
+   "key": "super",
+   "meaning": "超级；在……之上",
+   "en": "above; super",
+   "count": 1,
+   "examples": [
+    {
+     "id": 361,
+     "w": "superman",
+     "def": "超人",
+     "g": 7,
+     "hint": "super-(超级) + man(人) → 超人"
+    }
+   ]
+  },
+  {
+   "key": "sub",
+   "meaning": "在……之下；次级",
+   "en": "under; below",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "under",
+   "meaning": "在……下面；不足",
+   "en": "under; less",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "over",
+   "meaning": "在……上面；过度",
+   "en": "above; too much",
+   "count": 2,
+   "examples": [
+    {
+     "id": 411,
+     "w": "overlook",
+     "def": "忽略；未注意到",
+     "g": 7,
+     "hint": "over-(在上面) + look(看) → 从上往下看 → 俯瞰；忽视"
+    },
+    {
+     "id": 1262,
+     "w": "overweight",
+     "def": "超重的",
+     "g": 9,
+     "hint": "over-(过度) + weight(重量) → 超重的"
+    }
+   ]
+  },
+  {
+   "key": "out",
+   "meaning": "向外；超过",
+   "en": "out; beyond",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "co",
+   "meaning": "共同、一起",
+   "en": "together",
+   "count": 1,
+   "examples": [
+    {
+     "id": 123,
+     "w": "cover",
+     "def": "盖；覆盖",
+     "g": 7,
+     "hint": "co-(共同、一起) + ver(真实的)"
+    }
+   ]
+  },
+  {
+   "key": "com",
+   "meaning": "共同、一起（用于 b/m/p 前）",
+   "en": "together",
+   "count": 4,
+   "examples": [
+    {
+     "id": 356,
+     "w": "competition",
+     "def": "比赛；竞赛",
+     "g": 7,
+     "hint": "com-(共同) + pet(追求) + -ition → 一起追求 → 比赛、竞争"
+    },
+    {
+     "id": 701,
+     "w": "comment",
+     "def": "评论",
+     "g": 8,
+     "hint": "com-(一起) + ment(思考) → 一起思考 → 评论"
+    },
+    {
+     "id": 863,
+     "w": "*complain",
+     "def": "抱怨；投诉",
+     "g": 8,
+     "hint": "com-(共同、一起（用于 b/m/p 前）) + plain(平坦的；明白的)"
+    },
+    {
+     "id": 945,
+     "w": "*combine",
+     "def": "组合；联合",
+     "g": 8,
+     "hint": "com-(共同) + bine(成双) → 合在一起 → 结合"
+    }
+   ]
+  },
+  {
+   "key": "con",
+   "meaning": "共同、一起；加强",
+   "en": "together; with",
+   "count": 10,
+   "examples": [
+    {
+     "id": 5,
+     "w": "confident",
+     "def": "自信的；有自信心的",
+     "g": 7,
+     "hint": "con-(加强) + fid(相信) + -ent(……的) → 自信的"
+    },
+    {
+     "id": 537,
+     "w": "connect",
+     "def": "(使)连接",
+     "g": 7,
+     "hint": "con-(一起) + nect(连接) → 连接"
+    },
+    {
+     "id": 773,
+     "w": "*confused",
+     "def": "糊涂的；迷惑的",
+     "g": 8,
+     "hint": "confuse(使困惑) + -ed(感到……的)"
+    },
+    {
+     "id": 842,
+     "w": "context",
+     "def": "上下文；语境",
+     "g": 8,
+     "hint": "con-(一起) + text(文本) → 文本上下文 → 语境"
+    },
+    {
+     "id": 846,
+     "w": "contain",
+     "def": "包含；含有",
+     "g": 8,
+     "hint": "con-(一起) + tain(保持) → 保持在一起 → 包含"
+    },
+    {
+     "id": 1133,
+     "w": "*convinced",
+     "def": "坚信的；确信的",
+     "g": 9,
+     "hint": "convince(使信服) + -ed(感到……的)"
+    },
+    {
+     "id": 1232,
+     "w": "conduct",
+     "def": "实施",
+     "g": 9,
+     "hint": "con-(一起) + duct(引导) → 引导 → 进行；指挥"
+    },
+    {
+     "id": 1350,
+     "w": "continent",
+     "def": "大陆",
+     "g": 9,
+     "hint": "con-(一起) + tin(保持) + -ent → 连成一片 → 大陆"
+    },
+    {
+     "id": 1413,
+     "w": "consumer",
+     "def": "消费者",
+     "g": 9,
+     "hint": "consume(消费) + -er(……的人)"
+    },
+    {
+     "id": 1504,
+     "w": "conduct",
+     "def": "实施；执行",
+     "g": 9,
+     "hint": "con-(一起) + duct(引导) → 引导 → 进行；指挥"
+    }
+   ]
+  },
+  {
+   "key": "col",
+   "meaning": "共同、一起（用于 l 前）",
+   "en": "together",
+   "count": 2,
+   "examples": [
+    {
+     "id": 171,
+     "w": "collect",
+     "def": "收集；采集",
+     "g": 7,
+     "hint": "col-(一起) + lect(收集) → 收集"
+    },
+    {
+     "id": 288,
+     "w": "collection",
+     "def": "（常指同类的）收集物",
+     "g": 7,
+     "hint": "col-(一起) + lect(收集) + -ion → 收集；收藏品"
+    }
+   ]
+  },
+  {
+   "key": "cor",
+   "meaning": "共同、一起（用于 r 前）",
+   "en": "together",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "ex",
+   "meaning": "出、向外；前任的",
+   "en": "out; former",
+   "count": 6,
+   "examples": [
+    {
+     "id": 195,
+     "w": "express",
+     "def": "表示；表达；表露",
+     "g": 7,
+     "hint": "ex-(向外) + press(压) → 压出来 → 表达"
+    },
+    {
+     "id": 300,
+     "w": "explain",
+     "def": "解释；说明",
+     "g": 7,
+     "hint": "ex-(向外) + plain(平坦、明白) → 说明白 → 解释"
+    },
+    {
+     "id": 761,
+     "w": "exchange",
+     "def": "交流",
+     "g": 8,
+     "hint": "ex-(相互) + change(交换) → 交换"
+    },
+    {
+     "id": 781,
+     "w": "expect",
+     "def": "期待；盼望",
+     "g": 8,
+     "hint": "ex-(向外) + pect(看) → 向外看 → 期待"
+    },
+    {
+     "id": 800,
+     "w": "except",
+     "def": "除……之外",
+     "g": 8,
+     "hint": "ex-(向外) + cept(拿) → 拿出去 → 除了"
+    },
+    {
+     "id": 922,
+     "w": "expression",
+     "def": "表情；神色",
+     "g": 8,
+     "hint": "ex-(向外) + press(压) + -ion → 压出来 → 表达；表情"
+    }
+   ]
+  },
+  {
+   "key": "e",
+   "meaning": "出、向外",
+   "en": "out",
+   "count": 1,
+   "examples": [
+    {
+     "id": 272,
+     "w": "event",
+     "def": "公开活动；社交场合",
+     "g": 7,
+     "hint": "e-(向外) + vent(来) → 来到的事 → 事件"
+    }
+   ]
+  },
+  {
+   "key": "en",
+   "meaning": "使……；放入、进入",
+   "en": "make; put into",
+   "count": 2,
+   "examples": [
+    {
+     "id": 330,
+     "w": "encourage",
+     "def": "鼓励；激励",
+     "g": 7,
+     "hint": "en-(使) + courage(勇气) → 给勇气 → 鼓励"
+    },
+    {
+     "id": 1182,
+     "w": "strengthen",
+     "def": "加强；增强；巩固",
+     "g": 9,
+     "hint": "strength(力量) + -en(使……) → 加强"
+    }
+   ]
+  },
+  {
+   "key": "em",
+   "meaning": "使……；放入（用于 b/m/p 前）",
+   "en": "make; put into",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "fore",
+   "meaning": "前面；预先",
+   "en": "before; front",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "mid",
+   "meaning": "中间",
+   "en": "middle",
+   "count": 1,
+   "examples": [
+    {
+     "id": 799,
+     "w": "midnight",
+     "def": "午夜",
+     "g": 8,
+     "hint": "mid-(中间) + night(夜晚) → 午夜"
+    }
+   ]
+  },
+  {
+   "key": "pro",
+   "meaning": "向前；支持；公开",
+   "en": "forward; in favor of",
+   "count": 7,
+   "examples": [
+    {
+     "id": 55,
+     "w": "project",
+     "def": "课题",
+     "g": 7,
+     "hint": "pro-(向前) + ject(投) → 向前投出 → 工程、项目"
+    },
+    {
+     "id": 135,
+     "w": "provide",
+     "def": "提供；供应",
+     "g": 7,
+     "hint": "pro-(向前) + vide(看) → 提前看到 → 提供"
+    },
+    {
+     "id": 141,
+     "w": "protect",
+     "def": "保护",
+     "g": 7,
+     "hint": "pro-(向前) + tect(覆盖) → 在前面遮挡 → 保护"
+    },
+    {
+     "id": 314,
+     "w": "produce",
+     "def": "生产；制造",
+     "g": 7,
+     "hint": "pro-(向前) + duce(引导) → 向前引出 → 生产"
+    },
+    {
+     "id": 430,
+     "w": "product",
+     "def": "产品；制品",
+     "g": 7,
+     "hint": "pro-(向前) + duct(引导) → 产出的东西 → 产品"
+    },
+    {
+     "id": 1018,
+     "w": "progress",
+     "def": "前进；行进",
+     "g": 8,
+     "hint": "pro-(向前) + gress(行走) → 向前走 → 进步"
+    },
+    {
+     "id": 1048,
+     "w": "*promote",
+     "def": "促进；推动",
+     "g": 8,
+     "hint": "pro-(向前) + mote(移动) → 向前推 → 晋升、促进"
+    }
+   ]
+  },
+  {
+   "key": "per",
+   "meaning": "贯穿、透过；每",
+   "en": "through; each",
+   "count": 2,
+   "examples": [
+    {
+     "id": 609,
+     "w": "perform",
+     "def": "演出；表演",
+     "g": 7,
+     "hint": "per-(贯穿) + form(形式) → 全程呈现 → 表演"
+    },
+    {
+     "id": 899,
+     "w": "permission",
+     "def": "准许；许可",
+     "g": 8,
+     "hint": "per-(贯穿) + miss(送) + -ion → 送过去放行 → 允许"
+    }
+   ]
+  },
+  {
+   "key": "anti",
+   "meaning": "反对、抵抗",
+   "en": "against",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "auto",
+   "meaning": "自己、自动",
+   "en": "self",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "tele",
+   "meaning": "远的、远距离的",
+   "en": "far",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "bi",
+   "meaning": "二、两",
+   "en": "two",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "tri",
+   "meaning": "三",
+   "en": "three",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "multi",
+   "meaning": "多、许多",
+   "en": "many",
+   "count": 1,
+   "examples": [
+    {
+     "id": 678,
+     "w": "multimedia",
+     "def": "多媒体",
+     "g": 8,
+     "hint": "multi-(多) + media(媒体) → 多媒体"
+    }
+   ]
+  },
+  {
+   "key": "kilo",
+   "meaning": "千",
+   "en": "thousand",
+   "count": 2,
+   "examples": [
+    {
+     "id": 173,
+     "w": "kilometre",
+     "def": "千米；公里",
+     "g": 7,
+     "hint": "kilo-(千) + metre(米) → 千米"
+    },
+    {
+     "id": 204,
+     "w": "kilogram",
+     "def": "千克；公斤",
+     "g": 7,
+     "hint": "kilo-(千) + gram(克) → 千克"
+    }
+   ]
+  },
+  {
+   "key": "micro",
+   "meaning": "微小的",
+   "en": "small",
+   "count": 2,
+   "examples": [
+    {
+     "id": 703,
+     "w": "microprocessor",
+     "def": "微处理器",
+     "g": 8,
+     "hint": "micro-(微小) + processor(处理器) → 微处理器"
+    },
+    {
+     "id": 704,
+     "w": "microchip",
+     "def": "微芯片；芯片",
+     "g": 8,
+     "hint": "micro-(微小) + chip(芯片) → 微芯片"
+    }
+   ]
+  },
+  {
+   "key": "mini",
+   "meaning": "小的、微型的",
+   "en": "small",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "extra",
+   "meaning": "超出、额外的",
+   "en": "beyond; extra",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "sur",
+   "meaning": "在……之上；超过",
+   "en": "over; above",
+   "count": 3,
+   "examples": [
+    {
+     "id": 202,
+     "w": "surface",
+     "def": "表面；表层；面",
+     "g": 7,
+     "hint": "sur-(在……上) + face(面) → 表面"
+    },
+    {
+     "id": 581,
+     "w": "survive",
+     "def": "生存；存活",
+     "g": 7,
+     "hint": "sur-(超过) + vive(活) → 活过来 → 幸存"
+    },
+    {
+     "id": 1424,
+     "w": "surface",
+     "def": "表面；表层",
+     "g": 9,
+     "hint": "sur-(在……上) + face(面) → 表面"
+    }
+   ]
+  },
+  {
+   "key": "uni",
+   "meaning": "单一、统一",
+   "en": "one; single",
+   "count": 3,
+   "examples": [
+    {
+     "id": 197,
+     "w": "universe",
+     "def": "宇宙",
+     "g": 7,
+     "hint": "uni-(单一) + verse(转) → 万物运转一体 → 宇宙"
+    },
+    {
+     "id": 349,
+     "w": "uniform",
+     "def": "制服；校服",
+     "g": 7,
+     "hint": "uni-(单一) + form(形式) → 统一形式 → 校服、制服"
+    },
+    {
+     "id": 1391,
+     "w": "uniform",
+     "def": "校服",
+     "g": 9,
+     "hint": "uni-(单一) + form(形式) → 统一形式 → 校服、制服"
+    }
+   ]
+  },
+  {
+   "key": "a",
+   "meaning": "处于……状态；加强语气",
+   "en": "in a state",
+   "count": 9,
+   "examples": [
+    {
+     "id": 100,
+     "w": "alive",
+     "def": "有生气；有活力",
+     "g": 7,
+     "hint": "a-(处于) + live(活) → 活着的"
+    },
+    {
+     "id": 453,
+     "w": "asleep",
+     "def": "睡着",
+     "g": 7,
+     "hint": "a-(处于) + sleep(睡) → 睡着的"
+    },
+    {
+     "id": 858,
+     "w": "awake",
+     "def": "醒着",
+     "g": 8,
+     "hint": "a-(处于) + wake(醒来) → 醒着的"
+    },
+    {
+     "id": 986,
+     "w": "alone",
+     "def": "独自",
+     "g": 8,
+     "hint": "a-(处于) + lone(孤独的) → 独自"
+    },
+    {
+     "id": 1208,
+     "w": "*ashamed",
+     "def": "惭愧；羞愧",
+     "g": 9,
+     "hint": "a-(处于) + shame(羞愧) + -ed(感到……的)"
+    },
+    {
+     "id": 1290,
+     "w": "aloud",
+     "def": "大声地",
+     "g": 9,
+     "hint": "a-(处于) + loud(大声的) → 大声地"
+    },
+    {
+     "id": 1443,
+     "w": "asteroid",
+     "def": "小行星",
+     "g": 9,
+     "hint": "aster(星星) + -oid(像……的) → 像星星的天体 → 小行星"
+    },
+    {
+     "id": 1449,
+     "w": "alive",
+     "def": "活着；在世",
+     "g": 9,
+     "hint": "a-(处于) + live(活) → 活着的"
+    },
+    {
+     "id": 1461,
+     "w": "awake",
+     "def": "(awoke, awoken)（使）醒来",
+     "g": 9,
+     "hint": "a-(处于) + wake(醒来) → 醒着的"
+    }
+   ]
+  },
+  {
+   "key": "ab",
+   "meaning": "离开、偏离",
+   "en": "away from",
+   "count": 1,
+   "examples": [
+    {
+     "id": 1049,
+     "w": "abroad",
+     "def": "在国外；到国外",
+     "g": 8,
+     "hint": "ab-(离开、偏离) + road(词干)"
+    }
+   ]
+  },
+  {
+   "key": "be",
+   "meaning": "使成为；在……旁边",
+   "en": "make; beside",
+   "count": 1,
+   "examples": [
+    {
+     "id": 235,
+     "w": "become",
+     "def": "开始变得；变成",
+     "g": 7,
+     "hint": "be-(使) + come(来) → 变成"
+    }
+   ]
+  },
+  {
+   "key": "de",
+   "meaning": "向下；去掉、相反",
+   "en": "down; away",
+   "count": 8,
+   "examples": [
+    {
+     "id": 13,
+     "w": "describe",
+     "def": "描述；形容",
+     "g": 7,
+     "hint": "de-(向下) + scribe(写) → 写下来 → 描述"
+    },
+    {
+     "id": 44,
+     "w": "develop",
+     "def": "培养；发展",
+     "g": 7,
+     "hint": "de-(打开) + velop(包裹) → 打开包裹 → 发展"
+    },
+    {
+     "id": 104,
+     "w": "decide",
+     "def": "对……作出抉择；决定",
+     "g": 7,
+     "hint": "de-(向下) + cide(切) → 切断犹豫 → 决定"
+    },
+    {
+     "id": 223,
+     "w": "design",
+     "def": "设计",
+     "g": 7,
+     "hint": "de-(向下) + sign(标记) → 画下标记 → 设计"
+    },
+    {
+     "id": 730,
+     "w": "depend",
+     "def": "需要；依靠",
+     "g": 8,
+     "hint": "de-(向下) + pend(悬挂) → 挂靠在下面 → 依靠"
+    },
+    {
+     "id": 1081,
+     "w": "destroy",
+     "def": "摧毁",
+     "g": 8,
+     "hint": "de-(向下；去掉、相反) + stroy(建造、建立)"
+    },
+    {
+     "id": 1355,
+     "w": "develop",
+     "def": "增强；加强",
+     "g": 9,
+     "hint": "de-(打开) + velop(包裹) → 打开包裹 → 发展"
+    },
+    {
+     "id": 1422,
+     "w": "destroy",
+     "def": "摧毁；毁灭",
+     "g": 9,
+     "hint": "de-(向下；去掉、相反) + stroy(建造、建立)"
+    }
+   ]
+  },
+  {
+   "key": "semi",
+   "meaning": "半",
+   "en": "half",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "self",
+   "meaning": "自己、自身",
+   "en": "self",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "well",
+   "meaning": "好、良好地",
+   "en": "well",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "syn",
+   "meaning": "相同、一起",
+   "en": "same; together",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "sym",
+   "meaning": "相同、一起（用于 m/p 前）",
+   "en": "same; together",
+   "count": 1,
+   "examples": [
+    {
+     "id": 1210,
+     "w": "*sympathy",
+     "def": "同情",
+     "g": 9,
+     "hint": "sym-(相同) + path(感受) + -y → 感同身受 → 同情"
+    }
+   ]
+  },
+  {
+   "key": "mono",
+   "meaning": "单一",
+   "en": "one; single",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "vice",
+   "meaning": "副的、代理的",
+   "en": "deputy",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "intro",
+   "meaning": "向内、进入",
+   "en": "into, inward",
+   "count": 1,
+   "examples": [
+    {
+     "id": 187,
+     "w": "introduction",
+     "def": "序言；引言",
+     "g": 7,
+     "hint": "intro-(向内) + duc(引导) + -tion → 引进 → 介绍"
+    }
+   ]
+  },
+  {
+   "key": "ad",
+   "meaning": "朝向、加强",
+   "en": "toward",
+   "count": 2,
+   "examples": [
+    {
+     "id": 861,
+     "w": "advise",
+     "def": "劝告；建议",
+     "g": 8,
+     "hint": "ad-(朝向) + vis(看) → 让人看清楚 → 建议"
+    },
+    {
+     "id": 1384,
+     "w": "admit",
+     "def": "(常指勉强)承认",
+     "g": 9,
+     "hint": "ad-(朝向) + mit(送) → 送进来 → 承认；准许进入"
+    }
+   ]
+  },
+  {
+   "key": "ac",
+   "meaning": "朝向、加强（用于 c/k/q 前）",
+   "en": "toward",
+   "count": 3,
+   "examples": [
+    {
+     "id": 219,
+     "w": "across",
+     "def": "在……对面；在……对过",
+     "g": 7,
+     "hint": "a-(处于) + cross(穿过) → 横过、穿过"
+    },
+    {
+     "id": 783,
+     "w": "accept",
+     "def": "接受",
+     "g": 8,
+     "hint": "ac-(加强) + cept(拿) → 收下 → 接受"
+    },
+    {
+     "id": 1052,
+     "w": "acquire",
+     "def": "获得；得到",
+     "g": 8,
+     "hint": "ac-(加强) + quire(寻求) → 努力求得 → 获得"
+    }
+   ]
+  }
+ ],
+ "suffixes": [
+  {
+   "key": "er",
+   "meaning": "……的人；……的事物",
+   "en": "person; thing",
+   "count": 3,
+   "examples": [
+    {
+     "id": 191,
+     "w": "lander",
+     "def": "着陆器",
+     "g": 7,
+     "hint": "land(着陆) + -er(……的东西) → 着陆器"
+    },
+    {
+     "id": 222,
+     "w": "customer",
+     "def": "顾客；主顾；客户",
+     "g": 7,
+     "hint": "custom(光顾) + -er(……的人) → 顾客"
+    },
+    {
+     "id": 1269,
+     "w": "waiter",
+     "def": "服务员",
+     "g": 9,
+     "hint": "wait(等待) + -er(……的人) → 服务员"
+    }
+   ]
+  },
+  {
+   "key": "or",
+   "meaning": "……的人；……的事物",
+   "en": "person; thing",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "ist",
+   "meaning": "……的人（职业/信仰者）",
+   "en": "person",
+   "count": 4,
+   "examples": [
+    {
+     "id": 450,
+     "w": "receptionist",
+     "def": "接待员",
+     "g": 7,
+     "hint": "reception(接待) + -ist(……的人) → 接待员"
+    },
+    {
+     "id": 629,
+     "w": "artist",
+     "def": "艺术家；（尤指）画家",
+     "g": 8,
+     "hint": "art(艺术) + -ist(……的人) → 艺术家"
+    },
+    {
+     "id": 1299,
+     "w": "journalist",
+     "def": "新闻记者",
+     "g": 9,
+     "hint": "journal(报刊、日志) + -ist(……的人) → 记者"
+    },
+    {
+     "id": 1526,
+     "w": "dentist",
+     "def": "牙科医生",
+     "g": 9,
+     "hint": "dent(牙齿) + -ist(……的人) → 牙医"
+    }
+   ]
+  },
+  {
+   "key": "ian",
+   "meaning": "……的人；……的",
+   "en": "person; of",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "ess",
+   "meaning": "女性（表性别）",
+   "en": "female",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "tion",
+   "meaning": "名词后缀：行为、状态",
+   "en": "act; state",
+   "count": 3,
+   "examples": [
+    {
+     "id": 155,
+     "w": "solution",
+     "def": "解决办法",
+     "g": 7,
+     "hint": "solu(解开) + -tion → 解开问题的办法 → 解决方案"
+    },
+    {
+     "id": 187,
+     "w": "introduction",
+     "def": "序言；引言",
+     "g": 7,
+     "hint": "intro-(向内) + duc(引导) + -tion → 引进 → 介绍"
+    },
+    {
+     "id": 1432,
+     "w": "solution",
+     "def": "解决办法；处理手段",
+     "g": 9,
+     "hint": "solu(解开) + -tion → 解开问题的办法 → 解决方案"
+    }
+   ]
+  },
+  {
+   "key": "ation",
+   "meaning": "名词后缀：行为、结果",
+   "en": "act; result",
+   "count": 15,
+   "examples": [
+    {
+     "id": 60,
+     "w": "*presentation",
+     "def": "演示",
+     "g": 7,
+     "hint": "present(呈现) + -ation(名词后缀) → 展示、演示"
+    },
+    {
+     "id": 157,
+     "w": "generation",
+     "def": "（统称）一代人",
+     "g": 7,
+     "hint": "generate(产生) + -ation(名词后缀) → 一代人"
+    },
+    {
+     "id": 196,
+     "w": "determination",
+     "def": "决心；坚毅；坚定",
+     "g": 7,
+     "hint": "de-(向下) + termin(界限) + -ation → 划定界限 → 决心、决定"
+    },
+    {
+     "id": 440,
+     "w": "translation",
+     "def": "译文；译本",
+     "g": 7,
+     "hint": "translate(翻译) + -ation(名词后缀) → 翻译"
+    },
+    {
+     "id": 498,
+     "w": "population",
+     "def": "人口",
+     "g": 7,
+     "hint": "popul(人民) + -ation → 人口"
+    },
+    {
+     "id": 552,
+     "w": "education",
+     "def": "教育",
+     "g": 7,
+     "hint": "educate(教育) + -ation(名词后缀) → 教育"
+    },
+    {
+     "id": 654,
+     "w": "hesitation",
+     "def": "犹豫",
+     "g": 8,
+     "hint": "hesitate(犹豫) + -ation(名词后缀) → 犹豫"
+    },
+    {
+     "id": 782,
+     "w": "situation",
+     "def": "情况",
+     "g": 8,
+     "hint": "situate(位于) + -ation(名词后缀) → 情况、处境"
+    },
+    {
+     "id": 784,
+     "w": "adaptation",
+     "def": "适应",
+     "g": 8,
+     "hint": "adapt(适应) + -ation(名词后缀) → 改编；适应"
+    },
+    {
+     "id": 1137,
+     "w": "*evaluation",
+     "def": "评价；评估",
+     "g": 9,
+     "hint": "evaluate(评估) + -ation(名词后缀) → 评估"
+    },
+    {
+     "id": 1186,
+     "w": "vacation",
+     "def": "假期",
+     "g": 9,
+     "hint": "vac(空) + -ation → 空闲 → 假期"
+    },
+    {
+     "id": 1235,
+     "w": "recommendation",
+     "def": "推荐；介绍",
+     "g": 9,
+     "hint": "recommend(推荐) + -ation(名词后缀) → 推荐"
+    }
+   ]
+  },
+  {
+   "key": "ition",
+   "meaning": "名词后缀：行为、状态",
+   "en": "act; state",
+   "count": 3,
+   "examples": [
+    {
+     "id": 356,
+     "w": "competition",
+     "def": "比赛；竞赛",
+     "g": 7,
+     "hint": "com-(共同) + pet(追求) + -ition → 一起追求 → 比赛、竞争"
+    },
+    {
+     "id": 1184,
+     "w": "repetition",
+     "def": "重复",
+     "g": 9,
+     "hint": "re-(再) + pet(追求) + -ition → 重复"
+    },
+    {
+     "id": 1348,
+     "w": "repetition",
+     "def": "重复",
+     "g": 9,
+     "hint": "re-(再) + pet(追求) + -ition → 重复"
+    }
+   ]
+  },
+  {
+   "key": "sion",
+   "meaning": "名词后缀：行为、状态",
+   "en": "act; state",
+   "count": 3,
+   "examples": [
+    {
+     "id": 922,
+     "w": "expression",
+     "def": "表情；神色",
+     "g": 8,
+     "hint": "ex-(向外) + press(压) + -ion → 压出来 → 表达；表情"
+    },
+    {
+     "id": 923,
+     "w": "impression",
+     "def": "印象",
+     "g": 8,
+     "hint": "im-(向内) + press(压) + -ion → 压进心里 → 印象"
+    },
+    {
+     "id": 1314,
+     "w": "*possession",
+     "def": "私人物品；个人财产",
+     "g": 9,
+     "hint": "possess(拥有) + -ion(名词后缀)"
+    }
+   ]
+  },
+  {
+   "key": "ment",
+   "meaning": "名词后缀：行为、结果",
+   "en": "act; result",
+   "count": 12,
+   "examples": [
+    {
+     "id": 278,
+     "w": "equipment",
+     "def": "设备；器材",
+     "g": 7,
+     "hint": "equip(装备) + -ment(名词后缀) → 设备"
+    },
+    {
+     "id": 394,
+     "w": "government",
+     "def": "政府",
+     "g": 7,
+     "hint": "govern(治理) + -ment(名词后缀) → 政府"
+    },
+    {
+     "id": 419,
+     "w": "environment",
+     "def": "自然环境",
+     "g": 7,
+     "hint": "environ(环绕) + -ment → 周围环境"
+    },
+    {
+     "id": 528,
+     "w": "apartment",
+     "def": "公寓套房",
+     "g": 7,
+     "hint": "apart(分开) + -ment → 分隔开的房间 → 公寓"
+    },
+    {
+     "id": 681,
+     "w": "payment",
+     "def": "付款；支付",
+     "g": 8,
+     "hint": "pay(支付) + -ment(名词后缀) → 付款"
+    },
+    {
+     "id": 683,
+     "w": "treatment",
+     "def": "治疗；疗法",
+     "g": 8,
+     "hint": "treat(对待；治疗) + -ment(名词后缀) → 治疗；待遇"
+    },
+    {
+     "id": 701,
+     "w": "comment",
+     "def": "评论",
+     "g": 8,
+     "hint": "com-(一起) + ment(思考) → 一起思考 → 评论"
+    },
+    {
+     "id": 734,
+     "w": "statement",
+     "def": "说明",
+     "g": 8,
+     "hint": "state(陈述) + -ment(名词后缀)"
+    },
+    {
+     "id": 1136,
+     "w": "judgement",
+     "def": "看法；意见；评价",
+     "g": 9,
+     "hint": "judge(判断) + -ment(名词后缀) → 判断；判决"
+    },
+    {
+     "id": 1365,
+     "w": "development",
+     "def": "发展；壮大",
+     "g": 9,
+     "hint": "develop(发展) + -ment(名词后缀) → 发展"
+    },
+    {
+     "id": 1433,
+     "w": "government",
+     "def": "政府",
+     "g": 9,
+     "hint": "govern(治理) + -ment(名词后缀) → 政府"
+    },
+    {
+     "id": 1475,
+     "w": "announcement",
+     "def": "公告；通告",
+     "g": 9,
+     "hint": "announce(宣布) + -ment(名词后缀) → 公告"
+    }
+   ]
+  },
+  {
+   "key": "ness",
+   "meaning": "名词后缀：性质、状态",
+   "en": "quality; state",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "ity",
+   "meaning": "名词后缀：性质、状态",
+   "en": "quality; state",
+   "count": 2,
+   "examples": [
+    {
+     "id": 350,
+     "w": "personality",
+     "def": "性格；个性",
+     "g": 7,
+     "hint": "personal(个性的) + -ity(名词后缀) → 个性"
+    },
+    {
+     "id": 514,
+     "w": "electricity",
+     "def": "电；电能",
+     "g": 7,
+     "hint": "electric(电的) + -ity(名词后缀) → 电"
+    }
+   ]
+  },
+  {
+   "key": "ship",
+   "meaning": "名词后缀：关系、身份",
+   "en": "relationship; status",
+   "count": 2,
+   "examples": [
+    {
+     "id": 7,
+     "w": "friendship",
+     "def": "友谊；朋友关系",
+     "g": 7,
+     "hint": "friend(朋友) + -ship(关系) → 友谊"
+    },
+    {
+     "id": 874,
+     "w": "relationship",
+     "def": "关系",
+     "g": 8,
+     "hint": "relation(关系) + -ship(名词后缀) → 关系"
+    }
+   ]
+  },
+  {
+   "key": "hood",
+   "meaning": "名词后缀：时期、状态",
+   "en": "period; state",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "dom",
+   "meaning": "名词后缀：领域、状态",
+   "en": "realm; state",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "th",
+   "meaning": "名词后缀：性质（健康/真理）",
+   "en": "quality",
+   "count": 2,
+   "examples": [
+    {
+     "id": 869,
+     "w": "wealth",
+     "def": "钱财；财富",
+     "g": 8,
+     "hint": "weal(幸福、财富) + -th(名词后缀)"
+    },
+    {
+     "id": 1369,
+     "w": "wealth",
+     "def": "财富",
+     "g": 9,
+     "hint": "weal(幸福、财富) + -th(名词后缀)"
+    }
+   ]
+  },
+  {
+   "key": "ance",
+   "meaning": "名词后缀：行为、性质",
+   "en": "act; quality",
+   "count": 2,
+   "examples": [
+    {
+     "id": 14,
+     "w": "appearance",
+     "def": "外貌",
+     "g": 7,
+     "hint": "appear(出现) + -ance(名词后缀) → 外表；出现"
+    },
+    {
+     "id": 944,
+     "w": "performance",
+     "def": "表演；演出",
+     "g": 8,
+     "hint": "perform(表演) + -ance(名词后缀) → 表演；表现"
+    }
+   ]
+  },
+  {
+   "key": "ence",
+   "meaning": "名词后缀：行为、性质",
+   "en": "act; quality",
+   "count": 4,
+   "examples": [
+    {
+     "id": 237,
+     "w": "influence",
+     "def": "影响；对……起作用",
+     "g": 7,
+     "hint": "in-(向内) + flu(流动) + -ence → 流入 → 影响"
+    },
+    {
+     "id": 270,
+     "w": "difference",
+     "def": "差别；差异",
+     "g": 7,
+     "hint": "differ(不同) + -ence(名词后缀) → 差别"
+    },
+    {
+     "id": 603,
+     "w": "audience",
+     "def": "观众；听众",
+     "g": 7,
+     "hint": "audi(听) + -ence → 听的人 → 观众、听众"
+    },
+    {
+     "id": 1268,
+     "w": "preference",
+     "def": "偏爱；爱好",
+     "g": 9,
+     "hint": "prefer(更喜欢) + -ence(名词后缀) → 偏爱"
+    }
+   ]
+  },
+  {
+   "key": "age",
+   "meaning": "名词后缀：行为、集合、费用",
+   "en": "act; collection",
+   "count": 3,
+   "examples": [
+    {
+     "id": 1142,
+     "w": "manage",
+     "def": "完成（困难的事）",
+     "g": 9,
+     "hint": "man(手) + -age → 用手操作 → 管理"
+    },
+    {
+     "id": 1195,
+     "w": "manage",
+     "def": "明智地使用（金钱、时间、信息等）",
+     "g": 9,
+     "hint": "man(手) + -age → 用手操作 → 管理"
+    },
+    {
+     "id": 1388,
+     "w": "manage",
+     "def": "完成（困难的事）；勉力完成",
+     "g": 9,
+     "hint": "man(手) + -age → 用手操作 → 管理"
+    }
+   ]
+  },
+  {
+   "key": "ure",
+   "meaning": "名词后缀：行为、结果",
+   "en": "act; result",
+   "count": 10,
+   "examples": [
+    {
+     "id": 106,
+     "w": "culture",
+     "def": "文化；文明",
+     "g": 7,
+     "hint": "cult(耕种、培养) + -ure → 培养出来的 → 文化"
+    },
+    {
+     "id": 180,
+     "w": "adventure",
+     "def": "冒险；冒险经历；奇遇",
+     "g": 7,
+     "hint": "ad-(朝向) + vent(来) + -ure → 将要来临的事 → 冒险"
+    },
+    {
+     "id": 616,
+     "w": "lecture",
+     "def": "讲座；讲课；演讲",
+     "g": 7,
+     "hint": "lect(读、讲) + -ure(名词后缀) → 讲课、讲座"
+    },
+    {
+     "id": 898,
+     "w": "*structure",
+     "def": "结构",
+     "g": 8,
+     "hint": "struct(建造) + -ure(名词后缀) → 结构"
+    },
+    {
+     "id": 996,
+     "w": "*sculpture",
+     "def": "雕像",
+     "g": 8,
+     "hint": "sculpt(雕刻) + -ure(名词后缀) → 雕塑"
+    },
+    {
+     "id": 1058,
+     "w": "pleasure",
+     "def": "高兴；快乐",
+     "g": 8,
+     "hint": "please(使高兴) + -ure(名词后缀) → 愉快"
+    },
+    {
+     "id": 1196,
+     "w": "pressure",
+     "def": "心理压力；紧张",
+     "g": 9,
+     "hint": "press(压) + -ure(名词后缀) → 压力"
+    },
+    {
+     "id": 1301,
+     "w": "failure",
+     "def": "失败",
+     "g": 9,
+     "hint": "fail(失败) + -ure(名词后缀) → 失败"
+    },
+    {
+     "id": 1423,
+     "w": "nature",
+     "def": "自然界；大自然",
+     "g": 9,
+     "hint": "nat(出生、天生) + -ure → 天生的样子 → 自然"
+    },
+    {
+     "id": 1509,
+     "w": "pressure",
+     "def": "压力",
+     "g": 9,
+     "hint": "press(压) + -ure(名词后缀) → 压力"
+    }
+   ]
+  },
+  {
+   "key": "al",
+   "meaning": "形容词后缀：……的；也作名词",
+   "en": "of; relating to",
+   "count": 14,
+   "examples": [
+    {
+     "id": 10,
+     "w": "personal",
+     "def": "个性的",
+     "g": 7,
+     "hint": "person(人) + -al(……的) → 个人的"
+    },
+    {
+     "id": 107,
+     "w": "local",
+     "def": "地方的；当地的",
+     "g": 7,
+     "hint": "loc(地方) + -al(……的) → 当地的"
+    },
+    {
+     "id": 338,
+     "w": "medical",
+     "def": "医学的；医疗的",
+     "g": 7,
+     "hint": "medic(医学) + -al(……的) → 医学的"
+    },
+    {
+     "id": 505,
+     "w": "global",
+     "def": "全球的；全世界的",
+     "g": 7,
+     "hint": "glob(球) + -al(……的) → 全球的"
+    },
+    {
+     "id": 626,
+     "w": "original",
+     "def": "原来的；起初的",
+     "g": 8,
+     "hint": "origin(起源) + -al(……的) → 最初的"
+    },
+    {
+     "id": 692,
+     "w": "digital",
+     "def": "数码的",
+     "g": 8,
+     "hint": "digit(数字) + -al(……的) → 数字的"
+    },
+    {
+     "id": 693,
+     "w": "social",
+     "def": "社交的",
+     "g": 8,
+     "hint": "soci(社会) + -al(……的) → 社会的"
+    },
+    {
+     "id": 727,
+     "w": "international",
+     "def": "国际的",
+     "g": 8,
+     "hint": "inter-(之间) + nation(国家) + -al → 国家之间的 → 国际的"
+    },
+    {
+     "id": 837,
+     "w": "normal",
+     "def": "正常的",
+     "g": 8,
+     "hint": "norm(标准) + -al(……的) → 正常的"
+    },
+    {
+     "id": 868,
+     "w": "magical",
+     "def": "有魔力的",
+     "g": 8,
+     "hint": "magic(魔法) + -al(……的) → 神奇的"
+    },
+    {
+     "id": 1129,
+     "w": "classical",
+     "def": "古典的；经典的",
+     "g": 9,
+     "hint": "classic(经典的) + -al(……的) → 古典的"
+    },
+    {
+     "id": 1383,
+     "w": "international",
+     "def": "国际的",
+     "g": 9,
+     "hint": "inter-(之间) + nation(国家) + -al → 国家之间的 → 国际的"
+    }
+   ]
+  },
+  {
+   "key": "ic",
+   "meaning": "形容词后缀：……的",
+   "en": "of; relating to",
+   "count": 4,
+   "examples": [
+    {
+     "id": 497,
+     "w": "public",
+     "def": "公共的；公开的",
+     "g": 7,
+     "hint": "publ(公众) + -ic(……的) → 公众的"
+    },
+    {
+     "id": 562,
+     "w": "public",
+     "def": "百姓；民众",
+     "g": 7,
+     "hint": "publ(公众) + -ic(……的) → 公众的"
+    },
+    {
+     "id": 620,
+     "w": "artistic",
+     "def": "有艺术天赋的；（尤指）有美术才能的",
+     "g": 8,
+     "hint": "artist(艺术家) + -ic(……的) → 艺术的"
+    },
+    {
+     "id": 707,
+     "w": "electronic",
+     "def": "电子的",
+     "g": 8,
+     "hint": "electron(电子) + -ic(……的) → 电子的"
+    }
+   ]
+  },
+  {
+   "key": "ive",
+   "meaning": "形容词后缀：有……性质的",
+   "en": "having the nature of",
+   "count": 1,
+   "examples": [
+    {
+     "id": 353,
+     "w": "active",
+     "def": "忙碌的；活跃的",
+     "g": 7,
+     "hint": "act(做、行动) + -ive(……的) → 活跃的"
+    }
+   ]
+  },
+  {
+   "key": "ous",
+   "meaning": "形容词后缀：充满……的",
+   "en": "full of",
+   "count": 1,
+   "examples": [
+    {
+     "id": 1241,
+     "w": "various",
+     "def": "各种不同的；各种各样的",
+     "g": 9,
+     "hint": "vari(变化) + -ous(……的) → 各种各样的"
+    }
+   ]
+  },
+  {
+   "key": "ful",
+   "meaning": "形容词后缀：充满……的",
+   "en": "full of",
+   "count": 4,
+   "examples": [
+    {
+     "id": 94,
+     "w": "peaceful",
+     "def": "安静的；平静的",
+     "g": 7,
+     "hint": "peace(和平) + -ful(充满……的) → 和平的"
+    },
+    {
+     "id": 147,
+     "w": "harmful",
+     "def": "有害的",
+     "g": 7,
+     "hint": "harm(伤害) + -ful(充满……的) → 有害的"
+    },
+    {
+     "id": 334,
+     "w": "cheerful",
+     "def": "快乐的；离兴的",
+     "g": 7,
+     "hint": "cheer(欢呼) + -ful(充满……的) → 快乐的"
+    },
+    {
+     "id": 855,
+     "w": "*faithful",
+     "def": "忠实的；忠诚的",
+     "g": 8,
+     "hint": "faith(信念) + -ful(充满……的) → 忠诚的"
+    }
+   ]
+  },
+  {
+   "key": "less",
+   "meaning": "形容词后缀：没有……的",
+   "en": "without",
+   "count": 3,
+   "examples": [
+    {
+     "id": 995,
+     "w": "priceless",
+     "def": "无价的",
+     "g": 8,
+     "hint": "price(价格) + -less(没有……的) → 无价的"
+    },
+    {
+     "id": 1329,
+     "w": "selfless",
+     "def": "无私的",
+     "g": 9,
+     "hint": "self(自己) + -less(没有……的) → 无私的"
+    },
+    {
+     "id": 1416,
+     "w": "lifeless",
+     "def": "无生命的；无生长的",
+     "g": 9,
+     "hint": "life(生命) + -less(没有……的) → 无生命的"
+    }
+   ]
+  },
+  {
+   "key": "y",
+   "meaning": "形容词/名词后缀：……的；状态",
+   "en": "full of; state",
+   "count": 10,
+   "examples": [
+    {
+     "id": 66,
+     "w": "rocky",
+     "def": "困难的",
+     "g": 7,
+     "hint": "rock(岩石) + -y(多……的) → 多岩石的"
+    },
+    {
+     "id": 83,
+     "w": "sandy",
+     "def": "铺满沙子的；含沙的",
+     "g": 7,
+     "hint": "sand(沙) + -y(多……的) → 沙质的"
+    },
+    {
+     "id": 230,
+     "w": "memory",
+     "def": "回忆；记忆",
+     "g": 7,
+     "hint": "memor(记忆) + -y(名词后缀) → 记忆"
+    },
+    {
+     "id": 797,
+     "w": "victory",
+     "def": "胜利；成功",
+     "g": 8,
+     "hint": "victor(胜利者) + -y(名词后缀) → 胜利"
+    },
+    {
+     "id": 902,
+     "w": "mighty",
+     "def": "巨大的；非凡的",
+     "g": 8,
+     "hint": "might(力量) + -y(……的) → 强大的"
+    },
+    {
+     "id": 1031,
+     "w": "thirsty",
+     "def": "渴的；口渴的",
+     "g": 8,
+     "hint": "thirst(口渴) + -y(……的) → 口渴的"
+    },
+    {
+     "id": 1210,
+     "w": "*sympathy",
+     "def": "同情",
+     "g": 9,
+     "hint": "sym-(相同) + path(感受) + -y → 感同身受 → 同情"
+    },
+    {
+     "id": 1263,
+     "w": "sugary",
+     "def": "含糖的",
+     "g": 9,
+     "hint": "sugar(糖) + -y(多……的) → 含糖的"
+    },
+    {
+     "id": 1352,
+     "w": "discovery",
+     "def": "发现",
+     "g": 9,
+     "hint": "discover(发现) + -y(名词后缀) → 发现"
+    },
+    {
+     "id": 1527,
+     "w": "recovery",
+     "def": "恢复；痊愈",
+     "g": 9,
+     "hint": "recover(恢复) + -y(名词后缀) → 恢复"
+    }
+   ]
+  },
+  {
+   "key": "ly",
+   "meaning": "副词/形容词后缀：……地；……的",
+   "en": "in a manner",
+   "count": 32,
+   "examples": [
+    {
+     "id": 53,
+     "w": "*sincerely",
+     "def": "真诚地；诚实地",
+     "g": 7,
+     "hint": "sincere(真诚的) + -ly → 真诚地"
+    },
+    {
+     "id": 58,
+     "w": "luckily",
+     "def": "幸运地；幸好",
+     "g": 7,
+     "hint": "lucky(幸运的) + -ly → 幸运地"
+    },
+    {
+     "id": 89,
+     "w": "loudly",
+     "def": "喧闹地；响亮地",
+     "g": 7,
+     "hint": "loud(大声的) + -ly → 大声地"
+    },
+    {
+     "id": 254,
+     "w": "definitely",
+     "def": "肯定；没问题；当然；确实",
+     "g": 7,
+     "hint": "definite(确定的) + -ly → 肯定地"
+    },
+    {
+     "id": 264,
+     "w": "recently",
+     "def": "不久前；最近",
+     "g": 7,
+     "hint": "recent(最近的) + -ly → 最近"
+    },
+    {
+     "id": 295,
+     "w": "absolutely",
+     "def": "极其",
+     "g": 7,
+     "hint": "absolute(绝对的) + -ly → 绝对地"
+    },
+    {
+     "id": 355,
+     "w": "wisely",
+     "def": "聪明地；明智地",
+     "g": 7,
+     "hint": "wise(聪明的) + -ly → 明智地"
+    },
+    {
+     "id": 378,
+     "w": "mostly",
+     "def": "主要地；通常",
+     "g": 7,
+     "hint": "most(大多数) + -ly → 大多"
+    },
+    {
+     "id": 488,
+     "w": "eventually",
+     "def": "最后；终于",
+     "g": 7,
+     "hint": "eventual(最终的) + -ly → 最终"
+    },
+    {
+     "id": 507,
+     "w": "nearly",
+     "def": "几乎；差不多；将近",
+     "g": 7,
+     "hint": "near(近) + -ly → 几乎"
+    },
+    {
+     "id": 598,
+     "w": "extremely",
+     "def": "极其；极端；非常",
+     "g": 7,
+     "hint": "extreme(极端的) + -ly → 极其"
+    },
+    {
+     "id": 604,
+     "w": "lively",
+     "def": "充满趣味的；令人兴奋的",
+     "g": 7,
+     "hint": "live(活的) + -ly → 活泼的"
+    }
+   ]
+  },
+  {
+   "key": "able",
+   "meaning": "形容词后缀：能……的、可……的",
+   "en": "able to",
+   "count": 2,
+   "examples": [
+    {
+     "id": 938,
+     "w": "uncomfortable",
+     "def": "不自在的",
+     "g": 8,
+     "hint": "un-(不) + comfort(舒适) + -able(能……的) → 不舒服的"
+    },
+    {
+     "id": 1083,
+     "w": "probable",
+     "def": "很可能发生（或存在等）的",
+     "g": 8,
+     "hint": "prob(证明) + -able(能……的) → 很可能"
+    }
+   ]
+  },
+  {
+   "key": "ible",
+   "meaning": "形容词后缀：能……的、可……的",
+   "en": "able to",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "ish",
+   "meaning": "形容词后缀：有……特点的；……的",
+   "en": "somewhat",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "en",
+   "meaning": "动词/形容词后缀：使……；……质的",
+   "en": "make; made of",
+   "count": 2,
+   "examples": [
+    {
+     "id": 330,
+     "w": "encourage",
+     "def": "鼓励；激励",
+     "g": 7,
+     "hint": "en-(使) + courage(勇气) → 给勇气 → 鼓励"
+    },
+    {
+     "id": 1182,
+     "w": "strengthen",
+     "def": "加强；增强；巩固",
+     "g": 9,
+     "hint": "strength(力量) + -en(使……) → 加强"
+    }
+   ]
+  },
+  {
+   "key": "ify",
+   "meaning": "动词后缀：使……化",
+   "en": "make",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "ize",
+   "meaning": "动词后缀：使……化",
+   "en": "make",
+   "count": 2,
+   "examples": [
+    {
+     "id": 57,
+     "w": "realize",
+     "def": "意识到",
+     "g": 7,
+     "hint": "real(真实的) + -ize(使……) → 使成真 → 实现；意识到"
+    },
+    {
+     "id": 1011,
+     "w": "recognize",
+     "def": "认出；辨别出",
+     "g": 8,
+     "hint": "re-(再) + cogn(知道) + -ize → 再次知道 → 认出"
+    }
+   ]
+  },
+  {
+   "key": "ing",
+   "meaning": "名词/形容词后缀：行为、进行中",
+   "en": "act; ongoing",
+   "count": 11,
+   "examples": [
+    {
+     "id": 49,
+     "w": "greeting",
+     "def": "问候；招呼",
+     "g": 7,
+     "hint": "greet(问候) + -ing → 问候、打招呼"
+    },
+    {
+     "id": 239,
+     "w": "painting",
+     "def": "绘画",
+     "g": 7,
+     "hint": "paint(画画) + -ing → 绘画"
+    },
+    {
+     "id": 550,
+     "w": "engineering",
+     "def": "工程学",
+     "g": 7,
+     "hint": "engineer(工程师) + -ing → 工程学"
+    },
+    {
+     "id": 628,
+     "w": "suffering",
+     "def": "苦难；疼痛",
+     "g": 8,
+     "hint": "suffer(遭受) + -ing → 痛苦"
+    },
+    {
+     "id": 770,
+     "w": "feeling",
+     "def": "感觉；感情",
+     "g": 8,
+     "hint": "feel(感觉) + -ing → 感觉"
+    },
+    {
+     "id": 930,
+     "w": "meaning",
+     "def": "意义；意思",
+     "g": 8,
+     "hint": "mean(意味着) + -ing → 意思"
+    },
+    {
+     "id": 953,
+     "w": "warning",
+     "def": "警告；警示",
+     "g": 8,
+     "hint": "warn(警告) + -ing → 警告"
+    },
+    {
+     "id": 1127,
+     "w": "outstanding",
+     "def": "优秀的；杰出的",
+     "g": 9,
+     "hint": "outstand(突出) + -ing → 杰出的"
+    },
+    {
+     "id": 1198,
+     "w": "bullying",
+     "def": "霸凌；仗势作恶",
+     "g": 9,
+     "hint": "bully(欺负) + -ing → 欺凌"
+    },
+    {
+     "id": 1238,
+     "w": "snowboarding",
+     "def": "滑雪板运动",
+     "g": 9,
+     "hint": "snowboard(滑雪板) + -ing → 单板滑雪"
+    },
+    {
+     "id": 1463,
+     "w": "missing",
+     "def": "失踪的",
+     "g": 9,
+     "hint": "miss(想念；错过) + -ing → 失踪的"
+    }
+   ]
+  },
+  {
+   "key": "ed",
+   "meaning": "形容词/动词过去式：感到……的",
+   "en": "feeling; past",
+   "count": 11,
+   "examples": [
+    {
+     "id": 396,
+     "w": "endangered",
+     "def": "濒危的",
+     "g": 7,
+     "hint": "endanger(使濒危) + -ed → 濒危的"
+    },
+    {
+     "id": 468,
+     "w": "scared",
+     "def": "害怕；恐惧",
+     "g": 7,
+     "hint": "scare(使害怕) + -ed(感到……的)"
+    },
+    {
+     "id": 619,
+     "w": "talented",
+     "def": "有才能的；天才的",
+     "g": 8,
+     "hint": "talent(天赋) + -ed(有……的) → 有天赋的"
+    },
+    {
+     "id": 835,
+     "w": "stressed",
+     "def": "心力交瘁的；焦虑不安的",
+     "g": 8,
+     "hint": "stress(压力) + -ed(感到……的) → 有压力的"
+    },
+    {
+     "id": 1029,
+     "w": "alarmed",
+     "def": "担忧的",
+     "g": 8,
+     "hint": "alarm(使惊恐) + -ed(感到……的) → 惊恐的"
+    },
+    {
+     "id": 1056,
+     "w": "concerned",
+     "def": "关切的；关注的",
+     "g": 8,
+     "hint": "concern(担心) + -ed(感到……的) → 担心的"
+    },
+    {
+     "id": 1102,
+     "w": "frightened",
+     "def": "受惊的；害怕的",
+     "g": 8,
+     "hint": "frighten(使害怕) + -ed(感到……的) → 害怕的"
+    },
+    {
+     "id": 1133,
+     "w": "*convinced",
+     "def": "坚信的；确信的",
+     "g": 9,
+     "hint": "convince(使信服) + -ed(感到……的)"
+    },
+    {
+     "id": 1197,
+     "w": "addicted",
+     "def": "上瘾的",
+     "g": 9,
+     "hint": "addict(使上瘾) + -ed(感到……的) → 上瘾的"
+    },
+    {
+     "id": 1204,
+     "w": "*embarrassed",
+     "def": "窘迫的；尴尬的",
+     "g": 9,
+     "hint": "embarrass(使尴尬) + -ed(感到……的) → 尴尬的"
+    },
+    {
+     "id": 1208,
+     "w": "*ashamed",
+     "def": "惭愧；羞愧",
+     "g": 9,
+     "hint": "a-(处于) + shame(羞愧) + -ed(感到……的)"
+    }
+   ]
+  },
+  {
+   "key": "ward",
+   "meaning": "形容词/副词后缀：朝……方向",
+   "en": "toward",
+   "count": 1,
+   "examples": [
+    {
+     "id": 1115,
+     "w": "backward",
+     "def": "朝反方向；倒着",
+     "g": 8,
+     "hint": "back(向后) + -ward(朝……方向) → 向后的"
+    }
+   ]
+  },
+  {
+   "key": "self",
+   "meaning": "代词后缀：自己",
+   "en": "self",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "teen",
+   "meaning": "数字后缀：十几（13-19）",
+   "en": "teen",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "ty",
+   "meaning": "数字后缀：几十（20-90）",
+   "en": "ty",
+   "count": 1,
+   "examples": [
+    {
+     "id": 535,
+     "w": "safety",
+     "def": "安全；平安",
+     "g": 7,
+     "hint": "safe(安全的) + -ty(名词后缀：性质、状态)"
+    }
+   ]
+  },
+  {
+   "key": "some",
+   "meaning": "形容词后缀：有……倾向的",
+   "en": "tending to",
+   "count": 1,
+   "examples": [
+    {
+     "id": 1014,
+     "w": "handsome",
+     "def": "英俊的；漂亮的",
+     "g": 8,
+     "hint": "hand(手) + -some(有……的) → 顺手、合意 → 英俊的"
+    }
+   ]
+  },
+  {
+   "key": "ent",
+   "meaning": "形容词/名词后缀：……的",
+   "en": "of; having",
+   "count": 5,
+   "examples": [
+    {
+     "id": 5,
+     "w": "confident",
+     "def": "自信的；有自信心的",
+     "g": 7,
+     "hint": "con-(加强) + fid(相信) + -ent(……的) → 自信的"
+    },
+    {
+     "id": 666,
+     "w": "represent",
+     "def": "代表",
+     "g": 8,
+     "hint": "re-(再) + present(呈现) → 再次呈现 → 代表"
+    },
+    {
+     "id": 768,
+     "w": "independent",
+     "def": "自主的",
+     "g": 8,
+     "hint": "in-(不) + depend(依靠) + -ent → 不依靠的 → 独立的"
+    },
+    {
+     "id": 1350,
+     "w": "continent",
+     "def": "大陆",
+     "g": 9,
+     "hint": "con-(一起) + tin(保持) + -ent → 连成一片 → 大陆"
+    },
+    {
+     "id": 1401,
+     "w": "president",
+     "def": "总统",
+     "g": 9,
+     "hint": "pre-(在前) + sid(坐) + -ent → 坐在前面的人 → 总统；主席"
+    }
+   ]
+  },
+  {
+   "key": "ant",
+   "meaning": "形容词/名词后缀：……的；……的人",
+   "en": "of; person",
+   "count": 3,
+   "examples": [
+    {
+     "id": 871,
+     "w": "servant",
+     "def": "仆人；佣人",
+     "g": 8,
+     "hint": "serv(服务) + -ant(……的人) → 仆人"
+    },
+    {
+     "id": 903,
+     "w": "pleasant",
+     "def": "令人愉快的；宜人的",
+     "g": 8,
+     "hint": "please(使高兴) + -ant(形容词后缀) → 令人愉快的"
+    },
+    {
+     "id": 1228,
+     "w": "*contestant",
+     "def": "比赛者；竞争者",
+     "g": 9,
+     "hint": "contest(词干) + -ant(形容词/名词后缀：……的；……的人)"
+    }
+   ]
+  },
+  {
+   "key": "wise",
+   "meaning": "副词后缀：以……方式；在……方面",
+   "en": "in the manner of",
+   "count": 1,
+   "examples": [
+    {
+     "id": 580,
+     "w": "otherwise",
+     "def": "否则；不然",
+     "g": 7,
+     "hint": "other(其他) + -wise(以……方式) → 否则；在其他方面"
+    }
+   ]
+  }
+ ],
+ "roots": [
+  {
+   "key": "act",
+   "meaning": "做、行动",
+   "en": "do, act",
+   "count": 1,
+   "examples": [
+    {
+     "id": 353,
+     "w": "active",
+     "def": "忙碌的；活跃的",
+     "g": 7,
+     "hint": "act(做、行动) + -ive(……的) → 活跃的"
+    }
+   ]
+  },
+  {
+   "key": "audi",
+   "meaning": "听",
+   "en": "hear",
+   "count": 1,
+   "examples": [
+    {
+     "id": 603,
+     "w": "audience",
+     "def": "观众；听众",
+     "g": 7,
+     "hint": "audi(听) + -ence → 听的人 → 观众、听众"
+    }
+   ]
+  },
+  {
+   "key": "aud",
+   "meaning": "听",
+   "en": "hear",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "cess",
+   "meaning": "走、让；过去",
+   "en": "go, yield",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "ceed",
+   "meaning": "走、前进",
+   "en": "go",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "cent",
+   "meaning": "百；百分之一",
+   "en": "hundred; cent",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "clud",
+   "meaning": "关闭",
+   "en": "close, shut",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "cre",
+   "meaning": "增长、产生",
+   "en": "grow, create",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "dict",
+   "meaning": "说、讲",
+   "en": "say, speak",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "duc",
+   "meaning": "引导、带领",
+   "en": "lead",
+   "count": 1,
+   "examples": [
+    {
+     "id": 187,
+     "w": "introduction",
+     "def": "序言；引言",
+     "g": 7,
+     "hint": "intro-(向内) + duc(引导) + -tion → 引进 → 介绍"
+    }
+   ]
+  },
+  {
+   "key": "duct",
+   "meaning": "引导、带领",
+   "en": "lead",
+   "count": 3,
+   "examples": [
+    {
+     "id": 430,
+     "w": "product",
+     "def": "产品；制品",
+     "g": 7,
+     "hint": "pro-(向前) + duct(引导) → 产出的东西 → 产品"
+    },
+    {
+     "id": 1232,
+     "w": "conduct",
+     "def": "实施",
+     "g": 9,
+     "hint": "con-(一起) + duct(引导) → 引导 → 进行；指挥"
+    },
+    {
+     "id": 1504,
+     "w": "conduct",
+     "def": "实施；执行",
+     "g": 9,
+     "hint": "con-(一起) + duct(引导) → 引导 → 进行；指挥"
+    }
+   ]
+  },
+  {
+   "key": "equ",
+   "meaning": "相等、平均",
+   "en": "equal",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "fac",
+   "meaning": "做、制作",
+   "en": "do, make",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "fact",
+   "meaning": "做、事实",
+   "en": "do, fact",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "fer",
+   "meaning": "带来、拿",
+   "en": "carry, bring",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "fin",
+   "meaning": "结束、界限",
+   "en": "end, limit",
+   "count": 1,
+   "examples": [
+    {
+     "id": 1494,
+     "w": "final",
+     "def": "决赛",
+     "g": 9,
+     "hint": "fin(结束) + -al(……的) → 最后的"
+    }
+   ]
+  },
+  {
+   "key": "form",
+   "meaning": "形状、形成",
+   "en": "shape, form",
+   "count": 3,
+   "examples": [
+    {
+     "id": 349,
+     "w": "uniform",
+     "def": "制服；校服",
+     "g": 7,
+     "hint": "uni-(单一) + form(形式) → 统一形式 → 校服、制服"
+    },
+    {
+     "id": 609,
+     "w": "perform",
+     "def": "演出；表演",
+     "g": 7,
+     "hint": "per-(贯穿) + form(形式) → 全程呈现 → 表演"
+    },
+    {
+     "id": 1391,
+     "w": "uniform",
+     "def": "校服",
+     "g": 9,
+     "hint": "uni-(单一) + form(形式) → 统一形式 → 校服、制服"
+    }
+   ]
+  },
+  {
+   "key": "fort",
+   "meaning": "强壮",
+   "en": "strong",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "grad",
+   "meaning": "步、等级",
+   "en": "step, grade",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "gress",
+   "meaning": "行走",
+   "en": "walk",
+   "count": 1,
+   "examples": [
+    {
+     "id": 1018,
+     "w": "progress",
+     "def": "前进；行进",
+     "g": 8,
+     "hint": "pro-(向前) + gress(行走) → 向前走 → 进步"
+    }
+   ]
+  },
+  {
+   "key": "graph",
+   "meaning": "写、画",
+   "en": "write, draw",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "ject",
+   "meaning": "投、掷",
+   "en": "throw",
+   "count": 2,
+   "examples": [
+    {
+     "id": 55,
+     "w": "project",
+     "def": "课题",
+     "g": 7,
+     "hint": "pro-(向前) + ject(投) → 向前投出 → 工程、项目"
+    },
+    {
+     "id": 1165,
+     "w": "*reject",
+     "def": "拒绝接受；不予考虑",
+     "g": 9,
+     "hint": "re-(回) + ject(投) → 投回去 → 拒绝"
+    }
+   ]
+  },
+  {
+   "key": "lect",
+   "meaning": "挑选、收集；读、讲",
+   "en": "choose, gather, read",
+   "count": 2,
+   "examples": [
+    {
+     "id": 171,
+     "w": "collect",
+     "def": "收集；采集",
+     "g": 7,
+     "hint": "col-(一起) + lect(收集) → 收集"
+    },
+    {
+     "id": 616,
+     "w": "lecture",
+     "def": "讲座；讲课；演讲",
+     "g": 7,
+     "hint": "lect(读、讲) + -ure(名词后缀) → 讲课、讲座"
+    }
+   ]
+  },
+  {
+   "key": "loc",
+   "meaning": "地方",
+   "en": "place",
+   "count": 1,
+   "examples": [
+    {
+     "id": 107,
+     "w": "local",
+     "def": "地方的；当地的",
+     "g": 7,
+     "hint": "loc(地方) + -al(……的) → 当地的"
+    }
+   ]
+  },
+  {
+   "key": "log",
+   "meaning": "说、话语",
+   "en": "speak, word",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "man",
+   "meaning": "手",
+   "en": "hand",
+   "count": 4,
+   "examples": [
+    {
+     "id": 361,
+     "w": "superman",
+     "def": "超人",
+     "g": 7,
+     "hint": "super-(超级) + man(人) → 超人"
+    },
+    {
+     "id": 1142,
+     "w": "manage",
+     "def": "完成（困难的事）",
+     "g": 9,
+     "hint": "man(手) + -age → 用手操作 → 管理"
+    },
+    {
+     "id": 1195,
+     "w": "manage",
+     "def": "明智地使用（金钱、时间、信息等）",
+     "g": 9,
+     "hint": "man(手) + -age → 用手操作 → 管理"
+    },
+    {
+     "id": 1388,
+     "w": "manage",
+     "def": "完成（困难的事）；勉力完成",
+     "g": 9,
+     "hint": "man(手) + -age → 用手操作 → 管理"
+    }
+   ]
+  },
+  {
+   "key": "manu",
+   "meaning": "手",
+   "en": "hand",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "mem",
+   "meaning": "记忆、记住",
+   "en": "memory",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "mit",
+   "meaning": "送、发出",
+   "en": "send",
+   "count": 1,
+   "examples": [
+    {
+     "id": 1384,
+     "w": "admit",
+     "def": "(常指勉强)承认",
+     "g": 9,
+     "hint": "ad-(朝向) + mit(送) → 送进来 → 承认；准许进入"
+    }
+   ]
+  },
+  {
+   "key": "miss",
+   "meaning": "送、发出",
+   "en": "send",
+   "count": 1,
+   "examples": [
+    {
+     "id": 1463,
+     "w": "missing",
+     "def": "失踪的",
+     "g": 9,
+     "hint": "miss(想念；错过) + -ing → 失踪的"
+    }
+   ]
+  },
+  {
+   "key": "mob",
+   "meaning": "动、移动",
+   "en": "move",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "mot",
+   "meaning": "动、移动",
+   "en": "move",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "mov",
+   "meaning": "动、移动",
+   "en": "move",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "nat",
+   "meaning": "出生、天生",
+   "en": "born, nature",
+   "count": 1,
+   "examples": [
+    {
+     "id": 1423,
+     "w": "nature",
+     "def": "自然界；大自然",
+     "g": 9,
+     "hint": "nat(出生、天生) + -ure → 天生的样子 → 自然"
+    }
+   ]
+  },
+  {
+   "key": "nov",
+   "meaning": "新的",
+   "en": "new",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "ped",
+   "meaning": "脚",
+   "en": "foot",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "pel",
+   "meaning": "推、驱动",
+   "en": "push, drive",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "pend",
+   "meaning": "悬挂；依靠",
+   "en": "hang; depend",
+   "count": 1,
+   "examples": [
+    {
+     "id": 730,
+     "w": "depend",
+     "def": "需要；依靠",
+     "g": 8,
+     "hint": "de-(向下) + pend(悬挂) → 挂靠在下面 → 依靠"
+    }
+   ]
+  },
+  {
+   "key": "phon",
+   "meaning": "声音",
+   "en": "sound, voice",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "plic",
+   "meaning": "折叠；应用",
+   "en": "fold; apply",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "pon",
+   "meaning": "放置",
+   "en": "put, place",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "pos",
+   "meaning": "放置、位置",
+   "en": "put, place",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "port",
+   "meaning": "搬运、携带",
+   "en": "carry",
+   "count": 1,
+   "examples": [
+    {
+     "id": 462,
+     "w": "transport",
+     "def": "运输；运送",
+     "g": 7,
+     "hint": "trans-(横过) + port(搬运) → 搬运过去 → 运输"
+    }
+   ]
+  },
+  {
+   "key": "press",
+   "meaning": "压、按",
+   "en": "press",
+   "count": 3,
+   "examples": [
+    {
+     "id": 195,
+     "w": "express",
+     "def": "表示；表达；表露",
+     "g": 7,
+     "hint": "ex-(向外) + press(压) → 压出来 → 表达"
+    },
+    {
+     "id": 1196,
+     "w": "pressure",
+     "def": "心理压力；紧张",
+     "g": 9,
+     "hint": "press(压) + -ure(名词后缀) → 压力"
+    },
+    {
+     "id": 1509,
+     "w": "pressure",
+     "def": "压力",
+     "g": 9,
+     "hint": "press(压) + -ure(名词后缀) → 压力"
+    }
+   ]
+  },
+  {
+   "key": "prim",
+   "meaning": "第一、最初",
+   "en": "first",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "punct",
+   "meaning": "点、刺",
+   "en": "point",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "rect",
+   "meaning": "直、正",
+   "en": "straight, right",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "rupt",
+   "meaning": "破、断裂",
+   "en": "break",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "sci",
+   "meaning": "知道、了解",
+   "en": "know",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "scrib",
+   "meaning": "写",
+   "en": "write",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "script",
+   "meaning": "写、文字",
+   "en": "write",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "sens",
+   "meaning": "感觉、感知",
+   "en": "feel, sense",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "sent",
+   "meaning": "感觉、感知",
+   "en": "feel, sense",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "serv",
+   "meaning": "服务；保存",
+   "en": "serve; keep",
+   "count": 1,
+   "examples": [
+    {
+     "id": 871,
+     "w": "servant",
+     "def": "仆人；佣人",
+     "g": 8,
+     "hint": "serv(服务) + -ant(……的人) → 仆人"
+    }
+   ]
+  },
+  {
+   "key": "sign",
+   "meaning": "标记、符号",
+   "en": "mark, sign",
+   "count": 1,
+   "examples": [
+    {
+     "id": 223,
+     "w": "design",
+     "def": "设计",
+     "g": 7,
+     "hint": "de-(向下) + sign(标记) → 画下标记 → 设计"
+    }
+   ]
+  },
+  {
+   "key": "sist",
+   "meaning": "站立",
+   "en": "stand",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "solv",
+   "meaning": "解开、解决",
+   "en": "loosen, solve",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "solu",
+   "meaning": "解开、解决",
+   "en": "loosen, solve",
+   "count": 2,
+   "examples": [
+    {
+     "id": 155,
+     "w": "solution",
+     "def": "解决办法",
+     "g": 7,
+     "hint": "solu(解开) + -tion → 解开问题的办法 → 解决方案"
+    },
+    {
+     "id": 1432,
+     "w": "solution",
+     "def": "解决办法；处理手段",
+     "g": 9,
+     "hint": "solu(解开) + -tion → 解开问题的办法 → 解决方案"
+    }
+   ]
+  },
+  {
+   "key": "spect",
+   "meaning": "看、观察",
+   "en": "look, watch",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "spir",
+   "meaning": "呼吸、精神",
+   "en": "breathe, spirit",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "sta",
+   "meaning": "站立、放置",
+   "en": "stand",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "stat",
+   "meaning": "站立、状态",
+   "en": "stand, state",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "stan",
+   "meaning": "站立",
+   "en": "stand",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "struct",
+   "meaning": "建造、建立",
+   "en": "build",
+   "count": 1,
+   "examples": [
+    {
+     "id": 898,
+     "w": "*structure",
+     "def": "结构",
+     "g": 8,
+     "hint": "struct(建造) + -ure(名词后缀) → 结构"
+    }
+   ]
+  },
+  {
+   "key": "tact",
+   "meaning": "接触",
+   "en": "touch",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "tend",
+   "meaning": "伸展、倾向",
+   "en": "stretch, tend",
+   "count": 1,
+   "examples": [
+    {
+     "id": 808,
+     "w": "*pretend",
+     "def": "假装；佯装",
+     "g": 8,
+     "hint": "pre-(向前) + tend(伸展) → 向前伸展 → 假装"
+    }
+   ]
+  },
+  {
+   "key": "tens",
+   "meaning": "伸展",
+   "en": "stretch",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "terr",
+   "meaning": "土地、地球",
+   "en": "land, earth",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "test",
+   "meaning": "证明、测试",
+   "en": "test, prove",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "tract",
+   "meaning": "拉、拖",
+   "en": "pull, draw",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "vac",
+   "meaning": "空",
+   "en": "empty",
+   "count": 2,
+   "examples": [
+    {
+     "id": 1186,
+     "w": "vacation",
+     "def": "假期",
+     "g": 9,
+     "hint": "vac(空) + -ation → 空闲 → 假期"
+    },
+    {
+     "id": 1402,
+     "w": "vacation",
+     "def": "假期",
+     "g": 9,
+     "hint": "vac(空) + -ation → 空闲 → 假期"
+    }
+   ]
+  },
+  {
+   "key": "val",
+   "meaning": "价值、强壮",
+   "en": "value, strength",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "ven",
+   "meaning": "来",
+   "en": "come",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "vent",
+   "meaning": "来",
+   "en": "come",
+   "count": 1,
+   "examples": [
+    {
+     "id": 272,
+     "w": "event",
+     "def": "公开活动；社交场合",
+     "g": 7,
+     "hint": "e-(向外) + vent(来) → 来到的事 → 事件"
+    }
+   ]
+  },
+  {
+   "key": "ver",
+   "meaning": "真实的",
+   "en": "true",
+   "count": 1,
+   "examples": [
+    {
+     "id": 123,
+     "w": "cover",
+     "def": "盖；覆盖",
+     "g": 7,
+     "hint": "co-(共同、一起) + ver(真实的)"
+    }
+   ]
+  },
+  {
+   "key": "vid",
+   "meaning": "看",
+   "en": "see",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "vis",
+   "meaning": "看",
+   "en": "see",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "vit",
+   "meaning": "生命、活力",
+   "en": "life",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "viv",
+   "meaning": "生命、活力",
+   "en": "life",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "voc",
+   "meaning": "声音、呼喊",
+   "en": "voice, call",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "vok",
+   "meaning": "声音、呼喊",
+   "en": "voice, call",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "vol",
+   "meaning": "意志、意愿",
+   "en": "will",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "volv",
+   "meaning": "滚动、转动",
+   "en": "roll",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "wis",
+   "meaning": "知道、智慧",
+   "en": "know, wise",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "geo",
+   "meaning": "地球、土地",
+   "en": "earth",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "meter",
+   "meaning": "测量、仪表",
+   "en": "measure",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "metr",
+   "meaning": "测量",
+   "en": "measure",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "astro",
+   "meaning": "星星、太空",
+   "en": "star",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "bio",
+   "meaning": "生命、生物",
+   "en": "life",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "logy",
+   "meaning": "学科、学说",
+   "en": "study of",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "cycl",
+   "meaning": "圆、环、循环",
+   "en": "circle, cycle",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "clud",
+   "meaning": "关闭",
+   "en": "close",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "dent",
+   "meaning": "牙齿",
+   "en": "tooth",
+   "count": 1,
+   "examples": [
+    {
+     "id": 1526,
+     "w": "dentist",
+     "def": "牙科医生",
+     "g": 9,
+     "hint": "dent(牙齿) + -ist(……的人) → 牙医"
+    }
+   ]
+  },
+  {
+   "key": "dur",
+   "meaning": "持续、耐久",
+   "en": "last, endure",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "flor",
+   "meaning": "花",
+   "en": "flower",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "flu",
+   "meaning": "流动",
+   "en": "flow",
+   "count": 1,
+   "examples": [
+    {
+     "id": 237,
+     "w": "influence",
+     "def": "影响；对……起作用",
+     "g": 7,
+     "hint": "in-(向内) + flu(流动) + -ence → 流入 → 影响"
+    }
+   ]
+  },
+  {
+   "key": "gen",
+   "meaning": "出生、产生",
+   "en": "born, produce",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "greg",
+   "meaning": "群体、聚集",
+   "en": "flock, group",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "habit",
+   "meaning": "居住、习惯",
+   "en": "dwell, habit",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "lumin",
+   "meaning": "光",
+   "en": "light",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "luc",
+   "meaning": "光、明亮",
+   "en": "light",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "magn",
+   "meaning": "大",
+   "en": "great, large",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "med",
+   "meaning": "中间",
+   "en": "middle",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "merg",
+   "meaning": "沉、浸",
+   "en": "sink, dip",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "migr",
+   "meaning": "迁移",
+   "en": "move, migrate",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "mut",
+   "meaning": "改变",
+   "en": "change",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "norm",
+   "meaning": "标准、规范",
+   "en": "rule, standard",
+   "count": 1,
+   "examples": [
+    {
+     "id": 837,
+     "w": "normal",
+     "def": "正常的",
+     "g": 8,
+     "hint": "norm(标准) + -al(……的) → 正常的"
+    }
+   ]
+  },
+  {
+   "key": "oper",
+   "meaning": "工作、操作",
+   "en": "work",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "pac",
+   "meaning": "和平",
+   "en": "peace",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "pat",
+   "meaning": "父亲；感受",
+   "en": "father; feel",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "popul",
+   "meaning": "人民、大众",
+   "en": "people",
+   "count": 1,
+   "examples": [
+    {
+     "id": 498,
+     "w": "population",
+     "def": "人口",
+     "g": 7,
+     "hint": "popul(人民) + -ation → 人口"
+    }
+   ]
+  },
+  {
+   "key": "prob",
+   "meaning": "证明、检验",
+   "en": "prove, test",
+   "count": 1,
+   "examples": [
+    {
+     "id": 1083,
+     "w": "probable",
+     "def": "很可能发生（或存在等）的",
+     "g": 8,
+     "hint": "prob(证明) + -able(能……的) → 很可能"
+    }
+   ]
+  },
+  {
+   "key": "publ",
+   "meaning": "人民的、公众",
+   "en": "public",
+   "count": 2,
+   "examples": [
+    {
+     "id": 497,
+     "w": "public",
+     "def": "公共的；公开的",
+     "g": 7,
+     "hint": "publ(公众) + -ic(……的) → 公众的"
+    },
+    {
+     "id": 562,
+     "w": "public",
+     "def": "百姓；民众",
+     "g": 7,
+     "hint": "publ(公众) + -ic(……的) → 公众的"
+    }
+   ]
+  },
+  {
+   "key": "radi",
+   "meaning": "光线、辐射",
+   "en": "ray",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "reg",
+   "meaning": "统治、管理",
+   "en": "rule, govern",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "rot",
+   "meaning": "旋转",
+   "en": "turn, rotate",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "sect",
+   "meaning": "切、割",
+   "en": "cut",
+   "count": 1,
+   "examples": [
+    {
+     "id": 316,
+     "w": "insect",
+     "def": "昆虫",
+     "g": 7,
+     "hint": "in-(进入) + sect(切) → 切成一段段的 → 昆虫"
+    }
+   ]
+  },
+  {
+   "key": "secut",
+   "meaning": "跟随",
+   "en": "follow",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "sequ",
+   "meaning": "跟随",
+   "en": "follow",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "simil",
+   "meaning": "相同、相似",
+   "en": "similar",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "son",
+   "meaning": "声音",
+   "en": "sound",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "soph",
+   "meaning": "智慧",
+   "en": "wise",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "tempor",
+   "meaning": "时间",
+   "en": "time",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "termin",
+   "meaning": "界限、末端",
+   "en": "end, limit",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "tort",
+   "meaning": "扭曲",
+   "en": "twist",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "trib",
+   "meaning": "给予",
+   "en": "give, pay",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "turb",
+   "meaning": "搅动、扰乱",
+   "en": "stir, disturb",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "umbr",
+   "meaning": "阴影",
+   "en": "shadow",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "us",
+   "meaning": "使用",
+   "en": "use",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "ut",
+   "meaning": "使用",
+   "en": "use",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "vad",
+   "meaning": "走、前进",
+   "en": "go, walk",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "vas",
+   "meaning": "走、前进",
+   "en": "go, walk",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "vari",
+   "meaning": "变化",
+   "en": "change, vary",
+   "count": 1,
+   "examples": [
+    {
+     "id": 1241,
+     "w": "various",
+     "def": "各种不同的；各种各样的",
+     "g": 9,
+     "hint": "vari(变化) + -ous(……的) → 各种各样的"
+    }
+   ]
+  },
+  {
+   "key": "verb",
+   "meaning": "词语",
+   "en": "word",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "vest",
+   "meaning": "穿衣、衣服",
+   "en": "clothe",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "vict",
+   "meaning": "征服、胜利",
+   "en": "conquer, win",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "view",
+   "meaning": "看、观点",
+   "en": "see, view",
+   "count": 2,
+   "examples": [
+    {
+     "id": 608,
+     "w": "review",
+     "def": "评论",
+     "g": 7,
+     "hint": "re-(再) + view(看) → 再看一遍 → 复习；评论"
+    },
+    {
+     "id": 695,
+     "w": "interview",
+     "def": "采访",
+     "g": 8,
+     "hint": "inter-(相互) + view(看) → 相互看 → 采访、面试"
+    }
+   ]
+  },
+  {
+   "key": "vol",
+   "meaning": "意志、愿望",
+   "en": "will, wish",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "cir",
+   "meaning": "圆、环",
+   "en": "circle",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "civ",
+   "meaning": "公民、城市",
+   "en": "citizen",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "cult",
+   "meaning": "耕种、培养",
+   "en": "cultivate",
+   "count": 1,
+   "examples": [
+    {
+     "id": 106,
+     "w": "culture",
+     "def": "文化；文明",
+     "g": 7,
+     "hint": "cult(耕种、培养) + -ure → 培养出来的 → 文化"
+    }
+   ]
+  },
+  {
+   "key": "dem",
+   "meaning": "人民",
+   "en": "people",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "doc",
+   "meaning": "教、教导",
+   "en": "teach",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "electr",
+   "meaning": "电",
+   "en": "electric",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "fam",
+   "meaning": "名声、家庭",
+   "en": "fame, family",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "feder",
+   "meaning": "联盟、条约",
+   "en": "league",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "frag",
+   "meaning": "打碎、破裂",
+   "en": "break",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "funct",
+   "meaning": "起作用、功能",
+   "en": "function",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "gest",
+   "meaning": "带、产生",
+   "en": "carry, bear",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "gram",
+   "meaning": "写、画；克",
+   "en": "write; gram",
+   "count": 1,
+   "examples": [
+    {
+     "id": 204,
+     "w": "kilogram",
+     "def": "千克；公斤",
+     "g": 7,
+     "hint": "kilo-(千) + gram(克) → 千克"
+    }
+   ]
+  },
+  {
+   "key": "grat",
+   "meaning": "感激、高兴",
+   "en": "thankful",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "hemi",
+   "meaning": "半",
+   "en": "half",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "her",
+   "meaning": "粘、附着",
+   "en": "stick",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "hospit",
+   "meaning": "客人、接待",
+   "en": "guest",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "hydr",
+   "meaning": "水",
+   "en": "water",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "jur",
+   "meaning": "法律、正义",
+   "en": "law, justice",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "labor",
+   "meaning": "工作、劳动",
+   "en": "work",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "liber",
+   "meaning": "自由",
+   "en": "free",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "lig",
+   "meaning": "绑、连接",
+   "en": "bind, tie",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "lingu",
+   "meaning": "语言、舌头",
+   "en": "language, tongue",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "liter",
+   "meaning": "文字、字母",
+   "en": "letter",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "mar",
+   "meaning": "海",
+   "en": "sea",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "medi",
+   "meaning": "中间、治疗",
+   "en": "middle; heal",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "memor",
+   "meaning": "记忆",
+   "en": "memory",
+   "count": 1,
+   "examples": [
+    {
+     "id": 230,
+     "w": "memory",
+     "def": "回忆；记忆",
+     "g": 7,
+     "hint": "memor(记忆) + -y(名词后缀) → 记忆"
+    }
+   ]
+  },
+  {
+   "key": "ment",
+   "meaning": "心智、思考",
+   "en": "mind",
+   "count": 12,
+   "examples": [
+    {
+     "id": 278,
+     "w": "equipment",
+     "def": "设备；器材",
+     "g": 7,
+     "hint": "equip(装备) + -ment(名词后缀) → 设备"
+    },
+    {
+     "id": 394,
+     "w": "government",
+     "def": "政府",
+     "g": 7,
+     "hint": "govern(治理) + -ment(名词后缀) → 政府"
+    },
+    {
+     "id": 419,
+     "w": "environment",
+     "def": "自然环境",
+     "g": 7,
+     "hint": "environ(环绕) + -ment → 周围环境"
+    },
+    {
+     "id": 528,
+     "w": "apartment",
+     "def": "公寓套房",
+     "g": 7,
+     "hint": "apart(分开) + -ment → 分隔开的房间 → 公寓"
+    },
+    {
+     "id": 681,
+     "w": "payment",
+     "def": "付款；支付",
+     "g": 8,
+     "hint": "pay(支付) + -ment(名词后缀) → 付款"
+    },
+    {
+     "id": 683,
+     "w": "treatment",
+     "def": "治疗；疗法",
+     "g": 8,
+     "hint": "treat(对待；治疗) + -ment(名词后缀) → 治疗；待遇"
+    },
+    {
+     "id": 701,
+     "w": "comment",
+     "def": "评论",
+     "g": 8,
+     "hint": "com-(一起) + ment(思考) → 一起思考 → 评论"
+    },
+    {
+     "id": 734,
+     "w": "statement",
+     "def": "说明",
+     "g": 8,
+     "hint": "state(陈述) + -ment(名词后缀)"
+    },
+    {
+     "id": 1136,
+     "w": "judgement",
+     "def": "看法；意见；评价",
+     "g": 9,
+     "hint": "judge(判断) + -ment(名词后缀) → 判断；判决"
+    },
+    {
+     "id": 1365,
+     "w": "development",
+     "def": "发展；壮大",
+     "g": 9,
+     "hint": "develop(发展) + -ment(名词后缀) → 发展"
+    },
+    {
+     "id": 1433,
+     "w": "government",
+     "def": "政府",
+     "g": 9,
+     "hint": "govern(治理) + -ment(名词后缀) → 政府"
+    },
+    {
+     "id": 1475,
+     "w": "announcement",
+     "def": "公告；通告",
+     "g": 9,
+     "hint": "announce(宣布) + -ment(名词后缀) → 公告"
+    }
+   ]
+  },
+  {
+   "key": "metr",
+   "meaning": "母亲",
+   "en": "mother",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "min",
+   "meaning": "小、少",
+   "en": "small, less",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "mir",
+   "meaning": "惊奇、看",
+   "en": "wonder",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "mort",
+   "meaning": "死",
+   "en": "death",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "nau",
+   "meaning": "船",
+   "en": "ship",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "navig",
+   "meaning": "航行",
+   "en": "sail",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "nect",
+   "meaning": "连接",
+   "en": "connect",
+   "count": 1,
+   "examples": [
+    {
+     "id": 537,
+     "w": "connect",
+     "def": "(使)连接",
+     "g": 7,
+     "hint": "con-(一起) + nect(连接) → 连接"
+    }
+   ]
+  },
+  {
+   "key": "neg",
+   "meaning": "否定、拒绝",
+   "en": "deny",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "noct",
+   "meaning": "夜晚",
+   "en": "night",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "nomin",
+   "meaning": "名字",
+   "en": "name",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "nutri",
+   "meaning": "营养",
+   "en": "nourish",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "optim",
+   "meaning": "最好的",
+   "en": "best",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "opt",
+   "meaning": "选择、视力",
+   "en": "choose; eye",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "ord",
+   "meaning": "顺序、命令",
+   "en": "order",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "ori",
+   "meaning": "升起、开始",
+   "en": "rise, begin",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "part",
+   "meaning": "部分、分开",
+   "en": "part",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "pass",
+   "meaning": "经过、通过",
+   "en": "pass",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "path",
+   "meaning": "感受、病痛",
+   "en": "feeling, disease",
+   "count": 1,
+   "examples": [
+    {
+     "id": 1210,
+     "w": "*sympathy",
+     "def": "同情",
+     "g": 9,
+     "hint": "sym-(相同) + path(感受) + -y → 感同身受 → 同情"
+    }
+   ]
+  },
+  {
+   "key": "patr",
+   "meaning": "父亲、祖国",
+   "en": "father",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "ped",
+   "meaning": "儿童、教育",
+   "en": "child",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "phil",
+   "meaning": "爱",
+   "en": "love",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "photo",
+   "meaning": "光",
+   "en": "light",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "phys",
+   "meaning": "自然、身体",
+   "en": "nature, body",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "plan",
+   "meaning": "平坦、计划",
+   "en": "flat, plan",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "plur",
+   "meaning": "多、更多",
+   "en": "more",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "polis",
+   "meaning": "城市、国家",
+   "en": "city, state",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "polit",
+   "meaning": "城市、政治",
+   "en": "city, politics",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "pot",
+   "meaning": "能力、力量",
+   "en": "power",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "pract",
+   "meaning": "做、实践",
+   "en": "do, practice",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "preci",
+   "meaning": "价值",
+   "en": "price, value",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "priv",
+   "meaning": "私人的、单个",
+   "en": "private",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "psych",
+   "meaning": "心灵、灵魂",
+   "en": "mind, soul",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "quer",
+   "meaning": "寻找、询问",
+   "en": "seek, ask",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "quest",
+   "meaning": "寻找、询问",
+   "en": "seek, ask",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "quiet",
+   "meaning": "安静",
+   "en": "quiet, rest",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "quit",
+   "meaning": "安静、释放",
+   "en": "quiet, free",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "real",
+   "meaning": "真实的",
+   "en": "real",
+   "count": 1,
+   "examples": [
+    {
+     "id": 57,
+     "w": "realize",
+     "def": "意识到",
+     "g": 7,
+     "hint": "real(真实的) + -ize(使……) → 使成真 → 实现；意识到"
+    }
+   ]
+  },
+  {
+   "key": "rid",
+   "meaning": "笑",
+   "en": "laugh",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "riv",
+   "meaning": "河",
+   "en": "river",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "san",
+   "meaning": "健康",
+   "en": "healthy",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "sat",
+   "meaning": "足够、满足",
+   "en": "enough, satisfy",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "satisf",
+   "meaning": "满足",
+   "en": "satisfy",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "scop",
+   "meaning": "看、观察仪器",
+   "en": "see, look",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "sed",
+   "meaning": "坐",
+   "en": "sit",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "sid",
+   "meaning": "坐",
+   "en": "sit",
+   "count": 1,
+   "examples": [
+    {
+     "id": 1401,
+     "w": "president",
+     "def": "总统",
+     "g": 9,
+     "hint": "pre-(在前) + sid(坐) + -ent → 坐在前面的人 → 总统；主席"
+    }
+   ]
+  },
+  {
+   "key": "sess",
+   "meaning": "坐",
+   "en": "sit",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "soci",
+   "meaning": "同伴、社会",
+   "en": "companion, society",
+   "count": 1,
+   "examples": [
+    {
+     "id": 693,
+     "w": "social",
+     "def": "社交的",
+     "g": 8,
+     "hint": "soci(社会) + -al(……的) → 社会的"
+    }
+   ]
+  },
+  {
+   "key": "sol",
+   "meaning": "单独、太阳",
+   "en": "alone; sun",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "spec",
+   "meaning": "看",
+   "en": "look, see",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "stere",
+   "meaning": "坚固、立体",
+   "en": "solid",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "strict",
+   "meaning": "拉紧、严格",
+   "en": "tight, strict",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "strain",
+   "meaning": "拉紧",
+   "en": "tighten",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "surg",
+   "meaning": "升起、崛起",
+   "en": "rise",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "tain",
+   "meaning": "持有、保持",
+   "en": "hold, keep",
+   "count": 1,
+   "examples": [
+    {
+     "id": 846,
+     "w": "contain",
+     "def": "包含；含有",
+     "g": 8,
+     "hint": "con-(一起) + tain(保持) → 保持在一起 → 包含"
+    }
+   ]
+  },
+  {
+   "key": "ten",
+   "meaning": "持有、保持",
+   "en": "hold, keep",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "tin",
+   "meaning": "持有、保持",
+   "en": "hold, keep",
+   "count": 1,
+   "examples": [
+    {
+     "id": 1350,
+     "w": "continent",
+     "def": "大陆",
+     "g": 9,
+     "hint": "con-(一起) + tin(保持) + -ent → 连成一片 → 大陆"
+    }
+   ]
+  },
+  {
+   "key": "the",
+   "meaning": "神",
+   "en": "god",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "theo",
+   "meaning": "神",
+   "en": "god",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "therm",
+   "meaning": "热",
+   "en": "heat",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "tom",
+   "meaning": "切、切割",
+   "en": "cut",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "ton",
+   "meaning": "声音、音调",
+   "en": "sound, tone",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "tour",
+   "meaning": "转、环游",
+   "en": "turn, travel",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "tox",
+   "meaning": "毒",
+   "en": "poison",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "trud",
+   "meaning": "推、挤",
+   "en": "thrust",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "umbr",
+   "meaning": "阴影",
+   "en": "shadow",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "uni",
+   "meaning": "一个",
+   "en": "one",
+   "count": 3,
+   "examples": [
+    {
+     "id": 197,
+     "w": "universe",
+     "def": "宇宙",
+     "g": 7,
+     "hint": "uni-(单一) + verse(转) → 万物运转一体 → 宇宙"
+    },
+    {
+     "id": 349,
+     "w": "uniform",
+     "def": "制服；校服",
+     "g": 7,
+     "hint": "uni-(单一) + form(形式) → 统一形式 → 校服、制服"
+    },
+    {
+     "id": 1391,
+     "w": "uniform",
+     "def": "校服",
+     "g": 9,
+     "hint": "uni-(单一) + form(形式) → 统一形式 → 校服、制服"
+    }
+   ]
+  },
+  {
+   "key": "urb",
+   "meaning": "城市",
+   "en": "city",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "vac",
+   "meaning": "空",
+   "en": "empty",
+   "count": 2,
+   "examples": [
+    {
+     "id": 1186,
+     "w": "vacation",
+     "def": "假期",
+     "g": 9,
+     "hint": "vac(空) + -ation → 空闲 → 假期"
+    },
+    {
+     "id": 1402,
+     "w": "vacation",
+     "def": "假期",
+     "g": 9,
+     "hint": "vac(空) + -ation → 空闲 → 假期"
+    }
+   ]
+  },
+  {
+   "key": "vail",
+   "meaning": "强壮、价值",
+   "en": "strong, worth",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "velop",
+   "meaning": "包裹、卷",
+   "en": "wrap",
+   "count": 2,
+   "examples": [
+    {
+     "id": 44,
+     "w": "develop",
+     "def": "培养；发展",
+     "g": 7,
+     "hint": "de-(打开) + velop(包裹) → 打开包裹 → 发展"
+    },
+    {
+     "id": 1355,
+     "w": "develop",
+     "def": "增强；加强",
+     "g": 9,
+     "hint": "de-(打开) + velop(包裹) → 打开包裹 → 发展"
+    }
+   ]
+  },
+  {
+   "key": "verb",
+   "meaning": "词语",
+   "en": "word",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "vert",
+   "meaning": "转",
+   "en": "turn",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "vers",
+   "meaning": "转",
+   "en": "turn",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "vig",
+   "meaning": "活力",
+   "en": "vigor",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "viol",
+   "meaning": "力量、暴力",
+   "en": "force",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "vir",
+   "meaning": "男人、力量",
+   "en": "man",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "vit",
+   "meaning": "生命",
+   "en": "life",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "voc",
+   "meaning": "声音",
+   "en": "voice",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "vot",
+   "meaning": "发誓、许愿",
+   "en": "vow",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "war",
+   "meaning": "战争；警惕",
+   "en": "war; guard",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "zo",
+   "meaning": "动物",
+   "en": "animal",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "fid",
+   "meaning": "相信、信任",
+   "en": "trust, faith",
+   "count": 1,
+   "examples": [
+    {
+     "id": 5,
+     "w": "confident",
+     "def": "自信的；有自信心的",
+     "g": 7,
+     "hint": "con-(加强) + fid(相信) + -ent(……的) → 自信的"
+    }
+   ]
+  },
+  {
+   "key": "duce",
+   "meaning": "引导、带领",
+   "en": "lead",
+   "count": 1,
+   "examples": [
+    {
+     "id": 314,
+     "w": "produce",
+     "def": "生产；制造",
+     "g": 7,
+     "hint": "pro-(向前) + duce(引导) → 向前引出 → 生产"
+    }
+   ]
+  },
+  {
+   "key": "pose",
+   "meaning": "放置",
+   "en": "put, place",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "come",
+   "meaning": "来",
+   "en": "come",
+   "count": 2,
+   "examples": [
+    {
+     "id": 235,
+     "w": "become",
+     "def": "开始变得；变成",
+     "g": 7,
+     "hint": "be-(使) + come(来) → 变成"
+    },
+    {
+     "id": 506,
+     "w": "income",
+     "def": "收入；收益；所得",
+     "g": 7,
+     "hint": "in-(向内) + come(来) → 进来的钱 → 收入"
+    }
+   ]
+  },
+  {
+   "key": "print",
+   "meaning": "印记、印刷",
+   "en": "print",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "flu",
+   "meaning": "流动",
+   "en": "flow",
+   "count": 1,
+   "examples": [
+    {
+     "id": 237,
+     "w": "influence",
+     "def": "影响；对……起作用",
+     "g": 7,
+     "hint": "in-(向内) + flu(流动) + -ence → 流入 → 影响"
+    }
+   ]
+  },
+  {
+   "key": "tect",
+   "meaning": "覆盖、遮蔽",
+   "en": "cover",
+   "count": 1,
+   "examples": [
+    {
+     "id": 141,
+     "w": "protect",
+     "def": "保护",
+     "g": 7,
+     "hint": "pro-(向前) + tect(覆盖) → 在前面遮挡 → 保护"
+    }
+   ]
+  },
+  {
+   "key": "pect",
+   "meaning": "看、观察",
+   "en": "look",
+   "count": 1,
+   "examples": [
+    {
+     "id": 781,
+     "w": "expect",
+     "def": "期待；盼望",
+     "g": 8,
+     "hint": "ex-(向外) + pect(看) → 向外看 → 期待"
+    }
+   ]
+  },
+  {
+   "key": "scribe",
+   "meaning": "写",
+   "en": "write",
+   "count": 1,
+   "examples": [
+    {
+     "id": 13,
+     "w": "describe",
+     "def": "描述；形容",
+     "g": 7,
+     "hint": "de-(向下) + scribe(写) → 写下来 → 描述"
+    }
+   ]
+  },
+  {
+   "key": "vive",
+   "meaning": "活、生命",
+   "en": "live",
+   "count": 1,
+   "examples": [
+    {
+     "id": 581,
+     "w": "survive",
+     "def": "生存；存活",
+     "g": 7,
+     "hint": "sur-(超过) + vive(活) → 活过来 → 幸存"
+    }
+   ]
+  },
+  {
+   "key": "vide",
+   "meaning": "看",
+   "en": "see",
+   "count": 1,
+   "examples": [
+    {
+     "id": 135,
+     "w": "provide",
+     "def": "提供；供应",
+     "g": 7,
+     "hint": "pro-(向前) + vide(看) → 提前看到 → 提供"
+    }
+   ]
+  },
+  {
+   "key": "cide",
+   "meaning": "切、杀",
+   "en": "cut, kill",
+   "count": 1,
+   "examples": [
+    {
+     "id": 104,
+     "w": "decide",
+     "def": "对……作出抉择；决定",
+     "g": 7,
+     "hint": "de-(向下) + cide(切) → 切断犹豫 → 决定"
+    }
+   ]
+  },
+  {
+   "key": "cept",
+   "meaning": "拿、取",
+   "en": "take",
+   "count": 2,
+   "examples": [
+    {
+     "id": 783,
+     "w": "accept",
+     "def": "接受",
+     "g": 8,
+     "hint": "ac-(加强) + cept(拿) → 收下 → 接受"
+    },
+    {
+     "id": 800,
+     "w": "except",
+     "def": "除……之外",
+     "g": 8,
+     "hint": "ex-(向外) + cept(拿) → 拿出去 → 除了"
+    }
+   ]
+  },
+  {
+   "key": "ceive",
+   "meaning": "拿、取",
+   "en": "take",
+   "count": 2,
+   "examples": [
+    {
+     "id": 380,
+     "w": "receive",
+     "def": "接待；招待",
+     "g": 7,
+     "hint": "re-(回) + ceive(拿) → 拿回来 → 收到"
+    },
+    {
+     "id": 549,
+     "w": "receive",
+     "def": "拿到；接到；收到",
+     "g": 7,
+     "hint": "re-(回) + ceive(拿) → 拿回来 → 收到"
+    }
+   ]
+  },
+  {
+   "key": "lieve",
+   "meaning": "相信",
+   "en": "believe",
+   "count": 1,
+   "examples": [
+    {
+     "id": 866,
+     "w": "relieve",
+     "def": "方便；解手",
+     "g": 8,
+     "hint": "re-(加强) + lieve(减轻) → 减轻、缓解"
+    }
+   ]
+  },
+  {
+   "key": "verse",
+   "meaning": "转、旋转",
+   "en": "turn",
+   "count": 1,
+   "examples": [
+    {
+     "id": 197,
+     "w": "universe",
+     "def": "宇宙",
+     "g": 7,
+     "hint": "uni-(单一) + verse(转) → 万物运转一体 → 宇宙"
+    }
+   ]
+  },
+  {
+   "key": "vert",
+   "meaning": "转",
+   "en": "turn",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "vision",
+   "meaning": "视觉、看",
+   "en": "sight",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "scope",
+   "meaning": "看、观察仪器",
+   "en": "see, instrument",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "nect",
+   "meaning": "连接",
+   "en": "connect",
+   "count": 1,
+   "examples": [
+    {
+     "id": 537,
+     "w": "connect",
+     "def": "(使)连接",
+     "g": 7,
+     "hint": "con-(一起) + nect(连接) → 连接"
+    }
+   ]
+  },
+  {
+   "key": "tain",
+   "meaning": "持有、保持",
+   "en": "hold, keep",
+   "count": 1,
+   "examples": [
+    {
+     "id": 846,
+     "w": "contain",
+     "def": "包含；含有",
+     "g": 8,
+     "hint": "con-(一起) + tain(保持) → 保持在一起 → 包含"
+    }
+   ]
+  },
+  {
+   "key": "pens",
+   "meaning": "称重、花费",
+   "en": "weigh, pay",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "ploy",
+   "meaning": "折叠、应用",
+   "en": "fold, apply",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "fer",
+   "meaning": "带来、拿",
+   "en": "carry, bring",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "press",
+   "meaning": "压、按",
+   "en": "press",
+   "count": 3,
+   "examples": [
+    {
+     "id": 195,
+     "w": "express",
+     "def": "表示；表达；表露",
+     "g": 7,
+     "hint": "ex-(向外) + press(压) → 压出来 → 表达"
+    },
+    {
+     "id": 1196,
+     "w": "pressure",
+     "def": "心理压力；紧张",
+     "g": 9,
+     "hint": "press(压) + -ure(名词后缀) → 压力"
+    },
+    {
+     "id": 1509,
+     "w": "pressure",
+     "def": "压力",
+     "g": 9,
+     "hint": "press(压) + -ure(名词后缀) → 压力"
+    }
+   ]
+  },
+  {
+   "key": "plain",
+   "meaning": "平坦的；明白的",
+   "en": "flat, clear",
+   "count": 2,
+   "examples": [
+    {
+     "id": 300,
+     "w": "explain",
+     "def": "解释；说明",
+     "g": 7,
+     "hint": "ex-(向外) + plain(平坦、明白) → 说明白 → 解释"
+    },
+    {
+     "id": 863,
+     "w": "*complain",
+     "def": "抱怨；投诉",
+     "g": 8,
+     "hint": "com-(共同、一起（用于 b/m/p 前）) + plain(平坦的；明白的)"
+    }
+   ]
+  },
+  {
+   "key": "maze",
+   "meaning": "迷宫；迷惑",
+   "en": "maze",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "aster",
+   "meaning": "星星",
+   "en": "star",
+   "count": 1,
+   "examples": [
+    {
+     "id": 459,
+     "w": "disaster",
+     "def": "灾难；灾害",
+     "g": 7,
+     "hint": "dis-(坏的) + aster(星星) → 灾星 → 灾难"
+    }
+   ]
+  },
+  {
+   "key": "solute",
+   "meaning": "解开、溶解",
+   "en": "loosen",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "finite",
+   "meaning": "有限的",
+   "en": "finite",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "sult",
+   "meaning": "跳、跃起",
+   "en": "leap",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "quire",
+   "meaning": "寻求、询问",
+   "en": "seek, ask",
+   "count": 2,
+   "examples": [
+    {
+     "id": 993,
+     "w": "require",
+     "def": "需要",
+     "g": 8,
+     "hint": "re-(再) + quire(寻求) → 反复寻求 → 需要"
+    },
+    {
+     "id": 1052,
+     "w": "acquire",
+     "def": "获得；得到",
+     "g": 8,
+     "hint": "ac-(加强) + quire(寻求) → 努力求得 → 获得"
+    }
+   ]
+  },
+  {
+   "key": "mote",
+   "meaning": "移动",
+   "en": "move",
+   "count": 1,
+   "examples": [
+    {
+     "id": 1048,
+     "w": "*promote",
+     "def": "促进；推动",
+     "g": 8,
+     "hint": "pro-(向前) + mote(移动) → 向前推 → 晋升、促进"
+    }
+   ]
+  },
+  {
+   "key": "stroy",
+   "meaning": "建造、建立",
+   "en": "build",
+   "count": 2,
+   "examples": [
+    {
+     "id": 1081,
+     "w": "destroy",
+     "def": "摧毁",
+     "g": 8,
+     "hint": "de-(向下；去掉、相反) + stroy(建造、建立)"
+    },
+    {
+     "id": 1422,
+     "w": "destroy",
+     "def": "摧毁；毁灭",
+     "g": 9,
+     "hint": "de-(向下；去掉、相反) + stroy(建造、建立)"
+    }
+   ]
+  },
+  {
+   "key": "gard",
+   "meaning": "看、注视",
+   "en": "look, guard",
+   "count": 1,
+   "examples": [
+    {
+     "id": 1302,
+     "w": "regard",
+     "def": "把……视为；看待",
+     "g": 9,
+     "hint": "re-(再) + gard(看) → 再看、注视 → 认为；尊重"
+    }
+   ]
+  },
+  {
+   "key": "spire",
+   "meaning": "呼吸",
+   "en": "breathe",
+   "count": 1,
+   "examples": [
+    {
+     "id": 568,
+     "w": "inspire",
+     "def": "激励；鼓舞",
+     "g": 7,
+     "hint": "in-(向内) + spire(呼吸) → 吸入 → 鼓舞、激励"
+    }
+   ]
+  },
+  {
+   "key": "par",
+   "meaning": "相等、相同",
+   "en": "equal",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "glob",
+   "meaning": "球、球状",
+   "en": "ball, globe",
+   "count": 1,
+   "examples": [
+    {
+     "id": 505,
+     "w": "global",
+     "def": "全球的；全世界的",
+     "g": 7,
+     "hint": "glob(球) + -al(……的) → 全球的"
+    }
+   ]
+  },
+  {
+   "key": "cord",
+   "meaning": "心",
+   "en": "heart",
+   "count": 1,
+   "examples": [
+    {
+     "id": 636,
+     "w": "record",
+     "def": "记录",
+     "g": 8,
+     "hint": "re-(回) + cord(心) → 记在心里 → 记录"
+    }
+   ]
+  },
+  {
+   "key": "pet",
+   "meaning": "追求、寻求",
+   "en": "seek, strive",
+   "count": 3,
+   "examples": [
+    {
+     "id": 356,
+     "w": "competition",
+     "def": "比赛；竞赛",
+     "g": 7,
+     "hint": "com-(共同) + pet(追求) + -ition → 一起追求 → 比赛、竞争"
+    },
+    {
+     "id": 1184,
+     "w": "repetition",
+     "def": "重复",
+     "g": 9,
+     "hint": "re-(再) + pet(追求) + -ition → 重复"
+    },
+    {
+     "id": 1348,
+     "w": "repetition",
+     "def": "重复",
+     "g": 9,
+     "hint": "re-(再) + pet(追求) + -ition → 重复"
+    }
+   ]
+  },
+  {
+   "key": "cogn",
+   "meaning": "知道、认识",
+   "en": "know",
+   "count": 1,
+   "examples": [
+    {
+     "id": 1011,
+     "w": "recognize",
+     "def": "认出；辨别出",
+     "g": 8,
+     "hint": "re-(再) + cogn(知道) + -ize → 再次知道 → 认出"
+    }
+   ]
+  },
+  {
+   "key": "bine",
+   "meaning": "两个、成双",
+   "en": "two together",
+   "count": 1,
+   "examples": [
+    {
+     "id": 945,
+     "w": "*combine",
+     "def": "组合；联合",
+     "g": 8,
+     "hint": "com-(共同) + bine(成双) → 合在一起 → 结合"
+    }
+   ]
+  },
+  {
+   "key": "flect",
+   "meaning": "弯曲",
+   "en": "bend",
+   "count": 0,
+   "examples": []
+  },
+  {
+   "key": "crease",
+   "meaning": "增长",
+   "en": "grow",
+   "count": 2,
+   "examples": [
+    {
+     "id": 600,
+     "w": "increase",
+     "def": "增长；增多；增加",
+     "g": 7,
+     "hint": "in-(加强) + cre(增长) → 增长、增加"
+    },
+    {
+     "id": 1420,
+     "w": "increase",
+     "def": "（使）增长；增多；增加",
+     "g": 9,
+     "hint": "in-(加强) + cre(增长) → 增长、增加"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,11 @@
+# 词跃 LexiRise · 不要提交的文件
+node_modules/
+.next/
+out/
+data/user.db
+data/user.db-*
+data/backups/
+npm-debug.log*
+*.tsbuildinfo
+.DS_Store
+Thumbs.db
