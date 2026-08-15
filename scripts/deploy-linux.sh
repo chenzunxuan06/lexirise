@@ -16,6 +16,13 @@ fi
 echo "== 1/4 安装依赖 =="
 npm ci --omit=dev || npm install
 
+# Node 18/20 需要 better-sqlite3（Node 22+ 用内置 node:sqlite，无需安装）
+MAJOR=$(node -p "process.versions.node.split('.')[0]")
+if [ "$MAJOR" -lt 22 ]; then
+  echo "-- 安装 better-sqlite3（Node $MAJOR 本地 SQLite 驱动） --"
+  npm install better-sqlite3@11.10.0 --no-save
+fi
+
 echo "== 2/4 构建 =="
 npm run build
 
