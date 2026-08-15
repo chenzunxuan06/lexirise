@@ -28,12 +28,21 @@ bash scripts/deploy-linux.sh
 ```
 脚本会：装依赖 → 构建 → PM2 启动（端口 3000）。
 
-## 4. 公网访问
-- Cloud Studio 一般提供「端口转发 / 公网访问」：在空间面板找到端口 3000 → 开启公网访问 → 得到一个形如 `https://xxxx.cloudstudio.work` 的地址
-- 把这个地址收藏/分享即可
-- ⚠️ 数据库在空间磁盘里，**备份**：在服务器上配置定时执行 `node scripts/backup_db.mjs`（cron），把备份文件下载到本地（管理后台也能一键下载 .db）
+## 4. 公网访问（CloudStudio 没有"端口按钮"，地址用环境变量拼）
+在 CloudStudio 网页终端里执行（服务需已启动且监听 0.0.0.0——Next.js 默认就是）：
+```bash
+# 确认服务在跑
+curl -s localhost:3000 | head -c 100
 
-## 5. 保活（免费空间休眠问题）
+# 拼出公网地址（复制输出到浏览器打开）
+echo "https://${X_IDE_SPACE_KEY}--3000.${X_IDE_SPACE_REGION}.${X_IDE_SPACE_HOST}"
+```
+- 地址形如 `https://xxxx--3000.ap-shanghai2.cloudstudio.club`（官方文档：cloudstudio.net/docs 搜索"URL 访问异常排查"）
+- 部署脚本 `deploy-linux.sh` 跑完也会自动打印这个地址
+- ⚠️ 如果打不开：确认服务监听 `0.0.0.0`（Next 默认满足）、端口必须 3000 一致、工作空间未休眠
+- 网页版 IDE 的终端面板附近若看到 🔌/端口 图标，也能查看端口；但公网地址以上面拼出的为准
+
+## 4.5 保活（免费空间休眠问题）
 空间休眠后访问会慢/需要重新唤醒。方案：
 - **定时唤醒**：用任意免费定时服务（如 UptimeRobot、cron-job.org）每 5~10 分钟 GET 一次你的公网地址 —— 同时还能监控网站存活
 - 或 Cloud Studio 付费版/升级空间免除（看你自己预算）

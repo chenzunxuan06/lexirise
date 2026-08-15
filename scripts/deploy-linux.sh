@@ -26,9 +26,10 @@ pm2 save
 
 echo "== 4/4 完成 =="
 echo "本机验证: curl http://localhost:3000"
-echo "公网访问:"
-echo "  方案A Nginx 反代: server { listen 80; server_name 你的域名;"
-echo "                     location / { proxy_pass http://127.0.0.1:3000;"
-echo "                     proxy_set_header Host \$host; proxy_set_header X-Forwarded-For \$remote_addr; } }"
-echo "  方案B 直接映射端口 3000（CloudStudio/VPS 安全组放行）"
+if [ -n "$X_IDE_SPACE_KEY" ]; then
+  echo "🎉 CloudStudio 公网访问地址（复制到浏览器打开）:"
+  echo "https://${X_IDE_SPACE_KEY}--3000.${X_IDE_SPACE_REGION}.${X_IDE_SPACE_HOST}"
+else
+  echo "公网访问: 用 Nginx 反代或云服务器安全组放行 3000 端口"
+fi
 echo "别忘了配置每日备份（服务器 cron 定时执行 scripts/backup_db.mjs）"
