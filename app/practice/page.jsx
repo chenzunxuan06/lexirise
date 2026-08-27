@@ -21,11 +21,13 @@ export default function PracticePage() {
   const [results, setResults] = useState([]);
   const [isCached, setIsCached] = useState(false);
   const [source, setSource] = useState("auto");
+  const [grade, setGrade] = useState(0);
 
   useEffect(() => {
     const q = new URLSearchParams(window.location.search);
     const isUnit = !!q.get("unit");
     setSource(isUnit ? "unit" : "auto");
+    setGrade(isUnit ? 0 : Number(q.get("grade")) || 0);
     (async () => {
       try {
         const r = await fetch("/api/ai/practice", {
@@ -34,7 +36,7 @@ export default function PracticePage() {
           body: JSON.stringify({
             count: 10,
             source: isUnit ? "unit" : "auto",
-            grade: isUnit ? Number(q.get("grade")) : undefined,
+            grade: isUnit ? Number(q.get("grade")) : Number(q.get("grade")) || 0,
             semester: isUnit ? Number(q.get("semester")) : undefined,
             unit: isUnit ? Number(q.get("unit")) : undefined,
           }),
@@ -51,6 +53,11 @@ export default function PracticePage() {
       }
     })();
   }, []);
+
+  function switchGrade(g) {
+    // 重新按年级生成（每日缓存按 年级+用户 分开，不冲突）
+    window.location.href = g ? `/practice?grade=${g}` : "/practice";
+  }
 
   const cur = questions[idx];
   const isFill = cur && cur.type === "fill";
@@ -177,6 +184,24 @@ export default function PracticePage() {
             : "按你的记忆曲线 + 错题本自动选词 · 答错自动进错题本"}
           {isCached && <span className="tagline-dot">今日已生成</span>}
         </p>
+        {source !== "unit" && (
+          <div className="tabs" style={{ marginTop: 10 }}>
+            {[
+              { v: 0, label: "自动（按我的水平）" },
+              { v: 7, label: "七年级" },
+              { v: 8, label: "八年级" },
+              { v: 9, label: "九年级" },
+            ].map((g) => (
+              <button
+                key={g.v}
+                className={"tab" + (grade === g.v ? " active" : "")}
+                onClick={() => switchGrade(g.v)}
+              >
+                {g.label}
+              </button>
+            ))}
+          </div>
+        )}
       </header>
 
       {phase === "idle" && (
@@ -200,6 +225,7 @@ export default function PracticePage() {
           {isFill && (
             <>
               <div className="prac-q">{cur.q}</div>
+              {cur.q_zh && <div className="prac-zh">{cur.q_zh}</div>}
               <div className="prac-sub">选择正确的单词填入空白处</div>
               <div className="prac-options">
                 {cur.options.map((opt, i) => (
@@ -302,6 +328,7 @@ export default function PracticePage() {
                       </div>
                       <div className="exam-wrong-d">
                         答案：<b>{q.answer}</b>
+                        {q.q_zh ? ` · ${q.q_zh}` : ""}
                         {q.explain ? ` · ${q.explain}` : ""}
                       </div>
                     </div>

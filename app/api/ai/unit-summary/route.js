@@ -48,7 +48,7 @@ export async function POST(req) {
   }
 
   const today = new Date().toISOString().slice(0, 10);
-  const cacheKey = `unit:${grade}-${semester}-${unit}:${today}`;
+  const cacheKey = `unit:v2:${grade}-${semester}-${unit}:${today}`;
   const cached = await aiCacheGet(cacheKey);
   if (cached) return NextResponse.json(cached);
 

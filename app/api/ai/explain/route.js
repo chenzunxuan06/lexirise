@@ -26,7 +26,7 @@ export async function POST(req) {
     return NextResponse.json({ error: "词条不存在" }, { status: 404 });
   }
 
-  const cacheKey = `explain:${id}`;
+  const cacheKey = `explain:v2:${id}`;
   const cached = await aiCacheGet(cacheKey);
   if (cached) return NextResponse.json({ data: cached, cached: true });
 
