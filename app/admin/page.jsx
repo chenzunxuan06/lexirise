@@ -148,6 +148,14 @@ export default function AdminPage() {
             <div className="stat-num">{stats.customWords}</div>
             <div className="stat-name">自定义词条</div>
           </div>
+          <div className="stat-card">
+            <div className="stat-num">{stats.aiToday ?? 0}</div>
+            <div className="stat-name">今日 AI 调用</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-num">{stats.aiCached ?? 0}</div>
+            <div className="stat-name">AI 缓存条数</div>
+          </div>
         </div>
       )}
 

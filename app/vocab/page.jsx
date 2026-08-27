@@ -18,6 +18,30 @@ function gradeName(g) {
 
 function WordModal({ w, onClose }) {
   const [fav, setFav] = useState(favs.has(w.id));
+  // AI 讲解状态：idle | loading | done | error
+  const [ai, setAi] = useState({ state: "idle", data: null, error: "" });
+
+  useEffect(() => {
+    setAi({ state: "idle", data: null, error: "" });
+  }, [w && w.id]);
+
+  async function askAi() {
+    if (ai.state === "loading") return;
+    setAi({ state: "loading", data: null, error: "" });
+    try {
+      const r = await fetch("/api/ai/explain", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: w.id }),
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || "AI 讲解失败");
+      setAi({ state: "done", data: d.data, error: "" });
+    } catch (e) {
+      setAi({ state: "error", data: null, error: e.message });
+    }
+  }
+
   if (!w) return null;
   return (
     <div className="overlay" onClick={onClose}>
@@ -32,6 +56,9 @@ function WordModal({ w, onClose }) {
             onClick={() => setFav(favs.toggle(w.id))}
           >
             {fav ? "★ 已收藏" : "☆ 收藏"}
+          </button>
+          <button className="ai-btn" onClick={askAi} disabled={ai.state === "loading"} title="AI 讲解（生成一次后全站缓存）">
+            {ai.state === "loading" ? "⏳ 生成中" : "✨ AI 讲解"}
           </button>
         </div>
         {w.phonetic ? (
@@ -55,6 +82,49 @@ function WordModal({ w, onClose }) {
         )}
 
         <ExampleBlock w={w} />
+
+        {ai.state === "idle" && (
+          <div className="ai-block hint">
+            点击 ✨ AI 讲解：生成课本难度例句、记忆法和易混词辨析（结果全站共享缓存）
+          </div>
+        )}
+        {ai.state === "loading" && <div className="ai-block busy">⏳ AI 讲解生成中，约 10~30 秒…</div>}
+        {ai.state === "error" && (
+          <div className="ai-block error">
+            ✗ {ai.error}
+            {ai.error && ai.error.includes("未配置") && (
+              <div className="ai-block hint">管理员在服务器设置 API key 后即可使用</div>
+            )}
+          </div>
+        )}
+        {ai.state === "done" && ai.data && (
+          <div className="ai-block">
+            <div className="ai-title">✨ AI 讲解</div>
+            <div className="ai-explain">{ai.data.explain}</div>
+            {ai.data.memory_tip && (
+              <div className="ai-row">🧠 {ai.data.memory_tip}</div>
+            )}
+            {ai.data.examples && ai.data.examples.length > 0 && (
+              <div className="ai-examples">
+                {ai.data.examples.map((e, i) => (
+                  <div className="ai-example" key={i}>
+                    <div className="ai-en">{e.en}</div>
+                    {e.zh && <div className="ai-zh">{e.zh}</div>}
+                  </div>
+                ))}
+              </div>
+            )}
+            {ai.data.confusable && ai.data.confusable.length > 0 && (
+              <div className="ai-confusable">
+                {ai.data.confusable.map((c, i) => (
+                  <div className="ai-conf-item" key={i}>
+                    <b>⚠️ {c.word}</b>：{c.note}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="modal-foot">
           <span className="modal-meta">

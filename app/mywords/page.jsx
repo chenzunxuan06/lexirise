@@ -43,6 +43,33 @@ export default function MyWordsPage() {
   const [msg, setMsg] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  // AI 补全状态
+  const [busyAi, setBusyAi] = useState(false);
+  const [msgAi, setMsgAi] = useState("");
+  const [errAi, setErrAi] = useState("");
+
+  const missingAi = words.filter((w) => !w.ai).length;
+
+  async function doEnrich() {
+    setBusyAi(true);
+    setMsgAi("");
+    setErrAi("");
+    try {
+      const r = await fetch("/api/ai/enrich-words", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || "补全失败");
+      setMsgAi(`✅ AI 补全 ${d.enriched} 个词条${d.pending ? `（还有 ${d.pending} 个待补全）` : ""}`);
+      refresh();
+    } catch (e) {
+      setErrAi(e.message);
+    } finally {
+      setBusyAi(false);
+    }
+  }
 
   async function refresh() {
     try {
@@ -172,16 +199,21 @@ export default function MyWordsPage() {
 
       <div className="section-row">
         <h2 className="section-h">我的单词（{words.length}）</h2>
-        {words.length > 0 && (
-          <div className="review-actions">
-            {TRAIN_MODES.map((m) => (
-              <Link key={m.key} className="ghost-btn small-btn" href={`/train?custom=1&mode=${m.key}`}>
-                {m.label}
-              </Link>
-            ))}
-          </div>
-        )}
+        <div className="review-actions">
+          {missingAi > 0 && (
+            <button className="ai-btn" disabled={busyAi} onClick={doEnrich} title="AI 为缺音标/例句的词生成补全内容（每日 2 次）">
+              {busyAi ? "⏳ AI 补全中（约 30 秒）…" : `✨ AI 补全（${missingAi} 个待补）`}
+            </button>
+          )}
+          {TRAIN_MODES.map((m) => (
+            <Link key={m.key} className="ghost-btn small-btn" href={`/train?custom=1&mode=${m.key}`}>
+              {m.label}
+            </Link>
+          ))}
+        </div>
       </div>
+      {msgAi && <div className="import-ok">{msgAi}</div>}
+      {errAi && <div className="auth-error">{errAi}</div>}
 
       {words.length === 0 ? (
         <div className="empty-state">还没有单词，先在上面导入吧（如老师发的生词表）</div>
@@ -193,12 +225,28 @@ export default function MyWordsPage() {
                 {w.word_en}
                 <button className="mini-speak" onClick={() => speak(w.word_en)}>🔊</button>
               </div>
-              {w.phonetic ? <div className="ph">{w.phonetic}</div> : <div className="ph missing">音标自动生成中</div>}
+              {w.phonetic ? (
+                <div className="ph">{w.phonetic}</div>
+              ) : w.ai && w.ai.phonetic_hint ? (
+                <div className="ph ai-ph">{w.ai.phonetic_hint} <em>AI</em></div>
+              ) : (
+                <div className="ph missing">音标待补充（可点 AI 补全）</div>
+              )}
               <div className="def">{w.definition_zh}</div>
-              {w.pos && <span className="badge">{w.pos}</span>}
-              <button className="mini-x" onClick={() => doDelete(w.id)}>
-                删除 ✕
-              </button>
+              {w.ai && w.ai.memory_tip && <div className="affix-dot-line">🧠 {w.ai.memory_tip}</div>}
+              {w.ai && w.ai.example_en && (
+                <div className="fb-ex">
+                  <span className="fb-muted">✍️ </span>
+                  {w.ai.example_en}
+                  {w.ai.example_zh && <div className="ai-zh">{w.ai.example_zh}</div>}
+                </div>
+              )}
+              <div className="wrong-ai-row">
+                {w.pos && <span className="badge">{w.pos}</span>}
+                <button className="mini-x" onClick={() => doDelete(w.id)}>
+                  删除 ✕
+                </button>
+              </div>
             </div>
           ))}
         </div>

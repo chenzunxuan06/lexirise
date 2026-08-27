@@ -5,6 +5,7 @@ import { loadWords } from "@/lib/loadWords";
 import { speak, speakSlow, speakZh, stopSpeak } from "@/lib/tts";
 import { memory, wrongBook, favs, stats } from "@/lib/memory";
 import ExampleBlock from "../components/ExampleBlock";
+import { ContrastBox } from "../components/AiExplain";
 
 const GRADES = [
   { value: 0, label: "全部" },
@@ -12,6 +13,8 @@ const GRADES = [
   { value: 8, label: "八年级" },
   { value: 9, label: "九年级" },
 ];
+
+const UNIT_LABEL = (g, s, u) => `${g}年级${s === 1 ? "上" : "下"}册 Unit ${u}`;
 
 const MODES = [
   { key: "quiz", label: "选中文", icon: "✅", desc: "看单词，选出正确中文释义" },
@@ -89,7 +92,7 @@ function HintPanel({ word, hintLevel, setHintLevel, mode }) {
   );
 }
 
-function Feedback({ word, ok, pickedCorrect, onNext, onPracticeAgain }) {
+function Feedback({ word, ok, pickedCorrect, onNext, onPracticeAgain, wrongChoiceId }) {
   const [fav, setFav] = useState(favs.has(word.id));
   return (
     <div className="feedback">
@@ -110,6 +113,11 @@ function Feedback({ word, ok, pickedCorrect, onNext, onPracticeAgain }) {
       </div>
       {word.affix_hint && <div className="fb-ex">🧩 {word.affix_hint}</div>}
       <ExampleBlock w={word} compact />
+      {!ok && wrongChoiceId != null && (
+        <div className="fb-ex">
+          <ContrastBox ids={[word.id, wrongChoiceId]} />
+        </div>
+      )}
       {!ok && onPracticeAgain && (
         <button className="ghost-btn" onClick={onPracticeAgain}>
           🔁 加入错题本重练
@@ -195,27 +203,23 @@ export default function TrainPage() {
         const makeOpts = (w, p) => {
           const item = { word: w, id: w.id };
           const mm = runMode || "quiz";
-          if (mm === "quiz" || mm === "listening") {
-            const correct = w.definition_zh || w.word_en;
+          const buildOpts = (target, getId) => {
             const others = shuffle(
               p
                 .filter((x) => x.id !== w.id)
-                .map((x) => x.definition_zh || x.word_en)
-                .filter((x) => x && x !== correct)
+                .map((x) => ({ t: getId(x), id: x.id }))
+                .filter((x) => x.t && x.t !== target)
             );
-            item.options = shuffle([correct, ...others.slice(0, 3)]);
-            item.correct = correct;
+            const opts = shuffle([{ t: target, id: w.id }, ...others.slice(0, 3)]);
+            item.options = opts.map((o) => o.t);
+            item.optionIds = opts.map((o) => o.id);
+            item.correct = target;
+          };
+          if (mm === "quiz" || mm === "listening") {
+            buildOpts(w.definition_zh || w.word_en, (x) => x.definition_zh || x.word_en);
           }
           if (mm === "reverse") {
-            const correct = w.word_en;
-            const others = shuffle(
-              p
-                .filter((x) => x.id !== w.id)
-                .map((x) => x.word_en)
-                .filter((x) => x && x !== correct)
-            );
-            item.options = shuffle([correct, ...others.slice(0, 3)]);
-            item.correct = correct;
+            buildOpts(w.word_en, (x) => x.word_en);
           }
           return item;
         };
@@ -296,27 +300,23 @@ export default function TrainPage() {
 
   function makeItem(w, poolForOpts) {
     const item = { word: w, id: w.id };
-    if (mode === "quiz" || mode === "listening") {
-      const correct = w.definition_zh || w.word_en;
+    const buildOpts = (target, getId) => {
       const others = shuffle(
         poolForOpts
           .filter((x) => x.id !== w.id)
-          .map((x) => x.definition_zh || x.word_en)
-          .filter((d) => d && d !== correct)
+          .map((x) => ({ t: getId(x), id: x.id }))
+          .filter((x) => x.t && x.t !== target)
       );
-      item.options = shuffle([correct, ...others.slice(0, 3)]);
-      item.correct = correct;
+      const opts = shuffle([{ t: target, id: w.id }, ...others.slice(0, 3)]);
+      item.options = opts.map((o) => o.t);
+      item.optionIds = opts.map((o) => o.id);
+      item.correct = target;
+    };
+    if (mode === "quiz" || mode === "listening") {
+      buildOpts(w.definition_zh || w.word_en, (x) => x.definition_zh || x.word_en);
     }
     if (mode === "reverse") {
-      const correct = w.word_en;
-      const others = shuffle(
-        poolForOpts
-          .filter((x) => x.id !== w.id)
-          .map((x) => x.word_en)
-          .filter((d) => d && d !== correct)
-      );
-      item.options = shuffle([correct, ...others.slice(0, 3)]);
-      item.correct = correct;
+      buildOpts(w.word_en, (x) => x.word_en);
     }
     return item;
   }
@@ -597,6 +597,11 @@ export default function TrainPage() {
                 word={cur.word}
                 ok={picked === cur.correct}
                 pickedCorrect={picked === cur.correct}
+                wrongChoiceId={
+                  cur.optionIds && picked != null
+                    ? cur.optionIds[cur.options.indexOf(picked)] ?? null
+                    : null
+                }
                 onNext={next}
               />
             )}

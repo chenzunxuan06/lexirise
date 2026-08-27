@@ -5,6 +5,7 @@ import { loadWords } from "@/lib/loadWords";
 import { speak } from "@/lib/tts";
 import { memory, wrongBook, favs, stats } from "@/lib/memory";
 import ExampleBlock from "../components/ExampleBlock";
+import AiExplainCard from "../components/AiExplain";
 
 const DAILY_NEW = 10; // 每次复习顺带学习的新词数
 
@@ -29,6 +30,7 @@ export default function ReviewPage() {
   const [total, setTotal] = useState(0);
   const [finished, setFinished] = useState(false);
   const [tick, setTick] = useState(0);
+  const [explainId, setExplainId] = useState(null);
 
   useEffect(() => {
     loadWords().then(setData).catch((e) => console.error(e));
@@ -306,16 +308,32 @@ export default function ReviewPage() {
                     <span className="badge err">{n} 次错</span>
                   </div>
                   <div className="def">{word.definition_zh}</div>
-                  <button
-                    className="mini-x"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      wrongBook.remove(word.id);
-                      setTick((t) => t + 1);
-                    }}
-                  >
-                    移出 ✕
-                  </button>
+                  <div className="wrong-ai-row">
+                    <button
+                      className="mini-ai-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setExplainId(explainId === word.id ? null : word.id);
+                      }}
+                    >
+                      ✨ AI 讲解
+                    </button>
+                    <button
+                      className="mini-x"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        wrongBook.remove(word.id);
+                        setTick((t) => t + 1);
+                      }}
+                    >
+                      移出 ✕
+                    </button>
+                  </div>
+                  {explainId === word.id && (
+                    <div onClick={(e) => e.stopPropagation()}>
+                      <AiExplainCard id={word.id} />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

@@ -9,3 +9,4 @@ npm-debug.log*
 *.tsbuildinfo
 .DS_Store
 Thumbs.db
+.env.local

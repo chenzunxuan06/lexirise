@@ -63,6 +63,14 @@ export default function HomePage() {
   }, []);
 
   const [dailyGoal, setDailyGoal] = useState(() => plan.load().dailyNew || 10);
+  const [aiOk, setAiOk] = useState(null); // null=未知 true/false
+
+  useEffect(() => {
+    fetch("/api/ai/status")
+      .then((r) => r.json())
+      .then((d) => setAiOk(!!d.configured))
+      .catch(() => setAiOk(false));
+  }, []);
 
   const words = data ? data.words : [];
   const daily = useMemo(() => wordOfTheDay(words), [words]);
@@ -209,6 +217,21 @@ export default function HomePage() {
           <Link className="task-link" href="/review?tab=favs">去翻看 →</Link>
         </div>
       </section>
+
+      {aiOk === true && (
+        <section className="ai-practice-card">
+          <div className="ai-prac-left">
+            <div className="ai-prac-title">✨ 今日 AI 练习</div>
+            <div className="ai-prac-desc">
+              按你的记忆曲线到期词 + 错题本自动出 10 题（选词填空 / 拼写 / 词形变化），
+              做完自动回写记忆曲线，答错进错题本。
+            </div>
+          </div>
+          <Link className="start-btn" href="/practice?auto=1">
+            开始练习 →
+          </Link>
+        </section>
+      )}
 
       <section className="home-section">
         <div className="section-row">

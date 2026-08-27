@@ -4,6 +4,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { loadWords } from "@/lib/loadWords";
 import { speak } from "@/lib/tts";
 import { memory, wrongBook, stats, exams } from "@/lib/memory";
+import { ContrastBox } from "../components/AiExplain";
+import AiExplainCard from "../components/AiExplain";
 
 const GRADES = [
   { value: 7, label: "七年级" },
@@ -89,10 +91,16 @@ export default function ExamPage() {
       const others = shuffle(
         pool
           .filter((x) => x.id !== w.id)
-          .map((x) => x.definition_zh || x.word_en)
-          .filter((d) => d && d !== correct)
+          .map((x) => ({ t: x.definition_zh || x.word_en, id: x.id }))
+          .filter((d) => d.t && d.t !== correct)
       );
-      return { word: w, options: shuffle([correct, ...others.slice(0, 3)]), correct };
+      const opts = shuffle([{ t: correct, id: w.id }, ...others.slice(0, 3)]);
+      return {
+        word: w,
+        options: opts.map((o) => o.t),
+        optionIds: opts.map((o) => o.id),
+        correct,
+      };
     });
     setDeck(items);
     setIdx(0);
@@ -122,20 +130,23 @@ export default function ExamPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idx, phase, cur && cur.id, limit, answered]);
 
-  function finishAnswer(ok, w) {
+  function pick(opt) {
+    if (answered) return;
+    setPicked(opt);
+    setAnswered(true);
+    const pickedId = cur.optionIds
+      ? cur.optionIds[cur.options.indexOf(opt)] ?? null
+      : null;
+    finishAnswer(opt === cur.correct, cur.word, pickedId);
+  }
+
+  function finishAnswer(ok, w, pickedId) {
     const prev = memory.get(w.id);
     const isNew = !prev || prev.lv === 0;
     memory.record(w.id, ok, isNew);
     if (!ok) wrongBook.add(w.id);
     stats.add({ n: isNew ? 1 : 0, review: isNew ? 0 : 1, correct: ok ? 1 : 0, total: 1 });
-    setResults((r) => [...r, { id: w.id, correct: ok }]);
-  }
-
-  function pick(opt) {
-    if (answered) return;
-    setPicked(opt);
-    setAnswered(true);
-    finishAnswer(opt === cur.correct, cur.word);
+    setResults((r) => [...r, { id: w.id, correct: ok, pickedId: pickedId ?? null }]);
   }
 
   // 作答后自动进入下一题
@@ -163,7 +174,12 @@ export default function ExamPage() {
       correct,
       total: results.length,
       score,
-      wrong: deck.filter((d) => wrongIds.has(d.id)),
+      wrong: deck
+        .filter((d) => wrongIds.has(d.id))
+        .map((d) => ({
+          ...d,
+          pickedId: (results.find((r) => r.id === d.id && !r.correct) || {}).pickedId || null,
+        })),
       seconds: Math.round((Date.now() - startAt) / 1000),
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -380,6 +396,13 @@ export default function ExamPage() {
                       </div>
                       <div className="exam-wrong-d">{d.word.definition_zh}</div>
                       {d.word.affix_hint && <div className="fb-ex">🧩 {d.word.affix_hint}</div>}
+                      <div className="fb-ex">
+                        {d.pickedId != null ? (
+                          <ContrastBox ids={[d.id, d.pickedId]} />
+                        ) : (
+                          <AiExplainCard id={d.id} label="讲解" />
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>

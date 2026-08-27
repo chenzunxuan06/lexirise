@@ -5,7 +5,7 @@
 //  - words.json / affixes.json：缓存优先（词库离线可用）
 //  - /api/*：绝不缓存（用户数据隐私 + 时效性）
 // 版本号：每次改动资源结构时 +1 使缓存刷新
-const CACHE = "lexirise-v2";
+const CACHE = "lexirise-v3";
 
 // 首次安装预缓存：页面壳 + 词库数据（保证离线可用）
 const PRECACHE = [
@@ -21,6 +21,8 @@ const PRECACHE = [
   "/affixes",
   "/stats",
   "/admin",
+  "/ai",
+  "/practice",
   "/words.json",
   "/affixes.json",
   "/manifest.webmanifest",

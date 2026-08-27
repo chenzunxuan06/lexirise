@@ -14,6 +14,7 @@ const ITEMS = [
   { href: "/phrases", label: "短语", icon: "💬", desc: "固定搭配专项" },
   { href: "/mywords", label: "我的词表", icon: "📋", desc: "导入·自建词表" },
   { href: "/affixes", label: "词根词缀", icon: "🧩", desc: "前缀·后缀·词根" },
+  { href: "/ai", label: "AI 学习", icon: "✨", desc: "复习包·AI讲解" },
   { href: "/stats", label: "统计", icon: "📈", desc: "打卡·进度" },
 ];
 

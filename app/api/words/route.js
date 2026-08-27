@@ -9,10 +9,32 @@ export async function GET(req) {
   const db = await getDb();
   const rows = await db
     .prepare(
-      "SELECT id, word_en, phonetic, pos, definition_zh, created_at FROM custom_words WHERE user_id = ? ORDER BY id DESC"
+      `SELECT cw.id, cw.word_en, cw.phonetic, cw.pos, cw.definition_zh, cw.created_at,
+              cwa.phonetic_hint, cwa.memory_tip, cwa.example_en, cwa.example_zh, cwa.enriched_at
+       FROM custom_words cw
+       LEFT JOIN custom_word_ai cwa ON cwa.word_id = cw.id
+       WHERE cw.user_id = ? ORDER BY cw.id DESC`
     )
     .all(user.id);
-  return NextResponse.json({ words: rows });
+  return NextResponse.json({
+    words: rows.map((r) => ({
+      id: r.id,
+      word_en: r.word_en,
+      phonetic: r.phonetic,
+      pos: r.pos,
+      definition_zh: r.definition_zh,
+      created_at: r.created_at,
+      ai: r.enriched_at
+        ? {
+            phonetic_hint: r.phonetic_hint,
+            memory_tip: r.memory_tip,
+            example_en: r.example_en,
+            example_zh: r.example_zh,
+            enriched_at: r.enriched_at,
+          }
+        : null,
+    })),
+  });
 }
 
 export async function POST(req) {

@@ -47,6 +47,19 @@ echo "https://${X_IDE_SPACE_KEY}--3000.${X_IDE_SPACE_REGION}.${X_IDE_SPACE_HOST}
 - **定时唤醒**：用任意免费定时服务（如 UptimeRobot、cron-job.org）每 5~10 分钟 GET 一次你的公网地址 —— 同时还能监控网站存活
 - 或 Cloud Studio 付费版/升级空间免除（看你自己预算）
 
+## 4.6 AI 功能启用（可选）
+网站含 AI 模块（单词讲解/错题解析/每日练习/单元复习包）。**不设置也能正常使用**，AI 按钮会显示"未配置"。
+启用：在 CloudStudio 终端执行（PM2 会继承这些环境变量）：
+```bash
+export LLM_API_KEY=sk-你的DeepSeek密钥
+export LLM_BASE_URL=https://api.deepseek.com   # 可选，默认就是
+export LLM_MODEL=deepseek-chat                 # 可选，默认就是
+pm2 restart lexirise
+```
+- 密钥在 platform.deepseek.com 创建（充值极少量即可）
+- 换用其他 OpenAI 兼容服务商：改上面三个变量即可，零改代码
+- 用量：讲解有 30 天全站缓存，练习每用户每天 1 次，费用可忽略
+
 ## 6. 常见问题
 | 问题 | 解决 |
 | --- | --- |
