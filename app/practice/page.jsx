@@ -7,12 +7,14 @@ import { memory, wrongBook, stats } from "@/lib/memory";
 
 /**
  * AI 个性化练习作答页
- * ?auto=1 默认：服务端按 记忆曲线到期 + 错题本 自动选词（每日缓存）
- * ?grade=&semester=&unit= ：按单元出题
+ * 支持：
+ *  - auto（默认）：先选择 年级 + 题型模式，再开始出题
+ *  - unit：?grade=&semester=&unit= 按单元直接出题（从复习包/背书进入）
+ * 题型模式：mix=综合  context=语境填空  spell=拼写  form=词形变化
  */
 export default function PracticePage() {
   const [questions, setQuestions] = useState([]);
-  const [phase, setPhase] = useState("loading"); // loading | error | idle | running | done
+  const [phase, setPhase] = useState("setup"); // setup | loading | error | idle | running | done
   const [error, setError] = useState("");
   const [idx, setIdx] = useState(0);
   const [answered, setAnswered] = useState(false);
@@ -23,54 +25,19 @@ export default function PracticePage() {
   const [source, setSource] = useState("auto");
   const [grade, setGrade] = useState(0);
   const [mode, setMode] = useState("mix");
+  const [unitCfg, setUnitCfg] = useState(null); // {grade, semester, unit}
 
-  useEffect(() => {
-    const q = new URLSearchParams(window.location.search);
-    const isUnit = !!q.get("unit");
-    setSource(isUnit ? "unit" : "auto");
-    setGrade(isUnit ? 0 : Number(q.get("grade")) || 0);
-    setMode(["mix", "context", "spell", "form"].includes(q.get("mode")) ? q.get("mode") : "mix");
-    (async () => {
-      try {
-        const r = await fetch("/api/ai/practice", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            count: 10,
-            source: isUnit ? "unit" : "auto",
-            mode: q.get("mode") || "mix",
-            grade: Number(q.get("grade")) || 0,
-            semester: isUnit ? Number(q.get("semester")) : undefined,
-            unit: isUnit ? Number(q.get("unit")) : undefined,
-          }),
-        });
-        const d = await r.json();
-        if (!r.ok) throw new Error(d.error || "练习加载失败");
-        if (d.questions && d.questions.length === 0) throw new Error("没有生成题目");
-        setQuestions(d.questions || []);
-        setIsCached(!!d.cached);
-        setPhase(d.questions && d.questions.length ? "idle" : "error");
-      } catch (e) {
-        setError(e.message);
-        setPhase("error");
-      }
-    })();
-  }, []);
-
-  function go(params) {
-    const q = new URLSearchParams(window.location.search);
-    for (const [k, v] of Object.entries(params)) {
-      if (v == null || v === "" || v === 0) q.delete(k);
-      else q.set(k, String(v));
-    }
-    const s = q.toString();
-    window.location.href = s ? "/practice?" + s : "/practice";
-  }
   const MODES = [
-    { k: "mix", label: "综合" },
-    { k: "context", label: "语境填空" },
-    { k: "spell", label: "拼写" },
-    { k: "form", label: "词形变化" },
+    { k: "mix", label: "综合", desc: "4 种题型混搭，每天不同" },
+    { k: "context", label: "语境填空", desc: "把词放回句子里练使用" },
+    { k: "spell", label: "拼写", desc: "盯着拼写：释义拼词 + 首字母填空" },
+    { k: "form", label: "词形变化", desc: "派生词专项（训练中心没有的题型）" },
+  ];
+  const GRADES = [
+    { v: 0, label: "自动（按我的水平）" },
+    { v: 7, label: "七年级" },
+    { v: 8, label: "八年级" },
+    { v: 9, label: "九年级" },
   ];
   const TYPE_BADGE = {
     fill: { t: "📝 选词填空", cls: "b-fill" },
@@ -78,6 +45,72 @@ export default function PracticePage() {
     recall: { t: "✍️ 释义拼词", cls: "b-recall" },
     transform: { t: "🔄 词形变化", cls: "b-transform" },
   };
+
+  // 初始化：读 URL。unit 深链直接开始；auto 进入设置页等用户选择
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search);
+    const isUnit = !!q.get("unit");
+    if (isUnit) {
+      const cfg = {
+        grade: Number(q.get("grade")),
+        semester: Number(q.get("semester")),
+        unit: Number(q.get("unit")),
+      };
+      setSource("unit");
+      setUnitCfg(cfg);
+      setPhase("loading");
+      fetchPractice({ source: "unit", mode: "mix", ...cfg });
+    } else {
+      setSource("auto");
+      setGrade(Number(q.get("grade")) || 0);
+      setMode(["mix", "context", "spell", "form"].includes(q.get("mode")) ? q.get("mode") : "mix");
+      setPhase("setup");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function fetchPractice(opts) {
+    try {
+      const r = await fetch("/api/ai/practice", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          count: 10,
+          source: opts.source,
+          mode: opts.mode,
+          grade: opts.grade || 0,
+          semester: opts.semester,
+          unit: opts.unit,
+        }),
+      });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || "练习加载失败");
+      if (d.questions && d.questions.length === 0) throw new Error("没有生成题目");
+      setQuestions(d.questions || []);
+      setIsCached(!!d.cached);
+      // 生成完成直接进第一题（缓存命中则秒进），不再多一步"开始答题"
+      setIdx(0);
+      setPicked(null);
+      setInput("");
+      setAnswered(false);
+      setResults([]);
+      setPhase(d.questions && d.questions.length ? "running" : "error");
+    } catch (e) {
+      setError(e.message);
+      setPhase("error");
+    }
+  }
+
+  function start() {
+    setPhase("loading");
+    fetchPractice({ source: "auto", mode, grade });
+  }
+
+  function toSetup() {
+    setPhase("setup");
+    setQuestions([]);
+    setIsCached(false);
+  }
 
   const cur = questions[idx];
   const isFill = cur && cur.type === "fill";
@@ -152,44 +185,6 @@ export default function PracticePage() {
     setPhase("running");
   }
 
-  if (phase === "loading") {
-    return (
-      <div className="wrap">
-        <header className="hero">
-          <div className="brand">
-            <h1>AI 个性化练习</h1>
-            <span className="en">Practice</span>
-          </div>
-          <p className="tagline">
-            按你的记忆曲线 + 错题本自动选词 · 答错自动进错题本
-          </p>
-        </header>
-        <div className="empty-state">⏳ AI 练习生成中（约 20~60 秒，今日已生成过则直接加载）…</div>
-      </div>
-    );
-  }
-  if (phase === "error") {
-    return (
-      <div className="wrap">
-        <header className="hero">
-          <div className="brand">
-            <h1>AI 个性化练习</h1>
-            <span className="en">Practice</span>
-          </div>
-        </header>
-        <div className="empty-state">
-          <p>✗ {error}</p>
-          {error && error.includes("未配置") && (
-            <p style={{ fontSize: 13, marginTop: 8 }}>管理员在服务器设置 LLM_API_KEY 后即可使用。</p>
-          )}
-          <Link className="start-btn" style={{ display: "inline-block", marginTop: 14 }} href="/">
-            返回首页 →
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="wrap">
       <header className="hero">
@@ -202,55 +197,83 @@ export default function PracticePage() {
         <p className="tagline">
           {source === "unit"
             ? "按单元出题 · 答案可回写记忆曲线"
-            : "按你的记忆曲线 + 错题本自动选词 · 答错自动进错题本"}
-          {isCached && <span className="tagline-dot">今日已生成</span>}
+            : "按你的记忆曲线 + 错题本自动选词 · 答错自动进错题本 · 每题带解析"}
+          {isCached && phase !== "setup" && <span className="tagline-dot">今日已生成</span>}
         </p>
-        {source !== "unit" && (
-          <div style={{ marginTop: 10 }}>
-            <div className="tabs">
-              {[
-                { v: 0, label: "自动（按我的水平）" },
-                { v: 7, label: "七年级" },
-                { v: 8, label: "八年级" },
-                { v: 9, label: "九年级" },
-              ].map((g) => (
-                <button
-                  key={g.v}
-                  className={"tab" + (grade === g.v ? " active" : "")}
-                  onClick={() => go({ grade: g.v === 0 ? null : g.v })}
-                >
-                  {g.label}
-                </button>
-              ))}
-            </div>
-            <div className="tabs" style={{ marginTop: 8 }}>
-              {MODES.map((m) => (
-                <button
-                  key={m.k}
-                  className={"tab" + (mode === m.k ? " active" : "")}
-                  onClick={() => go({ mode: m.k })}
-                >
-                  {m.label}
-                </button>
-              ))}
-            </div>
-            <div className="prac-mode-hint">
-              综合=4种题型混搭（每天不同）· 语境填空=放回句子里练使用 · 拼写=盯着拼写 ·
-              词形变化=派生词专项（训练中心没有的题型）。这不替代训练中心，而是专攻你的弱点和到期词。
-            </div>
-          </div>
-        )}
       </header>
 
-      {phase === "idle" && (
-        <div className="empty-state">
-          <p>共 {questions.length} 题，开始吧！</p>
-          <button className="start-btn" onClick={restart}>
-            开始练习 →
-          </button>
+      {/* ---------- 设置：先选择，再开始 ---------- */}
+      {phase === "setup" && (
+        <div className="setup-card">
+          <div className="section-row">
+            <h2 className="section-h">练习设置</h2>
+            <span className="section-sub">先选 年级 和 题型，再开始出题</span>
+          </div>
+
+          <div className="setup-label">① 选年级（默认自动按你的水平）</div>
+          <div className="tabs">
+            {GRADES.map((g) => (
+              <button
+                key={g.v}
+                className={"tab" + (grade === g.v ? " active" : "")}
+                onClick={() => setGrade(g.v)}
+              >
+                {g.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="setup-label" style={{ marginTop: 14 }}>② 选题型（综合包含全部 4 种）</div>
+          <div className="mode-grid">
+            {MODES.map((m) => (
+              <button
+                key={m.k}
+                className={"mode-card" + (mode === m.k ? " active" : "")}
+                onClick={() => setMode(m.k)}
+              >
+                <div className="mode-name">{m.label}</div>
+                <div className="mode-desc">{m.desc}</div>
+              </button>
+            ))}
+          </div>
+
+          <div className="setup-foot">
+            <span className="pool-count">
+              每轮 10 题 · 词来自你的记忆曲线到期词 + 错题本（未登录则随机抽词）
+            </span>
+            <button
+              className="start-btn"
+              onClick={start}
+              title="生成后每道题都带解析，做完自动更新记忆曲线"
+            >
+              开始练习 →
+            </button>
+          </div>
         </div>
       )}
 
+      {/* ---------- 生成中 ---------- */}
+      {phase === "loading" && (
+        <div className="empty-state">
+          ⏳ AI 出题中…（约 20~60 秒；今天这个组合生成过的话是秒出，直接进题）
+        </div>
+      )}
+
+      {/* ---------- 出错 ---------- */}
+      {phase === "error" && (
+        <div className="empty-state">
+          <p>✗ {error}</p>
+          {error && error.includes("未配置") && (
+            <p style={{ fontSize: 13, marginTop: 8 }}>管理员在服务器设置 LLM_API_KEY 后即可使用。</p>
+          )}
+          <div className="done-actions" style={{ justifyContent: "flex-start" }}>
+            <button className="start-btn" onClick={toSetup}>返回设置</button>
+            <Link className="ghost-btn" href="/">返回首页</Link>
+          </div>
+        </div>
+      )}
+
+      {/* ---------- 答题中 ---------- */}
       {phase === "running" && cur && (
         <div className="prac-card">
           <div className="progress">
@@ -353,6 +376,7 @@ export default function PracticePage() {
         </div>
       )}
 
+      {/* ---------- 完成 ---------- */}
       {phase === "done" && (
         <div className="train-done">
           <h2 className="section-h">练习完成 🎉</h2>
@@ -398,6 +422,7 @@ export default function PracticePage() {
               <button className="start-btn" onClick={restart}>
                 再练一遍
               </button>
+              <button className="ghost-btn" onClick={toSetup}>换年级/题型</button>
               <Link className="ghost-btn" href="/review?tab=wrong">
                 去错题本 →
               </Link>
