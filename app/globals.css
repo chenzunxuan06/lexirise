@@ -2308,3 +2308,16 @@ a { color: inherit; text-decoration: none; }
 .ai-prac-desc { font-size: 13px; color: var(--text-soft); margin-top: 4px; max-width: 560px; line-height: 1.7; }
 .ai-ph em { font-style: normal; font-size: 10px; color: var(--primary); margin-left: 4px; }
 .prac-zh { font-size: 14px; color: var(--text-soft); margin-bottom: 12px; border-left: 3px solid var(--primary); padding-left: 8px; }
+.prac-mode-hint { font-size: 12px; color: var(--text-soft); margin-top: 8px; line-height: 1.6; }
+.prac-badge-row { margin-bottom: 8px; }
+.prac-badge {
+  display: inline-block;
+  font-size: 12px;
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-weight: 700;
+}
+.prac-badge.b-fill { background: #e3f1eb; color: var(--primary-dark); }
+.prac-badge.b-fill-in { background: #e8eefb; color: #3a5a9c; }
+.prac-badge.b-recall { background: #fdf2e3; color: #9a6a1b; }
+.prac-badge.b-transform { background: #f3e8fa; color: #7a3fa0; }

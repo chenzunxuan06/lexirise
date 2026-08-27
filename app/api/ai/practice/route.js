@@ -14,7 +14,7 @@ import { aiConsume, LimitError } from "@/lib/limits";
 import { bank, wordById, unitWords } from "@/lib/kb";
 import { practiceMessages } from "@/lib/prompts";
 
-const CACHE_VER = "v3";
+const CACHE_VER = "v4";
 const DEFAULT_GRADE = 8; // 默认按初二水平出题（本项目面向初中生，优先低年级起步）
 
 function shuffle(arr) {
@@ -24,6 +24,47 @@ function shuffle(arr) {
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
+}
+
+/** 题型可行性：有词根词缀提示/词根键的词才可能安全出"词形变化" */
+const isFormable = (w) => !!(w.affix_hint || (w.affix_keys && w.affix_keys.length));
+
+/**
+ * 服务端题型指派（AI 无权自行更换）：
+ * mix=综合  context=语境填空(只fill/fill-in)  spell=拼写(recall/fill-in)  form=词形变化(transform为主)
+ */
+function planRoles(picked, mode) {
+  const n = picked.length;
+  const SEQS = {
+    mix: ["fill", "fill", "fill", "fill", "fill-in", "fill-in", "recall", "recall", "transform", "transform"],
+    context: ["fill", "fill-in", "fill", "fill-in", "fill", "fill", "fill-in", "fill", "fill-in", "fill"],
+    spell: ["recall", "fill-in", "recall", "fill-in", "recall", "fill-in", "recall", "fill-in", "recall", "recall"],
+    form: ["transform", "transform", "transform", "transform", "transform", "transform", "transform", "transform", "recall", "recall"],
+  };
+  const seq = SEQS[mode] || SEQS.mix;
+  const roles = new Array(n).fill("recall");
+  const order = shuffle([...Array(n).keys()]);
+  order.forEach((pos, i) => {
+    roles[pos] = seq[i % seq.length];
+  });
+  // transform 只允许分配给"可变形"的词，否则降级为 recall
+  for (let i = 0; i < n; i++) {
+    if (roles[i] === "transform" && !isFormable(picked[i])) roles[i] = "recall";
+  }
+  // form 模式下可变形词很富余时，把 recall 名额匀给 transform
+  if (mode === "form") {
+    const formIdx = picked.map((w, i) => (isFormable(w) ? i : -1)).filter((i) => i >= 0);
+    const wantForm = Math.min(n, Math.max(1, Math.round(n * 0.8)));
+    let have = roles.filter((r) => r === "transform").length;
+    for (const i of shuffle(formIdx)) {
+      if (have >= wantForm) break;
+      if (roles[i] !== "transform") {
+        roles[i] = "transform";
+        have += 1;
+      }
+    }
+  }
+  return roles;
 }
 
 /** 服务端从该用户学习数据选词（到期优先，错题其次），不足随机补 */
@@ -84,6 +125,7 @@ export async function POST(req) {
   }
   const count = Math.max(5, Math.min(20, Number(body.count) || 10));
   const source = body.source === "unit" ? "unit" : "auto";
+  const mode = ["mix", "context", "spell", "form"].includes(body.mode) ? body.mode : "mix";
   const grade = Number(body.grade) || 0;
   const semester = Number(body.semester);
   const unit = Number(body.unit);
@@ -93,8 +135,8 @@ export async function POST(req) {
   const uid = user ? user.id : 0;
   const today = new Date().toISOString().slice(0, 10);
   const cacheKey = useUnit
-    ? `practice:${uid}:${grade}-${semester}-${unit}:${CACHE_VER}:${today}`
-    : `practice:${uid}:auto:${grade || "x"}:${CACHE_VER}:${today}`;
+    ? `practice:${uid}:unit:${grade}-${semester}-${unit}:${CACHE_VER}:${today}`
+    : `practice:${uid}:${mode}:${grade || "x"}:${CACHE_VER}:${today}`;
   const cached = await aiCacheGet(cacheKey);
   if (cached) {
     return NextResponse.json({ questions: cached, cached: true });
@@ -174,35 +216,73 @@ export async function POST(req) {
 
   const unitLabelText = useUnit ? `${grade}年级${semester === 1 ? "上" : "下"}册 Unit ${unit}` : "";
   const gradeLabel = `${levelGrade}年级`;
+  const roles = planRoles(picked, mode);
 
   // ---- 生成 ----
   try {
     const data = await chatRobust(
-      practiceMessages(picked, pool, unitLabelText, gradeLabel),
+      practiceMessages(picked, pool, unitLabelText, gradeLabel, roles),
       { json: true, maxTokens: 2600, temperature: 0.5, timeoutMs: 90000 }
     );
     const raw = Array.isArray(data.questions) ? data.questions : [];
     const questions = [];
-    const types = new Set(["fill", "recall", "transform"]);
+    const TYPE_OK = new Set(["fill", "fill-in", "recall", "transform"]);
     for (let i = 0; i < raw.length && i < picked.length; i++) {
       const q = raw[i];
       const w = picked[i];
-      const type = types.has(q.type) ? q.type : "recall";
-      // 词库个别词条带 * 等模板标记，答案判定前清理（*captain → captain）
+      // 以服务端指派为准，不信任 AI 自报的 type
+      let type = roles[i] || "recall";
+      if (!TYPE_OK.has(type)) type = "recall";
+      // 词库个别词条带 * 等模板标记，展示与判定前清理
       const cleanWord = String(w.word_en).replace(/^\*+|\*+$/g, "").trim();
+      const first = cleanWord ? cleanWord[0].toLowerCase() : "";
+      let options = null;
+      let answer = String(q.answer || "").trim().toLowerCase().replace(/^\*+|\*+$/g, "");
+      let questionText = String(q.q || "").trim();
+      const explain = String(q.explain || "").trim();
+
+      if (type === "fill") {
+        const opts = Array.isArray(q.options)
+          ? q.options.map((o) => String(o).trim()).filter(Boolean).slice(0, 4)
+          : [];
+        const ok = opts.length >= 2 && opts.some((o) => o.toLowerCase() === answer);
+        if (ok) {
+          options = shuffle(opts);
+        } else {
+          // 选项/答案不可靠 → 降级为 recall（不给错误题）
+          type = "recall";
+          questionText = `${w.definition_zh || ""}（首字母 ${first}）`.trim();
+        }
+      }
+      if (type === "transform") {
+        if (!answer || answer.includes(" ") || answer.length > 24) {
+          // 变形结果不可靠（多词/超长）→ 降级 recall
+          type = "recall";
+          questionText = `${w.definition_zh || ""}（首字母 ${first}）`.trim();
+        } else if (!questionText) {
+          questionText = `${cleanWord} → (?)`.trim();
+        }
+      }
+      if (type === "fill-in") {
+        if (!questionText) {
+          type = "recall";
+          questionText = `${w.definition_zh || ""}（首字母 ${first}）`.trim();
+        }
+      }
+      if (type === "recall" && !questionText) {
+        questionText = `${w.definition_zh || ""}（首字母 ${first}）`.trim();
+      }
+
       questions.push({
         wordId: w.id,
         word: cleanWord,
         definition_zh: w.definition_zh,
         type,
-        q: String(q.q || "").trim(),
+        q: questionText,
         q_zh: String(q.q_zh || "").trim(),
-        options:
-          type === "fill" && Array.isArray(q.options) && q.options.length >= 2
-            ? q.options.slice(0, 4).map((o) => String(o).trim()).filter(Boolean)
-            : null,
-        answer: String(q.answer || "").trim().toLowerCase().replace(/^\*+|\*+$/g, ""),
-        explain: String(q.explain || "").trim(),
+        options,
+        answer,
+        explain,
       });
     }
     if (!questions.length) {

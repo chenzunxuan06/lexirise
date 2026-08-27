@@ -22,12 +22,14 @@ export default function PracticePage() {
   const [isCached, setIsCached] = useState(false);
   const [source, setSource] = useState("auto");
   const [grade, setGrade] = useState(0);
+  const [mode, setMode] = useState("mix");
 
   useEffect(() => {
     const q = new URLSearchParams(window.location.search);
     const isUnit = !!q.get("unit");
     setSource(isUnit ? "unit" : "auto");
     setGrade(isUnit ? 0 : Number(q.get("grade")) || 0);
+    setMode(["mix", "context", "spell", "form"].includes(q.get("mode")) ? q.get("mode") : "mix");
     (async () => {
       try {
         const r = await fetch("/api/ai/practice", {
@@ -36,7 +38,8 @@ export default function PracticePage() {
           body: JSON.stringify({
             count: 10,
             source: isUnit ? "unit" : "auto",
-            grade: isUnit ? Number(q.get("grade")) : Number(q.get("grade")) || 0,
+            mode: q.get("mode") || "mix",
+            grade: Number(q.get("grade")) || 0,
             semester: isUnit ? Number(q.get("semester")) : undefined,
             unit: isUnit ? Number(q.get("unit")) : undefined,
           }),
@@ -54,13 +57,31 @@ export default function PracticePage() {
     })();
   }, []);
 
-  function switchGrade(g) {
-    // 重新按年级生成（每日缓存按 年级+用户 分开，不冲突）
-    window.location.href = g ? `/practice?grade=${g}` : "/practice";
+  function go(params) {
+    const q = new URLSearchParams(window.location.search);
+    for (const [k, v] of Object.entries(params)) {
+      if (v == null || v === "" || v === 0) q.delete(k);
+      else q.set(k, String(v));
+    }
+    const s = q.toString();
+    window.location.href = s ? "/practice?" + s : "/practice";
   }
+  const MODES = [
+    { k: "mix", label: "综合" },
+    { k: "context", label: "语境填空" },
+    { k: "spell", label: "拼写" },
+    { k: "form", label: "词形变化" },
+  ];
+  const TYPE_BADGE = {
+    fill: { t: "📝 选词填空", cls: "b-fill" },
+    "fill-in": { t: "🔤 首字母填空", cls: "b-fill-in" },
+    recall: { t: "✍️ 释义拼词", cls: "b-recall" },
+    transform: { t: "🔄 词形变化", cls: "b-transform" },
+  };
 
   const cur = questions[idx];
   const isFill = cur && cur.type === "fill";
+  const isFillIn = cur && cur.type === "fill-in";
   const isRecall = cur && cur.type === "recall";
   const isTransform = cur && cur.type === "transform";
 
@@ -185,21 +206,38 @@ export default function PracticePage() {
           {isCached && <span className="tagline-dot">今日已生成</span>}
         </p>
         {source !== "unit" && (
-          <div className="tabs" style={{ marginTop: 10 }}>
-            {[
-              { v: 0, label: "自动（按我的水平）" },
-              { v: 7, label: "七年级" },
-              { v: 8, label: "八年级" },
-              { v: 9, label: "九年级" },
-            ].map((g) => (
-              <button
-                key={g.v}
-                className={"tab" + (grade === g.v ? " active" : "")}
-                onClick={() => switchGrade(g.v)}
-              >
-                {g.label}
-              </button>
-            ))}
+          <div style={{ marginTop: 10 }}>
+            <div className="tabs">
+              {[
+                { v: 0, label: "自动（按我的水平）" },
+                { v: 7, label: "七年级" },
+                { v: 8, label: "八年级" },
+                { v: 9, label: "九年级" },
+              ].map((g) => (
+                <button
+                  key={g.v}
+                  className={"tab" + (grade === g.v ? " active" : "")}
+                  onClick={() => go({ grade: g.v === 0 ? null : g.v })}
+                >
+                  {g.label}
+                </button>
+              ))}
+            </div>
+            <div className="tabs" style={{ marginTop: 8 }}>
+              {MODES.map((m) => (
+                <button
+                  key={m.k}
+                  className={"tab" + (mode === m.k ? " active" : "")}
+                  onClick={() => go({ mode: m.k })}
+                >
+                  {m.label}
+                </button>
+              ))}
+            </div>
+            <div className="prac-mode-hint">
+              综合=4种题型混搭（每天不同）· 语境填空=放回句子里练使用 · 拼写=盯着拼写 ·
+              词形变化=派生词专项（训练中心没有的题型）。这不替代训练中心，而是专攻你的弱点和到期词。
+            </div>
           </div>
         )}
       </header>
@@ -224,6 +262,11 @@ export default function PracticePage() {
 
           {isFill && (
             <>
+              <div className="prac-badge-row">
+                {TYPE_BADGE[cur.type] && (
+                  <span className={"prac-badge " + TYPE_BADGE[cur.type].cls}>{TYPE_BADGE[cur.type].t}</span>
+                )}
+              </div>
               <div className="prac-q">{cur.q}</div>
               {cur.q_zh && <div className="prac-zh">{cur.q_zh}</div>}
               <div className="prac-sub">选择正确的单词填入空白处</div>
@@ -254,11 +297,20 @@ export default function PracticePage() {
             </>
           )}
 
-          {(isRecall || isTransform) && (
+          {(isRecall || isTransform || isFillIn) && (
             <>
+              <div className="prac-badge-row">
+                {TYPE_BADGE[cur.type] && (
+                  <span className={"prac-badge " + TYPE_BADGE[cur.type].cls}>{TYPE_BADGE[cur.type].t}</span>
+                )}
+              </div>
               <div className="prac-q">{cur.q}</div>
               <div className="prac-sub">
-                {isRecall ? "根据释义与首字母拼出单词" : "写出要求的词形变化"}
+                {isFillIn
+                  ? "根据首字母提示补全单词"
+                  : isTransform
+                  ? "写出要求的词形变化"
+                  : "根据释义与首字母拼出单词"}
                 <button className="speak" style={{ marginLeft: 8 }} onClick={() => speak(cur.word)} title="听发音">🔊</button>
               </div>
               <input
