@@ -32,6 +32,11 @@ export default function RootLayout({ children }) {
           <Sidebar />
           <main className="app-main">{children}</main>
         </div>
+        <div className="icp-bar">
+          <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">
+            粤ICP备2026124935号
+          </a>
+        </div>
         <PwaSupport />
       </body>
     </html>
