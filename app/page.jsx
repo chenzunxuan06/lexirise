@@ -41,14 +41,6 @@ function GoalRing({ done, goal }) {
 
 const GOAL_OPTS = [5, 10, 20, 30, 50];
 
-const MODES = [
-  { key: "quiz", label: "选中文", icon: "✅", desc: "看单词选释义" },
-  { key: "reverse", label: "选单词", icon: "🔀", desc: "看中文选单词" },
-  { key: "flashcard", label: "闪卡", icon: "🃏", desc: "翻卡自测" },
-  { key: "dictation", label: "听写", icon: "✍️", desc: "听音拼单词" },
-  { key: "listening", label: "听力", icon: "🔊", desc: "听音选释义" },
-];
-
 export default function HomePage() {
   const [data, setData] = useState(null);
 
@@ -234,24 +226,13 @@ export default function HomePage() {
       )}
 
       <section className="home-section">
-        <div className="section-row">
-          <h2 className="section-h">快速开始训练</h2>
-          <span className="section-sub">今日已学 {today.n + today.review} 词 · 正确 {today.correct} 次</span>
-        </div>
-        <div className="mode-grid home-modes">
-          {MODES.map((m) => (
-            <Link key={m.key} href={`/train?mode=${m.key}`} className="mode-card">
-              <div className="mode-icon">{m.icon}</div>
-              <div className="mode-name">{m.label}</div>
-              <div className="mode-desc">{m.desc}</div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      <section className="home-section">
         <h2 className="section-h">学习中心</h2>
         <div className="entry-grid">
+          <Link href="/train" className="entry-card">
+            <span className="entry-ic">🎯</span>
+            <span className="entry-name">训练</span>
+            <span className="entry-desc">选中文·闪卡·听写·听力</span>
+          </Link>
           <Link href="/recite" className="entry-card">
             <span className="entry-ic">📖</span>
             <span className="entry-name">背书</span>

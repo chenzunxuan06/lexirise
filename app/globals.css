@@ -99,7 +99,9 @@ a { color: inherit; text-decoration: none; }
   flex-direction: column;
   gap: 8px;
   transition: width 0.2s ease, padding 0.2s ease;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
 }
 .sidebar.collapsed {
   width: 74px;
@@ -2321,3 +2323,164 @@ a { color: inherit; text-decoration: none; }
 .prac-badge.b-fill-in { background: #e8eefb; color: #3a5a9c; }
 .prac-badge.b-recall { background: #fdf2e3; color: #9a6a1b; }
 .prac-badge.b-transform { background: #f3e8fa; color: #7a3fa0; }
+
+/* ============================================================
+   手机/窄屏适配：侧边栏抽屉化 + 排版收敛 + 桌面短窗可滚动
+   ============================================================ */
+.sb-hamburger {
+  display: none;
+}
+.sb-overlay {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  /* 悬浮汉堡按钮（在抽屉外） */
+  .sb-hamburger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 70;
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--primary-dark);
+    border-radius: 12px;
+    font-size: 20px;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+  }
+  .sb-hamburger:hover { background: var(--surface-2); }
+
+  /* 抽屉本体 */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 268px;
+    height: 100vh;
+    height: 100dvh;
+    z-index: 60;
+    transform: translateX(-106%);
+    transition: transform 0.22s ease;
+    border-right: 1px solid var(--border);
+    box-shadow: 10px 0 34px rgba(0, 0, 0, 0.16);
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  /* 抽屉内顶部按钮显示为「关闭」 */
+  .sidebar .sb-toggle {
+    position: fixed;
+    top: 18px;
+    left: calc(268px - 44px);
+    transform: none;
+    z-index: 71;
+    background: var(--surface);
+  }
+  .sidebar.open .sb-toggle { left: calc(268px - 44px); right: auto; }
+
+  /* 抽屉底部蒙层（点击关闭） */
+  .sb-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 40, 32, 0.4);
+    z-index: 55;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  .sidebar.open ~ .sb-overlay {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* 手机侧栏内容紧凑化 */
+  .sidebar .sb-desc { display: none; }
+  .sb-brand { padding: 54px 8px 10px; }
+  .sb-login, .sb-user { margin: 8px 6px 0; }
+
+  /* 桌面折叠状态在手机上强制复位为完整抽屉 */
+  .sidebar.collapsed {
+    width: 268px;
+    padding: 18px 14px;
+    align-items: stretch;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .sidebar.collapsed .sb-brand { justify-content: flex-start; padding: 54px 8px 10px; width: 100%; }
+  .sidebar.collapsed .sb-name { display: block; }
+  .sidebar.collapsed .sb-nav { align-items: stretch; }
+  .sidebar.collapsed .sb-item { justify-content: flex-start; padding: 11px 12px; gap: 12px; width: 100%; height: auto; }
+  .sidebar.collapsed .sb-icon { font-size: 20px; width: 24px; }
+  .sidebar.collapsed .sb-text { display: flex; }
+  .sidebar.collapsed .sb-foot { display: block; }
+  .sidebar.collapsed .sb-user { display: block; }
+  .sidebar.collapsed .sb-toggle { right: auto; transform: none; }
+
+  /* 主内容区给汉堡按钮让位 */
+  .wrap { padding: 0 12px 56px; }
+  .hero { padding: 78px 0 14px; }
+  .brand h1 { font-size: 23px; }
+  .brand .en { font-size: 12px; }
+
+  /* 首页卡片收敛 */
+  .task-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 14px; }
+  .task-card { padding: 12px; gap: 10px; }
+  .task-ic { font-size: 22px; }
+  .task-num { font-size: 22px; }
+  .task-link { font-size: 12px; }
+  .entry-grid { grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 10px; }
+  .entry-card { padding: 14px; }
+  .entry-ic { font-size: 24px; }
+  .entry-name { font-size: 15px; margin-top: 6px; }
+  .daily-card { padding: 16px 18px; }
+  .daily-word { font-size: 27px; }
+  .daily-def { font-size: 16px; }
+  .goal-card { padding: 14px 16px; gap: 10px; }
+  .goal-ring { transform: scale(0.85); transform-origin: right center; }
+  .stats { flex-wrap: wrap; gap: 8px; }
+  .hero .stats .stat { font-size: 12px; }
+
+  /* 通用块收敛 */
+  .cards { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+  .mode-grid { grid-template-columns: repeat(2, 1fr); }
+  .mode-card { padding: 14px 12px; }
+  .mode-icon { font-size: 26px; }
+  .setup-card { padding: 14px; }
+  .setup-label { font-size: 13px; }
+  .tabs { gap: 6px; margin-top: 8px; }
+  .tab { padding: 6px 12px; font-size: 13px; }
+  .chips { gap: 6px; }
+  .chip { font-size: 12px; padding: 5px 10px; }
+  .review-actions { flex-wrap: wrap; }
+  .recite-unit { padding: 12px 14px; }
+  .section-h { font-size: 17px; }
+  .exam-hist-time, .exam-hist-sub { display: none; }
+  .goal-ring svg { width: 110px; height: 110px; }
+}
+
+@media (max-width: 480px) {
+  .goal-card { flex-direction: column; align-items: stretch; }
+  .goal-ring { transform: none; align-self: flex-start; }
+  .daily-body { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .ai-practice-card { flex-direction: column; align-items: flex-start; }
+  .prac-card { padding: 0 2px; }
+  .home-modes { display: none; }
+}
+
+/* 桌面短窗口（横屏/小窗）：侧栏整体可滚动，不再裁切底部 */
+@media (max-height: 560px) and (min-width: 901px) {
+  .sidebar .sb-desc { display: none; }
+  .sb-item { padding: 8px 12px; }
+  .sb-brand { padding: 6px 8px 8px; }
+  .sb-nav { gap: 4px; }
+}

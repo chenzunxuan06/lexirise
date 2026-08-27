@@ -18,6 +18,13 @@ const ITEMS = [
   { href: "/stats", label: "统计", icon: "📈", desc: "打卡·进度" },
 ];
 
+const isMobile = () => typeof window !== "undefined" && window.innerWidth <= 900;
+
+function closeDrawer() {
+  const el = document.getElementById("app-sidebar");
+  if (el && isMobile()) el.classList.remove("open");
+}
+
 export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
@@ -34,81 +41,98 @@ export default function Sidebar() {
 
   const showAdmin = user && user.role === "admin";
 
+  function toggleMenu() {
+    const el = document.getElementById("app-sidebar");
+    if (!el) return;
+    if (isMobile()) {
+      el.classList.toggle("open");
+    } else {
+      el.classList.toggle("collapsed");
+    }
+  }
+
   return (
-    <aside className="sidebar" id="app-sidebar">
-      <button
-        className="sb-toggle"
-        onClick={() => {
-          const el = document.getElementById("app-sidebar");
-          el.classList.toggle("collapsed");
-        }}
-        title="收起 / 展开菜单"
-      >
-        «
+    <>
+      <button className="sb-hamburger" onClick={toggleMenu} aria-label="打开菜单" title="菜单">
+        ☰
       </button>
 
-      <Link href="/" className="sb-brand">
-        <span className="sb-logo">词</span>
-        <span className="sb-name">词跃 LexiRise</span>
-      </Link>
+      <aside className="sidebar" id="app-sidebar">
+        <button
+          className="sb-toggle"
+          onClick={toggleMenu}
+          title="收起 / 展开菜单"
+        >
+          «
+        </button>
 
-      <nav className="sb-nav">
-        {ITEMS.map((it) => (
-          <Link
-            key={it.href}
-            href={it.href}
-            className={"sb-item" + (isActive(it.href) ? " active" : "")}
-            title={it.label}
-            data-label={it.label}
-          >
-            <span className="sb-icon">{it.icon}</span>
-            <span className="sb-text">
-              <span className="sb-label">{it.label}</span>
-              <span className="sb-desc">{it.desc}</span>
-            </span>
-          </Link>
-        ))}
-        {showAdmin && (
-          <Link
-            href="/admin"
-            className={"sb-item" + (isActive("/admin") ? " active" : "")}
-            title="管理后台"
-            data-label="管理后台"
-          >
-            <span className="sb-icon">⚙️</span>
-            <span className="sb-text">
-              <span className="sb-label">管理后台</span>
-              <span className="sb-desc">用户 · 备份</span>
-            </span>
-          </Link>
-        )}
-      </nav>
+        <Link href="/" className="sb-brand" onClick={closeDrawer}>
+          <span className="sb-logo">词</span>
+          <span className="sb-name">词跃 LexiRise</span>
+        </Link>
 
-      <div className="sb-user">
-        {user ? (
-          <div className="sb-user-in">
-            <span className="sb-user-name" title={user.nickname || user.username}>
-              👤 {user.nickname || user.username}
-            </span>
-            <button
-              className="sb-logout"
-              onClick={async () => {
-                await sync.logout();
-                router.push("/");
-                router.refresh();
-              }}
+        <nav className="sb-nav">
+          {ITEMS.map((it) => (
+            <Link
+              key={it.href}
+              href={it.href}
+              className={"sb-item" + (isActive(it.href) ? " active" : "")}
+              title={it.label}
+              data-label={it.label}
+              onClick={closeDrawer}
             >
-              退出
-            </button>
-          </div>
-        ) : (
-          <Link className="sb-login" href="/login">
-            🔐 登录 / 注册
-          </Link>
-        )}
-      </div>
+              <span className="sb-icon">{it.icon}</span>
+              <span className="sb-text">
+                <span className="sb-label">{it.label}</span>
+                <span className="sb-desc">{it.desc}</span>
+              </span>
+            </Link>
+          ))}
+          {showAdmin && (
+            <Link
+              href="/admin"
+              className={"sb-item" + (isActive("/admin") ? " active" : "")}
+              title="管理后台"
+              data-label="管理后台"
+              onClick={closeDrawer}
+            >
+              <span className="sb-icon">⚙️</span>
+              <span className="sb-text">
+                <span className="sb-label">管理后台</span>
+                <span className="sb-desc">用户 · 备份</span>
+              </span>
+            </Link>
+          )}
+        </nav>
 
-      <div className="sb-foot">沪教牛津版 · 1535 词</div>
-    </aside>
+        <div className="sb-user">
+          {user ? (
+            <div className="sb-user-in">
+              <span className="sb-user-name" title={user.nickname || user.username}>
+                👤 {user.nickname || user.username}
+              </span>
+              <button
+                className="sb-logout"
+                onClick={async () => {
+                  await sync.logout();
+                  router.push("/");
+                  router.refresh();
+                }}
+              >
+                退出
+              </button>
+            </div>
+          ) : (
+            <Link className="sb-login" href="/login" onClick={closeDrawer}>
+              🔐 登录 / 注册
+            </Link>
+          )}
+        </div>
+
+        <div className="sb-foot">沪教牛津版 · 1535 词</div>
+      </aside>
+
+      <div className="sb-overlay" onClick={closeDrawer} />
+    </>
   );
 }
