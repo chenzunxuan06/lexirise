@@ -36,6 +36,15 @@ export default function RootLayout({ children }) {
           <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">
             粤ICP备2026124935号
           </a>
+          <span className="icp-sep">·</span>
+          <a
+            href="https://beian.mps.gov.cn/#/query/webSearch?code=44010502004343"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <img src="/icons/gongan.png" alt="公安备案" className="icp-icon" />
+            粤公网安备44010502004343号
+          </a>
         </div>
         <PwaSupport />
       </body>

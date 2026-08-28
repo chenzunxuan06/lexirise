@@ -2498,3 +2498,17 @@ a { color: inherit; text-decoration: none; }
 .icp-bar a:hover {
   color: var(--primary-dark);
 }
+.icp-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.icp-sep { color: var(--text-soft); }
+.icp-icon {
+  height: 14px;
+  width: auto;
+  vertical-align: -2px;
+  margin-right: 4px;
+}
