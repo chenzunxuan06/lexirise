@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { loadWords } from "@/lib/loadWords";
-import { speak, speakSlow, speakZh, stopSpeak } from "@/lib/tts";
+import { speak, speakSlow, speakZh, stopSpeak, unlockAudio } from "@/lib/tts";
 import { memory, wrongBook, favs, stats } from "@/lib/memory";
 import ExampleBlock from "../components/ExampleBlock";
 import { ContrastBox } from "../components/AiExplain";
@@ -323,6 +323,8 @@ export default function TrainPage() {
 
   function buildDeck() {
     if (pool.length === 0) return;
+    // 用户手势内解锁音频：保证听力/听写模式 350ms 后的自动朗读在移动端不被拦
+    unlockAudio();
     const n = size === 0 ? pool.length : Math.min(size, pool.length);
     const sample = shuffle(pool).slice(0, n);
     const items = sample.map((w) => makeItem(w, pool));
@@ -382,11 +384,26 @@ export default function TrainPage() {
     recordAnswer(opt === deck[idx].correct);
   }
 
+  // 听写判分用规范化键：与朗读文本对齐（连字符=空格、剥括号/星号、省略号→something），
+  // 避免 switch-off / (be) busy with / leave ... behind 类词条“听对了却判错”
+  function normKey(s) {
+    return String(s)
+      .trim()
+      .toLowerCase()
+      .replace(/\s*[–—-]\s*/g, " ")
+      .replace(/\([^)]*\)/g, "")
+      .replace(/^\*+/, "")
+      .replace(/…+|\.{2,}/g, " something ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
   function submitDictation() {
     if (answered) return;
     const val = input.trim().toLowerCase();
-    const target = deck[idx].word.word_en.trim().toLowerCase();
-    const ok = val === target;
+    const key = normKey(val);
+    const target = normKey(deck[idx].word.word_en);
+    const ok = key !== "" && key === target;
     setAnswered(true);
     recordAnswer(ok);
   }
@@ -404,6 +421,7 @@ export default function TrainPage() {
 
   function practiceWrong() {
     if (!wrongPool.length) return;
+    unlockAudio();
     startDeck(wrongPool.map((w) => makeItem(w, pool.length ? pool : data.words)));
   }
 

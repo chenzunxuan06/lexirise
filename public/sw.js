@@ -5,7 +5,7 @@
 //  - words.json / affixes.json：缓存优先（词库离线可用）
 //  - /api/*：绝不缓存（用户数据隐私 + 时效性）
 // 版本号：每次改动资源结构时 +1 使缓存刷新
-const CACHE = "lexirise-v4";
+const CACHE = "lexirise-v5";
 
 // 首次安装预缓存：页面壳 + 词库数据（保证离线可用）
 const PRECACHE = [
@@ -26,6 +26,7 @@ const PRECACHE = [
   "/words.json",
   "/affixes.json",
   "/manifest.webmanifest",
+  "/tts-diag.html",
   "/icon.svg",
   "/icons/icon-192.png",
   "/icons/icon-512.png",
@@ -77,7 +78,30 @@ self.addEventListener("fetch", (e) => {
   }
 
   // 静态资源 + 词库数据：缓存优先（后台更新）
-  if (path.startsWith("/_next/static/") || path === "/words.json" || path === "/affixes.json") {
+  if (
+    path.startsWith("/_next/static/") ||
+    path === "/words.json" ||
+    path === "/affixes.json"
+  ) {
+    e.respondWith(
+      caches.match(req).then((hit) => {
+        const net = fetch(req)
+          .then((res) => {
+            if (res.ok) {
+              const copy = res.clone();
+              caches.open(CACHE).then((c) => c.put(req, copy));
+            }
+            return res;
+          })
+          .catch(() => hit);
+        return hit || net;
+      })
+    );
+    return;
+  }
+
+  // 发音音频 /audio/t/*.mp3：缓存优先（首播后离线也能发音）
+  if (path.startsWith("/audio/t/")) {
     e.respondWith(
       caches.match(req).then((hit) => {
         const net = fetch(req)

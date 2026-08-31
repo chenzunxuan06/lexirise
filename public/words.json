@@ -10537,7 +10537,7 @@
   {
    "id": 516,
    "word_en": "switch-off",
-   "phonetic": "/swɪtʃ''ɒf/",
+   "phonetic": "/ˈswɪtʃ ɒf/",
    "pos": "adj.",
    "definition_zh": "关闭(电灯、机器等）的",
    "grade": 7,
@@ -12522,7 +12522,7 @@
   {
    "id": 613,
    "word_en": "compare",
-   "phonetic": "/kam'pea(r)/",
+   "phonetic": "/kəmˈpeə(r)/",
    "pos": "v.",
    "definition_zh": "将……比作",
    "grade": 7,
@@ -28287,7 +28287,7 @@
   {
    "id": 1383,
    "word_en": "international",
-   "phonetic": "/ˌɪnərˈnæʃənɑl/",
+   "phonetic": "/ˌɪntərˈnæʃənəl/",
    "pos": "adj.",
    "definition_zh": "国际的",
    "grade": 9,
@@ -30349,7 +30349,7 @@
   {
    "id": 1483,
    "word_en": "glove",
-   "phonetic": "/gləv/",
+   "phonetic": "/ɡlʌv/",
    "pos": "n.",
    "definition_zh": "手套",
    "grade": 9,
@@ -30529,7 +30529,7 @@
   {
    "id": 1492,
    "word_en": "enter",
-   "phonetic": "/ˈɛnər/",
+   "phonetic": "/ˈentə(r)/",
    "pos": "v.",
    "definition_zh": "报名参加",
    "grade": 9,
@@ -30549,7 +30549,7 @@
   {
    "id": 1493,
    "word_en": "semi-final",
-   "phonetic": null,
+   "phonetic": "/ˌsemi ˈfaɪnəl/",
    "pos": "n.",
    "definition_zh": "半决赛",
    "grade": 9,
@@ -30835,7 +30835,7 @@
   {
    "id": 1507,
    "word_en": "focus",
-   "phonetic": "/ˈfoʊkɪs/",
+   "phonetic": "/ˈfoʊkəs/",
    "pos": "v.",
    "definition_zh": "集中（注意力、精力等）于",
    "grade": 9,

@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { loadWords } from "@/lib/loadWords";
-import { speak, speakSlow } from "@/lib/tts";
+import { speak, speakSlow, unlockAudio } from "@/lib/tts";
 import { memory, wrongBook, stats } from "@/lib/memory";
 import ExampleBlock from "../components/ExampleBlock";
 
@@ -67,6 +67,8 @@ export default function RecitePage() {
   }
 
   function startUnit(ws) {
+    // 用户手势内解锁音频：保证进入单元后自动朗读不被移动端自动播放策略拦
+    unlockAudio();
     setDeck(ws);
     setIdx(0);
     setRevealed(false);
