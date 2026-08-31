@@ -466,7 +466,9 @@ a { color: inherit; text-decoration: none; }
   cursor: pointer;
   color: var(--primary-dark);
 }
-.speak:hover { background: #e3f1eb; }
+@media (hover: hover) {
+  .speak:hover { background: #e3f1eb; }
+}
 .modal .phon {
   font-size: 17px;
   color: var(--text-soft);
@@ -818,9 +820,11 @@ a { color: inherit; text-decoration: none; }
   cursor: pointer;
   transition: all 0.15s ease;
 }
-.opt:hover:not(:disabled) {
-  border-color: var(--primary);
-  background: var(--surface-2);
+@media (hover: hover) {
+  .opt:hover:not(:disabled) {
+    border-color: var(--primary);
+    background: var(--surface-2);
+  }
 }
 .opt:disabled { cursor: default; }
 .opt.right {
@@ -1117,7 +1121,9 @@ a { color: inherit; text-decoration: none; }
   font-weight: 600;
   transition: all 0.15s ease;
 }
-.hint-btn:hover { background: var(--surface-2); }
+@media (hover: hover) {
+  .hint-btn:hover { background: var(--surface-2); }
+}
 .hint-panel {
   margin-top: 16px;
   background: #fffaf0;
