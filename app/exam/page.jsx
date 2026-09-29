@@ -4,8 +4,14 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { loadWords } from "@/lib/loadWords";
 import { speak } from "@/lib/tts";
 import { memory, wrongBook, stats, exams } from "@/lib/memory";
+import { game } from "@/lib/game";
+import { track } from "@/lib/analytics";
 import { ContrastBox } from "../components/AiExplain";
 import AiExplainCard from "../components/AiExplain";
+import GameBar from "../components/GameBar";
+import ResolvePanel from "../components/ResolvePanel";
+import ChapterHead from "../components/ChapterHead";
+import PetEmpty from "../components/PetEmpty";
 
 const GRADES = [
   { value: 7, label: "七年级" },
@@ -46,10 +52,63 @@ export default function ExamPage() {
   const [timeLeft, setTimeLeft] = useState(0);
   const [startAt, setStartAt] = useState(0);
   const [tick, setTick] = useState(0);
+  const [urlJump, setUrlJump] = useState(null); // 深链 /exam?grade=&semester=&unit=
+  const recordedRef = useRef(new Set()); // 已记分的词 id（防重复提交，缺陷防护）
+
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search);
+    const g = Number(q.get("grade"));
+    const s = Number(q.get("semester"));
+    const u = Number(q.get("unit"));
+    if (g && s && u) setUrlJump({ grade: g, semester: s, unit: u });
+  }, []);
 
   useEffect(() => {
     loadWords().then(setData).catch((e) => console.error(e));
   }, []);
+
+  // 深链直达：数据就绪后定位并直接开考（缺陷 #3）
+  useEffect(() => {
+    if (!data || !urlJump) return;
+    const { grade: g, semester: s, unit: u } = urlJump;
+    setGrade(g);
+    setSemester(s);
+    setUnit(u);
+    setPhase("running");
+    const pool = data.words.filter(
+      (w) => w.grade === g && w.semester === s && w.unit === u && w.word_en
+    ).sort((a, b) => a.id - b.id);
+    if (pool.length) {
+      savedRef.current = false;
+      recordedRef.current = new Set();
+      const n = count === 0 ? pool.length : Math.min(count, pool.length);
+      const sample = shuffle(pool).slice(0, n);
+      const items = sample.map((w) => {
+        const correct = w.definition_zh || w.word_en;
+        const others = shuffle(
+          pool
+            .filter((x) => x.id !== w.id)
+            .map((x) => ({ t: x.definition_zh || x.word_en, id: x.id }))
+            .filter((d) => d.t && d.t !== correct)
+        );
+        const opts = shuffle([{ t: correct, id: w.id }, ...others.slice(0, 3)]);
+        return {
+          word: w,
+          options: opts.map((o) => o.t),
+          optionIds: opts.map((o) => o.id),
+          correct,
+        };
+      });
+      setDeck(items);
+      setIdx(0);
+      setResults([]);
+      setPicked(null);
+      setAnswered(false);
+      setStartAt(Date.now());
+    }
+    setUrlJump(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, urlJump]);
 
   const words = data ? data.words : [];
 
@@ -83,6 +142,7 @@ export default function ExamPage() {
   function startExam() {
     if (!unitWords.length) return;
     savedRef.current = false;
+    recordedRef.current = new Set();
     const pool = unitWords;
     const n = count === 0 ? pool.length : Math.min(count, pool.length);
     const sample = shuffle(pool).slice(0, n);
@@ -132,6 +192,7 @@ export default function ExamPage() {
 
   function pick(opt) {
     if (answered) return;
+    if (cur && recordedRef.current.has(cur.word.id)) return; // 防重复提交（自动进入下一题的时间窗内再点）
     setPicked(opt);
     setAnswered(true);
     const pickedId = cur.optionIds
@@ -141,6 +202,8 @@ export default function ExamPage() {
   }
 
   function finishAnswer(ok, w, pickedId) {
+    if (recordedRef.current.has(w.id)) return;
+    recordedRef.current.add(w.id);
     const prev = memory.get(w.id);
     const isNew = !prev || prev.lv === 0;
     memory.record(w.id, ok, isNew);
@@ -174,11 +237,14 @@ export default function ExamPage() {
       correct,
       total: results.length,
       score,
+      // ⚠️ deck item 的 id 在 d.word.id（不是 d.id）—— 原来写 d.id 导致错题报告永远为空
       wrong: deck
-        .filter((d) => wrongIds.has(d.id))
+        .filter((d) => wrongIds.has(d.word.id))
         .map((d) => ({
           ...d,
-          pickedId: (results.find((r) => r.id === d.id && !r.correct) || {}).pickedId || null,
+          id: d.word.id,
+          pickedId:
+            (results.find((r) => r.id === d.word.id && !r.correct) || {}).pickedId || null,
         })),
       seconds: Math.round((Date.now() - startAt) / 1000),
     };
@@ -200,25 +266,38 @@ export default function ExamPage() {
         seconds: summary.seconds,
         limit,
       });
+      // 游戏化：按成绩发 XP + 刷新成就
+      game.reward("exam", { score: summary.score });
+      track("exam_done", { score: summary.score });
+      game.refreshAchievements({
+        learnedCount: memory.learnedCount(),
+        masteredCount: memory.masteredCount(),
+        wrongCount: wrongBook.count(),
+        streak: stats.streakDays(),
+        examBest: summary.score,
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, summary]);
 
   if (!data) {
-    return <div className="wrap"><div className="empty-state">加载词库中…</div></div>;
+    return <div className="wrap"><PetEmpty /></div>;
   }
 
   return (
     <div className="wrap">
-      <header className="hero">
-        <div className="brand">
-          <h1>单元测验</h1>
-          <span className="en">Unit Exam</span>
-        </div>
-        <p className="tagline">
-          限时选择题 · 整单元检测 · 出分与错题报告（成绩会记入记忆曲线）
-        </p>
-      </header>
+      <ChapterHead
+        variant="mag"
+        chNo={unit ? `U${unit}` : "U-"}
+        chLabel={["CHALLENGE", "EXAM", unit ? `UNIT ${unit}` : "选单元"]}
+        ribbon={<>词跃 · EXAM <b>单元检验</b></>}
+        ribbonRight={`${grade || "-"} 年级`}
+        title={<>检验 <span className="ch-hl">{unit ? `Unit ${unit}` : "这一课"}</span>，拿下三星</>}
+        sub="≥90 三星 · ≥75 两星 · 成绩记入记忆曲线"
+        quote="找个 10 分钟整块时间，勿倍速——检验就是检验。"
+      />
+
+      <GameBar />
 
       {phase === "setup" && (
         <div className="setup-card">
@@ -268,7 +347,7 @@ export default function ExamPage() {
             ))}
           </div>
 
-          <div className="setup-label">④ 题量（本单元共 {unitWords.length} 词）</div>
+          <div className="setup-label">④ 题量（本单元 {unitWords.length} 词）</div>
           <div className="tabs">
             {[
               { value: 10, label: "10 题" },
@@ -317,7 +396,7 @@ export default function ExamPage() {
             </span>
             {limit > 0 && (
               <span className={"exam-timer" + (timeLeft <= 3 ? " danger" : "")}>
-                ⏱ {timeLeft}s
+                剩 {timeLeft} 秒
               </span>
             )}
           </div>
@@ -360,7 +439,7 @@ export default function ExamPage() {
                   {picked === cur.correct
                     ? "✓ 正确"
                     : timeLeft <= 0
-                    ? "⏱ 超时：" + cur.correct
+                    ? "超时：" + cur.correct
                     : "✗ 正确答案：" + cur.correct}
                 </div>
                 {cur.word.affix_hint && <div className="fb-ex">🧩 {cur.word.affix_hint}</div>}
@@ -373,68 +452,67 @@ export default function ExamPage() {
 
       {phase === "done" && (
         <div className="train-done">
-          <h2 className="section-h">考试结束</h2>
-          <div className="done-card">
-            <div className="exam-score">
-              {summary.score}
-              <span> 分</span>
-            </div>
-            <div className="done-label">
-              答对 {summary.correct} / {summary.total} · 用时 {Math.floor(summary.seconds / 60)} 分 {summary.seconds % 60} 秒
-            </div>
+          <ResolvePanel
+            kind="judge"
+            stamp={`${summary.score} 分`}
+            stampTone={summary.score >= 90 ? "fin" : "normal"}
+            kpis={[
+              { label: "答对", value: summary.correct },
+              { label: "答错", value: summary.wrong.length },
+              { label: `用时`, value: `${Math.floor(summary.seconds / 60)}'${String(summary.seconds % 60).padStart(2, "0")}"` },
+              { label: "评级", value: summary.score >= 90 ? "三星" : summary.score >= 75 ? "两星" : "继续加油" },
+            ]}
+            list={summary.wrong.map((d) => ({
+              word: d.word.word_en.replace(/^\*/, ""),
+              mark: "错",
+              def: d.word.definition_zh,
+              tag: "错题本",
+            }))}
+            title="错题报告（已进错题本）"
+            actions={[
+              summary.wrong.length > 0
+                ? {
+                    label: `重测错题（${summary.wrong.length}）`,
+                    primary: true,
+                    onClick: () => {
+                      savedRef.current = false;
+                      setDeck(shuffle(summary.wrong));
+                      setIdx(0);
+                      setResults([]);
+                      setPicked(null);
+                      setAnswered(false);
+                      setStartAt(Date.now());
+                      setPhase("running");
+                    },
+                  }
+                : { label: "再测一次", primary: true, onClick: startExam },
+              { label: "再测一次", onClick: startExam },
+              { label: "换单元", onClick: () => setPhase("setup") },
+            ]}
+          />
 
-            {summary.wrong.length > 0 && (
-              <div className="exam-wrong">
-                <div className="exam-wrong-title">错题报告</div>
-                <div className="exam-wrong-list">
-                  {summary.wrong.map((d) => (
-                    <div className="exam-wrong-item" key={d.id}>
-                      <div className="exam-wrong-w">
-                        <b>{d.word.word_en}</b>
-                        {d.word.phonetic && <span>{d.word.phonetic}</span>}
-                        <button className="mini-speak" onClick={() => speak(d.word.word_en)}>🔊</button>
-                      </div>
-                      <div className="exam-wrong-d">{d.word.definition_zh}</div>
-                      {d.word.affix_hint && <div className="fb-ex">🧩 {d.word.affix_hint}</div>}
-                      <div className="fb-ex">
-                        {d.pickedId != null ? (
-                          <ContrastBox ids={[d.id, d.pickedId]} />
-                        ) : (
-                          <AiExplainCard id={d.id} label="讲解" />
-                        )}
-                      </div>
-                    </div>
-                  ))}
+          {/* 错题的逐条讲解（AI 对比 / 词根），保留原有深度 */}
+          {summary.wrong.length > 0 && (
+            <div className="bs-explain-extra">
+              {summary.wrong.map((d) => (
+                <div className="exam-wrong-item" key={d.id}>
+                  <div className="exam-wrong-w">
+                    <b>{d.word.word_en.replace(/^\*/, "")}</b>
+                    {d.word.phonetic && <span>{d.word.phonetic}</span>}
+                    <button className="mini-speak" onClick={() => speak(d.word.word_en)}>🔊</button>
+                  </div>
+                  {d.word.affix_hint && <div className="fb-ex">{d.word.affix_hint}</div>}
+                  <div className="fb-ex">
+                    {d.pickedId != null ? (
+                      <ContrastBox ids={[d.id, d.pickedId]} />
+                    ) : (
+                      <AiExplainCard id={d.id} label="讲解" />
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
-
-            <div className="done-actions">
-              {summary.wrong.length > 0 && (
-                <button
-                  className="start-btn"
-                  onClick={() => {
-                    savedRef.current = false;
-                    setDeck(shuffle(summary.wrong));
-                    setIdx(0);
-                    setResults([]);
-                    setPicked(null);
-                    setAnswered(false);
-                    setStartAt(Date.now());
-                    setPhase("running");
-                  }}
-                >
-                  🔁 重测错题
-                </button>
-              )}
-              <button className="start-btn" onClick={startExam}>
-                再测一次
-              </button>
-              <button className="ghost-btn" onClick={() => setPhase("setup")}>
-                换单元
-              </button>
+              ))}
             </div>
-          </div>
+          )}
         </div>
       )}
     </div>

@@ -1,0 +1,301 @@
+/* app/demo/demo.module.css —— 设计评审页样式（仅 /demo 使用，不污染全站） */
+
+.page {
+  --paper: #f7f3e8;
+  --paper2: #fffdf7;
+  --ink: #2a2519;
+  --soft: #6b6453;
+  --faint: #736b5b;
+  --fox: #c8763a;
+  --fox-ink: #9e551f;
+  --seal-g: #2f7d4f;
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  padding: 26px 26px 60px;
+  font-size: 14px;
+}
+
+.pageHead {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 12px;
+  margin-bottom: 8px;
+}
+.pageHead h1 { margin: 0; font-size: 24px; font-weight: 900; letter-spacing: 1px; }
+.pageHead .en { font-size: 12px; font-weight: 900; letter-spacing: 2px; color: var(--fox-ink); }
+.pageHead .hint { margin-left: auto; font-size: 12px; font-weight: 800; color: var(--soft); }
+
+.modeBtn {
+  border: 1.5px solid var(--ink); background: var(--paper2); color: var(--ink);
+  border-radius: 4px; padding: 6px 12px; font: inherit; font-size: 12px; font-weight: 900; cursor: pointer;
+}
+.modeBtn:hover { background: #fdf3e2; }
+
+.sec { margin-top: 34px; }
+.secH {
+  display: flex; align-items: baseline; gap: 10px;
+  font-size: 17px; font-weight: 900; letter-spacing: 1px;
+  border-bottom: 1.5px solid var(--ink); padding-bottom: 8px; margin-bottom: 6px;
+}
+.secH small { font-size: 12px; font-weight: 800; color: var(--soft); letter-spacing: 0; }
+.secNote { font-size: 12px; font-weight: 700; color: var(--soft); margin: 8px 0 16px; line-height: 1.7; }
+
+.row { display: flex; gap: 22px; flex-wrap: wrap; align-items: flex-start; }
+.card {
+  background: var(--paper2); border: 1.5px solid var(--ink); border-radius: 8px;
+  box-shadow: 4px 4px 0 rgba(38, 34, 29, .28);
+  padding: 12px; display: flex; flex-direction: column; gap: 10px;
+}
+.cardCap { display: flex; align-items: baseline; gap: 8px; }
+.cardCap b { font-size: 15px; font-weight: 900; }
+.cardCap span { font-size: 12px; font-weight: 800; color: var(--fox-ink); }
+.cardTag {
+  margin-left: auto; font-size: 12px; font-weight: 900; color: var(--soft);
+  border: 1px solid var(--faint); border-radius: 3px; padding: 1px 6px;
+}
+.pros { font-size: 12px; font-weight: 700; color: var(--soft); line-height: 1.75; max-width: 330px; }
+.pros em { font-style: normal; color: var(--fox-ink); font-weight: 900; }
+
+/* ============ 左栏三版 ============ */
+.rail {
+  background: var(--paper2); border-right: 1px solid var(--faint);
+  min-height: 520px; display: flex; flex-direction: column; gap: 10px;
+  padding: 14px 14px 16px;
+}
+.railNarrow { width: 216px; }
+.railWide { width: 286px; }
+
+.railH { font-size: 12px; font-weight: 900; letter-spacing: 2px; color: var(--soft); }
+
+/* 甲案：加宽 + 两行式册行 + 附录图标格 */
+.bookRow {
+  border: 1px solid transparent; border-bottom: 1px dashed #ddd4bd;
+  padding: 9px 8px 9px 6px; display: flex; flex-direction: column; gap: 5px; cursor: default;
+}
+.bookRowOn { background: #fdf3e2; border: 1px solid var(--ink); border-radius: 5px; }
+.bookTop { display: flex; align-items: baseline; gap: 8px; }
+.bookName { font-size: 15px; font-weight: 900; }
+.bookNum { margin-left: auto; font-size: 12px; font-weight: 900; color: var(--soft); }
+.bookBar { height: 5px; background: #eae2cf; border: 1px solid var(--faint); border-radius: 99px; overflow: hidden; }
+.bookBar i { display: block; height: 100%; background: var(--ink); }
+.bookSub { font-size: 12px; font-weight: 700; color: var(--soft); }
+
+.appGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
+.appTile {
+  border: 1.5px solid var(--ink); border-radius: 6px; background: var(--paper);
+  padding: 9px 10px; display: flex; flex-direction: column; gap: 4px;
+}
+.appTileK { color: var(--fox-ink); font-weight: 900; }
+.appTileT { font-size: 13px; font-weight: 900; }
+.appTileN { font-size: 12px; font-weight: 800; color: var(--fox-ink); }
+
+/* 乙案：当前册聚焦 + 折叠 */
+.focusCard { border: 1.5px solid var(--ink); border-radius: 6px; padding: 12px; background: var(--paper); }
+.focusHead { display: flex; align-items: center; gap: 12px; }
+.ring { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 900; background: conic-gradient(var(--ink) 38%, #e7dfcb 0); color: var(--ink); }
+.ringIn { width: 40px; height: 40px; border-radius: 50%; background: var(--paper); display: grid; place-items: center; }
+.focusT { font-size: 18px; font-weight: 900; }
+.focusS { font-size: 12px; font-weight: 800; color: var(--soft); }
+.unitLine { display: flex; align-items: center; gap: 9px; padding: 7px 2px; border-bottom: 1px dotted #d9d0b8; font-size: 13.5px; font-weight: 800; }
+.unitLine i { flex: 1; border-bottom: 1px dotted var(--faint); height: 1px; }
+.unitLine b { font-size: 12px; font-weight: 900; color: var(--soft); }
+.chipRow { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { border: 1px solid var(--faint); border-radius: 99px; padding: 3px 9px; font-size: 12px; font-weight: 900; color: var(--soft); background: var(--paper); }
+.fold { border: 1px dashed var(--faint); border-radius: 5px; padding: 9px 11px; font-size: 13px; font-weight: 900; display: flex; align-items: center; gap: 8px; }
+.fold span { margin-left: auto; font-size: 12px; color: var(--soft); font-weight: 800; }
+
+/* 丙案：书脊卡片 */
+.spineGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+.spine {
+  border: 1.5px solid var(--ink); border-left: 6px solid var(--fox); border-radius: 4px;
+  background: var(--paper); padding: 9px 10px; display: flex; flex-direction: column; gap: 4px;
+}
+.spineOn { border-left-color: var(--seal-g); background: #fdf3e2; }
+.spineT { font-size: 15px; font-weight: 900; }
+.spineN { font-size: 12px; font-weight: 800; color: var(--soft); }
+.iconRow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
+.iconBtn {
+  width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid var(--ink);
+  background: var(--paper); display: grid; place-items: center; font-size: 15px; font-weight: 900;
+  position: relative;
+}
+.iconBtn b {
+  position: absolute; top: -5px; right: -5px; min-width: 18px; height: 18px; border-radius: 99px;
+  background: var(--fox-ink); color: #fff; font-size: 11px; font-weight: 900; display: grid; place-items: center;
+  border: 1.5px solid var(--paper);
+}
+
+/* ============ 上栏三版 ============ */
+.headBox { width: 640px; background: var(--paper2); border: 1.5px solid var(--ink); border-radius: 6px; overflow: hidden; }
+.headA { display: flex; align-items: center; gap: 16px; padding: 0 18px; height: 52px; border-bottom: 1px solid var(--ink); }
+.headA .date { margin-left: auto; font-size: 12px; font-weight: 800; color: var(--soft); }
+.brandT { font-size: 18px; font-weight: 900; letter-spacing: 1px; }
+.brandS { font-size: 12px; font-weight: 800; color: var(--soft); letter-spacing: 1.5px; }
+.tabsL { display: flex; gap: 4px; }
+.tabBase { padding: 7px 12px; font-size: 13.5px; font-weight: 900; border: 1.5px solid transparent; border-radius: 4px; color: var(--soft); }
+.tabOn { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+.headB { position: relative; display: flex; align-items: center; padding: 0 18px; height: 52px; border-bottom: 1px solid var(--ink); }
+.headB .center { position: absolute; left: 50%; transform: translateX(-50%); }
+.headB .right { margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 800; color: var(--soft); }
+
+.headC { border-bottom: 1px solid var(--ink); }
+.headCtop { display: flex; align-items: center; gap: 12px; padding: 9px 18px 7px; }
+.headCtop .right { margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 800; color: var(--soft); }
+.indexRow { display: flex; align-items: flex-end; gap: 6px; padding: 0 18px; }
+.indexTab {
+  border: 1.5px solid var(--ink); border-bottom: none; border-radius: 5px 5px 0 0;
+  padding: 7px 14px; font-size: 13px; font-weight: 900; background: #efe8d6; color: var(--soft);
+}
+.indexOn { background: var(--ink); color: var(--paper); padding-bottom: 11px; margin-bottom: -1px; }
+
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; font-weight: 800; color: var(--soft); margin-top: 10px; }
+
+/* ============ 上栏 · 第二轮（紧凑版，专治丙案上方留白） ============ */
+.locked {
+  font-size: 12px; font-weight: 900;
+  border-radius: 3px; padding: 2px 7px;
+}
+/* 注意：(0,2,0) 才能压过 .cardCap span（(0,1,1)）—— 之前被它改成狐狸橙、绿底橙字 1.10 */
+.cardCap .locked {
+  background: #eaf7f0; color: #25603c; border: 1px solid var(--seal-g);
+}
+.heightTag { font-size: 12px; font-weight: 900; color: var(--soft); }
+
+/* 丙A · 紧凑双行 68px */
+.headCa { border-bottom: 1px solid var(--ink); }
+.headCaTop { display: flex; align-items: center; gap: 10px; padding: 5px 16px 4px; }
+.headCaTop .right { margin-left: auto; font-size: 12px; font-weight: 800; color: var(--soft); }
+.indexRowTight { display: flex; align-items: flex-end; gap: 5px; padding: 0 16px; }
+.indexTabTight {
+  border: 1.5px solid var(--ink); border-bottom: none; border-radius: 4px 4px 0 0;
+  padding: 5px 12px; font-size: 13px; font-weight: 900; background: #efe8d6; color: var(--soft);
+}
+.indexOnTight { background: var(--ink); color: var(--paper); padding-bottom: 8px; margin-bottom: -1px; }
+
+/* 丙B · 单行索引 46px */
+.headCb { display: flex; align-items: stretch; gap: 14px; height: 46px; padding: 0 16px; border-bottom: 1px solid var(--ink); }
+.headCb .brandWrap { display: flex; align-items: center; gap: 8px; }
+.headCb .right { margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 800; color: var(--soft); }
+.indexTabInline {
+  display: flex; align-items: center; border: 1.5px solid var(--ink); border-bottom: none;
+  border-radius: 4px 4px 0 0; padding: 0 13px; font-size: 13px; font-weight: 900;
+  background: #efe8d6; color: var(--soft); margin-top: 8px;
+}
+.indexOnInline { background: var(--ink); color: var(--paper); margin-top: 4px; }
+
+/* 丁 · 索引入左栏（上栏最矮 40px） */
+.headD { display: flex; align-items: center; gap: 12px; height: 40px; padding: 0 16px; border-bottom: 1px solid var(--ink); }
+.headD .right { margin-left: auto; font-size: 12px; font-weight: 800; color: var(--soft); }
+.railTopMock {
+  border: 1px solid var(--faint); border-top: none; background: var(--paper);
+  padding: 10px 12px; display: flex; gap: 8px; align-items: center;
+}
+.railTopMock .mini { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 12px; font-weight: 900; color: var(--soft); }
+.railTopMock .mini i {
+  width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--ink);
+  display: grid; place-items: center; font-style: normal; font-size: 15px; color: var(--ink); background: var(--paper2);
+}
+.railTopMock .mini.on i { background: var(--ink); color: var(--paper); }
+.headDNote { font-size: 12px; font-weight: 800; color: var(--soft); padding: 8px 16px; }
+
+/* 戊 · 单行书签 + 标题并进内容页头 46px */
+.headE { display: flex; align-items: center; gap: 12px; height: 46px; padding: 0 16px; border-bottom: 1px solid var(--ink); }
+.headE .right { margin-left: auto; font-size: 12px; font-weight: 800; color: var(--soft); }
+.pgHeadMock { display: flex; justify-content: space-between; font-size: 12px; font-weight: 800; color: var(--soft); padding: 9px 16px; }
+
+/* ============================================================
+   整页对比：真实尺寸整页骨架（2026-09-21）
+   真壳数值：.bs-cols = 286px | 694px | 240px（合计 1220，居中）
+   整页外框宽固定 1240（= 1220 + 左右各 10px 留白）
+   ============================================================ */
+.fpToolbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 12px 0 18px; }
+.fpTip { font-size: 12px; font-weight: 800; color: var(--soft); }
+.fpZoom {
+  border: 1.5px solid var(--ink); background: var(--paper2); color: var(--ink);
+  border-radius: 4px; padding: 5px 11px; font-size: 12px; font-weight: 900; cursor: pointer;
+}
+.fpZoomOn { background: var(--ink); color: var(--paper); }
+
+.fpStack { display: flex; flex-direction: column; gap: 30px; }
+.fpCap { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; margin-bottom: 8px; }
+.fpCap b { font-size: 15px; font-weight: 900; }
+.fpCap span { font-size: 12px; font-weight: 800; color: var(--fox-ink); }
+.fpCap em { margin-left: auto; font-style: normal; font-size: 12px; font-weight: 800; color: var(--soft); }
+
+.fpClip { overflow: hidden; }
+.fpFrame {
+  width: 1240px; background: var(--paper);
+  border: 1.5px solid var(--ink); border-radius: 8px; overflow: hidden;
+  box-shadow: 4px 4px 0 rgba(38, 34, 29, .28);
+}
+
+/* 上栏 · 单行 + 书签右贴 + 放大字号（= 2026-09-22 实机定案，数值与 bs.css 一致） */
+.headBase {
+  display: flex; align-items: center; gap: 18px; height: 56px; padding: 0 22px;
+  background: var(--paper2); border-bottom: 1px solid var(--ink);
+}
+.headBase .brandT { font-size: 17px; }
+.headBase .brandS { font-size: 13px; }
+.fpTabs { display: flex; gap: 6px; margin-left: auto; }
+.fpBaseTab {
+  padding: 9px 15px; font-size: 15px; font-weight: 900;
+  color: #5c5544; border-radius: 4px;
+}
+.fpBaseTabOn { background: var(--ink); color: var(--paper); }
+.fpGear { font-size: 15px; padding: 7px 10px; }
+.fpMeta { font-size: 12px; font-weight: 800; color: var(--soft); white-space: nowrap; }
+
+/* 尺寸标尺：直接画在三栏上方，一眼看出「哪块多宽、在哪个位置」 */
+.fpRuler {
+  display: grid; grid-template-columns: 286px 694px 240px; justify-content: center;
+  height: 22px; background: #efe8d6; border-bottom: 1px dashed var(--faint);
+}
+.fpRulerCell {
+  font-size: 12px; font-weight: 900; color: var(--soft);
+  display: grid; place-items: center; border-right: 1px dashed var(--faint);
+}
+.fpRulerCell:last-child { border-right: none; }
+
+.fpCols { display: grid; grid-template-columns: 286px 694px 240px; justify-content: center; height: 694px; }
+.fpL { border-right: 1px solid var(--faint); padding: 14px 14px 0; display: flex; flex-direction: column; gap: 9px; overflow: hidden; }
+.fpL .bookRow { padding: 7px 7px 7px 5px; gap: 4px; }
+.fpL .appTile { padding: 7px 9px; }
+.fpC { border-right: 1px solid var(--faint); padding: 14px 18px 0; overflow: hidden; }
+.fpR { padding: 14px 14px 0; overflow: hidden; }
+
+.fpCbar {
+  display: flex; align-items: baseline; gap: 10px;
+  border: 1.5px solid var(--ink); border-radius: 5px; background: var(--paper2); padding: 9px 12px;
+}
+.fpCbar b { font-size: 15px; font-weight: 900; }
+.fpCbar em { margin-left: auto; font-style: normal; font-size: 12px; font-weight: 800; color: var(--soft); }
+.fpSecH { font-size: 12px; font-weight: 900; letter-spacing: 2px; color: var(--soft); margin: 12px 0 4px; }
+.fpDirRow { display: flex; align-items: baseline; gap: 10px; padding: 8px 6px; border-bottom: 1px dashed #ddd4bd; }
+.fpDirOn { background: #fdf3e2; border: 1px solid var(--ink); border-radius: 5px; }
+.fpDirName { font-size: 15px; font-weight: 900; }
+.fpDirSub { font-size: 12px; font-weight: 700; color: var(--soft); }
+.fpDirPct { margin-left: auto; font-size: 12px; font-weight: 900; color: var(--soft); }
+.fpUnitRow { display: flex; align-items: center; gap: 9px; padding: 7px 6px; border-bottom: 1px dotted #d9d0b8; }
+.fpUnitRow b { font-size: 13px; font-weight: 900; color: var(--fox-ink); min-width: 22px; }
+.fpUnitRow span { font-size: 13.5px; font-weight: 800; }
+.fpUnitRow em { font-style: normal; font-size: 12px; font-weight: 800; color: var(--soft); }
+.fpUnitRow i { flex: 1; border-bottom: 1px dotted var(--faint); height: 1px; }
+.fpActs { font-size: 12px; font-weight: 800; color: var(--soft); }
+
+.fpCard { border: 1px solid var(--faint); border-radius: 6px; background: var(--paper2); padding: 12px; margin-bottom: 10px; }
+.fpRing {
+  width: 64px; height: 64px; border-radius: 50%; margin: 0 auto;
+  background: conic-gradient(var(--ink) 38%, #e7dfcb 0); display: grid; place-items: center;
+  font-size: 14px; font-weight: 900;
+}
+.fpRingIn { width: 50px; height: 50px; border-radius: 50%; background: var(--paper2); display: grid; place-items: center; }
+.fpBig { font-size: 19px; font-weight: 900; }
+.fpBig b { color: var(--fox-ink); }
+.fpSub { font-size: 12px; font-weight: 800; color: var(--soft); }
+.fpQuick { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+.fpQuickRow { border: 1px solid var(--faint); border-radius: 4px; background: var(--paper); padding: 7px 10px; font-size: 13px; font-weight: 900; }

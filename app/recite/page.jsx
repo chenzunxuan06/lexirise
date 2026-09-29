@@ -1,11 +1,16 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { loadWords } from "@/lib/loadWords";
 import { speak, speakSlow, unlockAudio } from "@/lib/tts";
 import { memory, wrongBook, stats } from "@/lib/memory";
 import ExampleBlock from "../components/ExampleBlock";
+import GameBar from "../components/GameBar";
+import ChapterHead from "../components/ChapterHead";
+import PetEmpty from "../components/PetEmpty";
+import ResolvePanel from "../components/ResolvePanel";
 
 const GRADES = [
   { value: 7, label: "七年级" },
@@ -14,6 +19,21 @@ const GRADES = [
 ];
 
 export default function RecitePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="wrap">
+          <PetEmpty title="加载背书…" sub="跃跃在翻书" />
+        </div>
+      }
+    >
+      <ReciteInner />
+    </Suspense>
+  );
+}
+
+function ReciteInner() {
+  const sp = useSearchParams();
   const [data, setData] = useState(null);
   const [grade, setGrade] = useState(7);
   const [semester, setSemester] = useState(null); // 1 上 / 2 下
@@ -23,7 +43,9 @@ export default function RecitePage() {
   const [revealed, setRevealed] = useState(false);
   const [autoSpeak, setAutoSpeak] = useState(true);
   const [knownCount, setKnownCount] = useState(0);
+  const [wrongList, setWrongList] = useState([]); // 本轮不认识的词（结算清单用）
   const [tick, setTick] = useState(0);
+  const [selUnit, setSelUnit] = useState(null); // 当前选择/背诵的单元号
 
   useEffect(() => {
     loadWords().then(setData).catch((e) => console.error(e));
@@ -66,15 +88,45 @@ export default function RecitePage() {
     return n;
   }
 
-  function startUnit(ws) {
+  function startUnit(ws, u, count) {
     // 用户手势内解锁音频：保证进入单元后自动朗读不被移动端自动播放策略拦
     unlockAudio();
-    setDeck(ws);
+    if (u) setSelUnit(u);
+    let deckWords = ws;
+    if (count && count > 0 && count < ws.length) deckWords = ws.slice(0, count);
+    setDeck(deckWords);
     setIdx(0);
     setRevealed(false);
     setKnownCount(0);
+    setWrongList([]);
     setPhase("running");
   }
+
+  // URL 参数响应（修复 2026-09-16）：深链 / 切册 / 后退前进，参数一变就重建甲板，
+  // 不再只在挂载时读一次（旧 bug：左栏切册后头部变了、词卡不变）
+  const g = Number(sp.get("grade")) || 0;
+  const s = Number(sp.get("semester")) || 0;
+  const u = Number(sp.get("unit")) || 0;
+  const c = Number(sp.get("count")) || 0;
+  const paramsKey = `${g}/${s}/${u}/${c}`;
+  const lastKey = useRef(null);
+
+  useEffect(() => {
+    if (!data || !g || !s || !u) return;
+    if (lastKey.current === paramsKey) return;
+    lastKey.current = paramsKey;
+    const unitWords = data.words
+      .filter(
+        (w) => w.grade === g && w.semester === s && w.unit === u && w.word_en
+      )
+      .sort((a, b) => a.id - b.id);
+    if (unitWords.length) {
+      setGrade(g);
+      setSemester(s);
+      startUnit(unitWords, u, c > 0 ? c : 0);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, paramsKey]);
 
   const cur = deck[idx];
 
@@ -92,7 +144,10 @@ export default function RecitePage() {
     const prev = memory.get(w.id);
     const isNew = !prev || prev.lv === 0;
     memory.record(w.id, ok, isNew);
-    if (!ok) wrongBook.add(w.id);
+    if (!ok) {
+      wrongBook.add(w.id);
+      setWrongList((l) => [...l, w]);
+    }
     stats.add({ n: isNew ? 1 : 0, review: isNew ? 0 : 1, correct: ok ? 1 : 0, total: 1 });
     if (ok) setKnownCount((k) => k + 1);
     setTick((t) => t + 1);
@@ -105,22 +160,31 @@ export default function RecitePage() {
   }
 
   if (!data) {
-    return <div className="wrap"><div className="empty-state">加载词库中…</div></div>;
+    return <div className="wrap"><PetEmpty /></div>;
   }
 
   const totalWords = units.reduce((s, u) => s + u.words.length, 0);
+  const curUnit = units.find((u) => u.unit === selUnit) || null;
+  const curDone = curUnit ? unitLearned(curUnit.words) : 0;
 
   return (
     <div className="wrap">
-      <header className="hero">
-        <div className="brand">
-          <h1>背书</h1>
-          <span className="en">Recite by Unit</span>
-        </div>
-        <p className="tagline">
-          按 <b>年级 → 学期 → 单元</b> 逐词背诵 · 教材原序 · 自动朗读 · 进度记入记忆曲线
-        </p>
-      </header>
+      <ChapterHead
+        variant="book"
+        ribbon="词跃 · 背书 · 课本同步"
+        chLabel={curUnit ? `LECTURE ${curUnit.unit}` : "LECTURE"}
+        title={
+          curUnit ? (
+            <>背完 <span className="ch-hl">Unit {curUnit.unit}</span>，图鉴点亮 +{curUnit.words.length - curDone}</>
+          ) : (
+            "按单元闯关，图鉴一张张点亮"
+          )
+        }
+        sub={curUnit ? `${curUnit.words.length} 词 · 已学 ${curDone}` : "选 年级 → 册 → 单元"}
+        quote={curUnit ? `跟学校进度走，今天 ${curUnit.words.length - curDone} 词。` : "先选单元，再逐词背诵。"}
+      />
+
+      <GameBar />
 
       {/* ---------- 选择阶段 ---------- */}
       {phase === "choose" && (
@@ -167,7 +231,7 @@ export default function RecitePage() {
             {semester && (
               <>
                 <div className="setup-label">
-                  ③ 选择单元（{semester === 1 ? "上册" : "下册"} · 共 {totalWords} 词）
+                  ③ 选择单元（{semester === 1 ? "上册" : "下册"}）
                 </div>
                 <div className="recite-units">
                   {units.map((u) => {
@@ -184,7 +248,7 @@ export default function RecitePage() {
                             <div className="recite-unit-fill" style={{ width: pct + "%" }} />
                           </div>
                         </div>
-                        <button className="start-btn" onClick={() => startUnit(u.words)}>
+                        <button className="start-btn" onClick={() => startUnit(u.words, u.unit)}>
                           开始背诵 →
                         </button>
                       </div>
@@ -235,7 +299,7 @@ export default function RecitePage() {
 
           <div className="recite-card">
             <div className="recite-word">
-              {cur.word_en}
+              {cur.word_en.replace(/^\*/, "")}
               <button className="speak" onClick={() => speak(cur.word_en)} title="朗读">🔊</button>
               <button className="speak slow" onClick={() => speakSlow(cur.word_en)} title="慢速">🐢</button>
             </div>
@@ -258,7 +322,7 @@ export default function RecitePage() {
 
             <div className="recite-actions">
               <button className="known-no" onClick={() => mark(false)}>
-                ✗ 不认识
+                不认识
               </button>
               <button
                 className="reveal-btn inline"
@@ -268,45 +332,49 @@ export default function RecitePage() {
                 显示释义
               </button>
               <button className="known-yes" onClick={() => mark(true)}>
-                认识了 ✓
+                认识
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* ---------- 完成阶段 ---------- */}
+      {/* ---------- 完成阶段（统一结算 ResolvePanel，首批：背书共用） ---------- */}
       {phase === "done" && (
         <div className="train-done">
-          <h2 className="section-h">本单元背诵完成 🎉</h2>
-          <div className="done-card">
-            <div className="done-score">
-              {knownCount}
-              <span> / {deck.length}</span>
-            </div>
-            <div className="done-label">
-              认识率 {deck.length ? Math.round((knownCount / deck.length) * 100) : 0}%
-              {deck.length - knownCount > 0 && (
-                <span className="done-extra">
-                  还有 {deck.length - knownCount} 个不认识的词，已自动进入错题本
-                </span>
-              )}
-            </div>
-            <div className="done-actions">
-              <button className="start-btn" onClick={() => startUnit(deck)}>
-                再背一遍
-              </button>
-              <Link
-                className="ghost-btn"
-                href={`/exam?grade=${grade}&semester=${semester}&unit=${cur ? cur.unit : 1}`}
-              >
-                测验本单元 →
-              </Link>
-              <button className="ghost-btn" onClick={() => setPhase("choose")}>
-                返回选单元
-              </button>
-            </div>
-          </div>
+          <ResolvePanel
+            kind="self"
+            stamp={
+              deck.length > 0 && knownCount === deck.length
+                ? "本单元通关"
+                : `本片完成 ${knownCount}/${deck.length}`
+            }
+            kpis={[
+              { label: "过了一遍", value: deck.length },
+              { label: "认识", value: knownCount },
+              { label: "不认识", value: deck.length - knownCount },
+              { label: "XP", value: `+${knownCount * 2}` },
+            ]}
+            list={wrongList.map((w) => ({
+              word: w.word_en.replace(/^\*/, ""),
+              mark: "不认识",
+              def: w.definition_zh,
+              tag: "错题本",
+            }))}
+            title="不认识的词（已进错题本）"
+            actions={[
+              {
+                label: "再背一遍",
+                primary: true,
+                onClick: () => startUnit(deck, selUnit),
+              },
+              {
+                label: "测验本单元 →",
+                href: `/exam?grade=${grade}&semester=${semester}&unit=${cur ? cur.unit : 1}`,
+              },
+              { label: "返回选单元", onClick: () => setPhase("choose") },
+            ]}
+          />
         </div>
       )}
     </div>

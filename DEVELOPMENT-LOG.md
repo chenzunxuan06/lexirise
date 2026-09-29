@@ -72,6 +72,42 @@
 
 ## 四、问题记录
 
+### 2026-09-06｜暗夜模式下线：固定浅色纸墨风（4 轮配色全部被否）
+- **现象**（用户看到的）：深色模式下「又丑又看不到字」。先后做了 4 轮 demo（精修暖棕 / 墨蓝·墨绿·墨灰 / 正统卡片暗夜「近黑+白字+单强调」/ 深墨杂志夜刊），全部被否。
+- **根因**：非配色问题——用户对「暗夜模式」这一形态本身不满意；且原暗夜是纸墨风硬套深色，大量组件漏适配导致部分文字深字深底看不清。
+- **错误类型**：需求变更。
+- **被忽视的点**：用户最初的诉求里「删掉」就排第一，多轮 demo 应更早收敛到「删」；对反复否决的方向，及时止损比继续创造更尊重用户时间。
+- **修复方案**：
+  1. `lib/settings.js`：默认 `theme:"light"`（不再 auto）。
+  2. `app/components/ThemeInit.jsx`：强制 `data-theme="light"`，无视 localStorage 与系统偏好（代码注释保留恢复方法）。
+  3. `app/settings/page.jsx`：移除主题切换 UI（跟随系统/浅/深 三键），外观卡改为一句话「深色模式已下线」。
+  4. `globals.css` 中全部 `[data-theme="dark"]` 覆盖**保留但不触发**（以后想恢复暗夜，改回 ThemeInit + 设置页即可，配色层随时可换）。
+- **验证方式**：无头浏览器强制写 `localStorage theme:"dark"` 后刷新 → `data-theme` 仍 `light`、body 背景仍 `rgb(244,240,230)` 浅色；设置页显示「深色模式已下线」；`npm run build` 通过、`/` `/settings` 正常渲染。
+
+### 2026-09-06｜上线加固甲批：全局错误边界 + 分享页真 404 + 文档修正
+- **现象**（用户看到的）：① 生产环境某页一行报错即白屏/断页；② 分享链接填错时 `/share/<坏token>` 页面 URL 返回 200（文档宣称 404），搜索引擎/分享预览语义不对；③ README 写 bcrypt 实际代码是 scrypt，且训练页「我的词表」词源早已删除但文档仍写着。
+- **根因**：
+  - ① 全项目无任何错误边界（无 `app/error.js`/`global-error.js`，无 componentDidCatch）。
+  - ② 分享页是纯客户端组件 `useEffect` 里 fetch `/api/share/[token]`——API 明明已返回 404，但**页面 URL 本身永远是 200**（客户端 fetch 无法改变文档 HTTP 状态）。页内只把错误 JSON 显示为「😕 分享链接无效」，状态码层面仍是 200。
+  - ③ README 与实现脱节（bcrypt vs scrypt；训练页词源残留文案）。
+- **错误类型**：逻辑缺陷（404 语义）＋ 流程疏忽（文档脱节）＋ 兼容性/健壮性（无错误边界）。
+- **被忽视的点**：
+  1. **客户端 fetch 页面的「HTTP 状态」无法反映数据层错误**——要看 URL 级状态码是否 404，必须让该路径在服务端决定（Server Component + `notFound()`）。
+  2. **Next.js 以下划线 `_` 开头的目录是「私有文件夹」，不参与路由**——临时测试页 `__err-test` 直接 404，白改一次构建。
+  3. **服务端组件抛错会在构建期被预渲染拦截**（`Export encountered errors on following paths`）——要测运行时 error.js 必须给测试页 `export const dynamic = "force-dynamic"`。
+  4. **node fetch 不带浏览器 `Accept` 头会拿到 RSC flight 而非 HTML**（"err-card" 命中只是内联 CSS 类名，误判 error.js 没渲染）——验证 UI 必须用真浏览器（CDP 无头），HTTP 200/404 只是半句话。
+- **修复方案**（改动要点，涉及文件）：
+  1. 新增 `app/error.js`、`app/global-error.js`、`app/not-found.jsx`（纸墨风兜底：胶带便签卡 + 印章 + 跃跃 hungry/sleep 图 + 「再试一次/回主页」）。
+  2. 分享周报逻辑抽到 `lib/share-report.js`（页面与 API 共用，`buildShareReport(db, token)` 无效返回 null）。
+  3. `app/share/[token]/page.jsx` 改为**服务端组件**：直读 DB，无效 token → `notFound()`（真 404 + 纸墨风失效页）；`app/api/share/[token]/route.js` 改为调用共享函数（行为不变）。
+  4. `app/globals.css` 追加 `.err-*` 纸墨风样式（含深色适配）。
+  5. `README.md` 修正 bcrypt→scrypt、训练页词源残留文案。
+  6. 新增验证脚本 `scripts/verify-http.mjs`（HTTP 状态+标记）、`scripts/verify-dom.mjs`（CDP 无头 DOM+控制台异常）。
+- **验证方式**：
+  - `npm run build` 通过；`/`、`/train` 无 JS 异常。
+  - `verify-http.mjs`：首页 200 ✅；未知路径 404 + err-card ✅；`/share/<坏token>` 404 + err-card ✅；`/share/<好token>` 200 + share-cards ✅（临时插入 token 测完即删）。
+  - `verify-dom.mjs`（无头 Edge）：`/err-test`（临时页，force-dynamic 抛错）→ 可见文本「出错了 / 页面试纸被风吹走了 / 再试一次 / 回主页」✅ 非白屏；`/no-such-page-xyz` 与 `/share/<坏token>` →「404 / 这一页掉进书缝里了」✅。测试页与测试 token 均已清理。
+
 ### 历史问题速览（2026-08-31 之前，依据本仓库 git 提交记录与 `.workbuddy/memory` 开发记忆整理）
 
 | 日期 | 问题 | 错误类型 | 修复要点 | 教训点 |

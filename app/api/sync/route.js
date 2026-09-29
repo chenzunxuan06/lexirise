@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
 import { getUserFromRequest } from "@/lib/auth";
 
-const FIELDS = ["memory", "wrong", "favs", "stats", "plan", "exams"];
+const FIELDS = ["memory", "wrong", "favs", "stats", "plan", "exams", "game"];
 
 function safeJson(s, fallback) {
   try {
@@ -61,14 +61,15 @@ export async function POST(req) {
 
   await db
     .prepare(
-      `INSERT INTO user_data (user_id, memory, wrong, favs, stats, plan, exams, ts, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `INSERT INTO user_data (user_id, memory, wrong, favs, stats, plan, exams, game, ts, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
        ON CONFLICT(user_id) DO UPDATE SET
          memory = excluded.memory, wrong = excluded.wrong, favs = excluded.favs,
          stats = excluded.stats, plan = excluded.plan, exams = excluded.exams,
+         game = excluded.game,
          ts = excluded.ts, updated_at = excluded.updated_at`
     )
-    .run(user.id, vals.memory, vals.wrong, vals.favs, vals.stats, vals.plan, vals.exams, ts, now);
+    .run(user.id, vals.memory, vals.wrong, vals.favs, vals.stats, vals.plan, vals.exams, vals.game, ts, now);
 
   return NextResponse.json({ ok: true });
 }

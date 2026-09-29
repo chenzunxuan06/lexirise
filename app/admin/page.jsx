@@ -14,6 +14,36 @@ function fmtTs(ts) {
   });
 }
 
+const EVENT_LABEL = {
+  page_view: "页面访问",
+  train_start: "开始训练",
+  train_done: "完成训练",
+  exam_done: "完成测验",
+  chest_open: "开宝箱",
+  pet_evolve: "宠物进化",
+  badge_earned: "获得徽章",
+  share_created: "分享周报",
+};
+
+function LineChart({ data }) {
+  const W = 640, H = 180, PAD = 24;
+  const max = Math.max(1, ...data.map((d) => d.views));
+  const n = data.length;
+  const x = (i) => PAD + (i * (W - PAD * 2)) / Math.max(1, n - 1);
+  const y = (v) => H - PAD - (v / max) * (H - PAD * 2);
+  const pts = data.map((d, i) => `${x(i)},${y(d.views)}`).join(" ");
+  const area = `${PAD},${H - PAD} ${pts} ${W - PAD},${H - PAD}`;
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="admin-chart" preserveAspectRatio="none">
+      <polygon points={area} fill="rgba(29,158,117,.12)" />
+      <polyline points={pts} fill="none" stroke="var(--primary)" strokeWidth="2.5" strokeLinejoin="round" />
+      {data.map((d, i) => (
+        <circle key={i} cx={x(i)} cy={y(d.views)} r="3" fill="var(--primary)" />
+      ))}
+    </svg>
+  );
+}
+
 export default function AdminPage() {
   const [user, setUser] = useState(sync.user);
   const [stats, setStats] = useState(null);
@@ -21,6 +51,7 @@ export default function AdminPage() {
   const [detail, setDetail] = useState(null);
   const [msg, setMsg] = useState("");
   const [error, setError] = useState("");
+  const [analytics, setAnalytics] = useState(null);
 
   useEffect(() => {
     sync.init().then(() => setUser(sync.user));
@@ -30,12 +61,14 @@ export default function AdminPage() {
 
   async function load() {
     try {
-      const [s, u] = await Promise.all([
+      const [s, u, a] = await Promise.all([
         fetch("/api/admin/stats").then((r) => r.json()),
         fetch("/api/admin/users").then((r) => r.json()),
+        fetch("/api/admin/analytics").then((r) => r.json()),
       ]);
       setStats(s.stats);
       setUsers(u.users || []);
+      setAnalytics(a);
     } catch {
       setError("加载失败");
     }
@@ -155,6 +188,44 @@ export default function AdminPage() {
           <div className="stat-card">
             <div className="stat-num">{stats.aiCached ?? 0}</div>
             <div className="stat-name">AI 缓存条数</div>
+          </div>
+        </div>
+      )}
+
+      {analytics && analytics.dau14 && (
+        <div className="analytics-block">
+          <div className="section-row">
+            <h2 className="section-h">📊 最近 14 天访问趋势</h2>
+            <span className="section-sub">
+              总事件 {analytics.totals?.events ?? 0} · 近 7 天 {analytics.totals?.events7d ?? 0}
+            </span>
+          </div>
+          <LineChart data={analytics.dau14} />
+          <div className="chart-x">
+            <span>{analytics.dau14[0]?.label}</span>
+            <span>DAU/访问量（绿线为每日访问次数）</span>
+            <span>{analytics.dau14[analytics.dau14.length - 1]?.label}</span>
+          </div>
+          <div className="section-row" style={{ marginTop: 18 }}>
+            <h2 className="section-h">📈 近 7 天功能使用分布</h2>
+          </div>
+          <div className="event-dist">
+            {analytics.eventDist.length === 0 ? (
+              <div className="admin-detail-empty">暂无打点数据（上线后会随使用累积）</div>
+            ) : (
+              analytics.eventDist.map((e) => {
+                const max = Math.max(1, analytics.eventDist[0]?.count || 1);
+                return (
+                  <div className="ed-row" key={e.event}>
+                    <span className="ed-name">{EVENT_LABEL[e.event] || e.event}</span>
+                    <div className="ed-bar">
+                      <i style={{ width: Math.round((e.count / max) * 100) + "%" }} />
+                    </div>
+                    <span className="ed-count">{e.count}</span>
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
       )}

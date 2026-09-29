@@ -3,11 +3,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { loadAffixes } from "@/lib/loadWords";
 import { speak } from "@/lib/tts";
+import LexiTabs from "../components/LexiTabs";
+import { pageWindow, pagerInfo } from "@/lib/paging";
 
 const GROUPS = [
-  { key: "prefixes", label: "前缀 Prefix", icon: "➡️" },
-  { key: "suffixes", label: "后缀 Suffix", icon: "⬅️" },
-  { key: "roots", label: "词根 Root", icon: "🧩" },
+  { key: "prefixes", label: "前缀 Prefix" },
+  { key: "suffixes", label: "后缀 Suffix" },
+  { key: "roots", label: "词根 Root" },
 ];
 
 export default function AffixesPage() {
@@ -15,6 +17,8 @@ export default function AffixesPage() {
   const [group, setGroup] = useState("prefixes");
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(null);
+  const [page, setPage] = useState(1); // 分页（分页纪律：>12 条必须分页）
+  const PAGE_SIZE = 12;
 
   useEffect(() => {
     loadAffixes().then(setData).catch((e) => console.error(e));
@@ -40,6 +44,9 @@ export default function AffixesPage() {
   }
 
   const totalMatched = data[group].reduce((s, a) => s + a.count, 0);
+  const totalPages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+  const cur = Math.min(page, totalPages);
+  const slice = list.slice((cur - 1) * PAGE_SIZE, cur * PAGE_SIZE);
 
   return (
     <div className="wrap">
@@ -49,17 +56,21 @@ export default function AffixesPage() {
           <span className="en">Roots &amp; Affixes</span>
         </div>
         <p className="tagline">
-          共 {data.prefixes.length + data.suffixes.length + data.roots.length} 个词缀词根 ·
-          关联词库 {data.roots.reduce((s, a) => s + a.count, 0) + data.prefixes.reduce((s, a) => s + a.count, 0) + data.suffixes.reduce((s, a) => s + a.count, 0)} 个单词 · 点击词缀查看关联单词
+          词根词缀拆解词义，点击词缀查看关联单词
         </p>
       </header>
+
+      <LexiTabs />
 
       <div className="controls">
         <input
           className="search"
           placeholder="搜索词缀/词根，如 re、-tion、port"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setPage(1); // 改关键词自动回第 1 页
+          }}
         />
         <div className="tabs">
           {GROUPS.map((g) => (
@@ -69,9 +80,10 @@ export default function AffixesPage() {
               onClick={() => {
                 setGroup(g.key);
                 setOpen(null);
+                setPage(1); // 切组自动回第 1 页
               }}
             >
-              {g.icon} {g.label} <b>{data[g.key].length}</b>
+              {g.label} <b>{data[g.key].length}</b>
             </button>
           ))}
         </div>
@@ -80,7 +92,7 @@ export default function AffixesPage() {
       {list.length === 0 && <div className="empty-state">没有匹配的词缀，换个关键词。</div>}
 
       <div className="affix-list">
-        {list.map((a) => (
+        {slice.map((a) => (
           <div className={"affix-item" + (open === a.key ? " open" : "")} key={a.key}>
             <button className="affix-head" onClick={() => setOpen(open === a.key ? null : a.key)}>
               <span className="affix-key">
@@ -123,6 +135,43 @@ export default function AffixesPage() {
           </div>
         ))}
       </div>
+
+      {/* 翻页条（分页纪律） */}
+      {totalPages > 1 && (
+        <nav className="pg-pager" aria-label="词根词缀分页">
+          <button
+            className="pg-btn"
+            disabled={cur === 1}
+            onClick={() => setPage(cur - 1)}
+          >
+            ‹ 上一页
+          </button>
+          {pageWindow(cur, totalPages).map((n, i) =>
+            n === "…" ? (
+              <span className="pg-gap" key={"gap" + i}>
+                …
+              </span>
+            ) : (
+              <button
+                key={n}
+                className={"pg-num" + (n === cur ? " on" : "")}
+                aria-current={n === cur ? "page" : undefined}
+                onClick={() => setPage(n)}
+              >
+                {n}
+              </button>
+            )
+          )}
+          <button
+            className="pg-btn"
+            disabled={cur === totalPages}
+            onClick={() => setPage(cur + 1)}
+          >
+            下一页 ›
+          </button>
+          <span className="pg-info">{pagerInfo(cur, PAGE_SIZE, list.length, "条")}</span>
+        </nav>
+      )}
 
       <footer className="footer">
         词根词缀提示由词典规则生成并人工校对 · 仅供参考记忆

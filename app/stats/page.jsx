@@ -3,12 +3,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { loadWords } from "@/lib/loadWords";
 import { memory, wrongBook, favs, stats, exams } from "@/lib/memory";
+import { game } from "@/lib/game";
+import PetEmpty from "../components/PetEmpty";
 
 export default function StatsPage() {
   const [data, setData] = useState(null);
   const [tick, setTick] = useState(0);
+  const [mounted, setMounted] = useState(false); // 水合安全：挂载后再渲染 localStorage 数据
 
   useEffect(() => {
+    setMounted(true);
     loadWords().then(setData).catch((e) => console.error(e));
     const t = setInterval(() => setTick((x) => x + 1), 30000);
     return () => clearInterval(t);
@@ -82,6 +86,41 @@ export default function StatsPage() {
   const dist = useMemo(() => memory.distribution(words), [words, tick]);
   const distPct = (v) => (dist.total ? Math.round((v / dist.total) * 100) : 0);
 
+  // 补签卡（增9）：只由宝箱产出；断签 ≤3 天可用一张补回连击
+  const g = mounted ? game.state() : null;
+  const protectN = (g && g.streakProtect) || 0;
+  const gapKey = useMemo(() => {
+    if (!mounted || protectN < 1) return null;
+    const s = stats.load();
+    const d = new Date();
+    if (!s[stats.keyOf(d)]) d.setDate(d.getDate() - 1);
+    for (let i = 1; i <= 3; i++) {
+      const c = new Date(d);
+      c.setDate(c.getDate() - i);
+      const k = stats.keyOf(c);
+      if (!s[k]) return { key: k, days: i };
+    }
+    return null;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mounted, protectN, tick]);
+
+  // 水合安全：首帧（含 SSR）不渲染 localStorage 数据（注意：必须在全部 hooks 之后）
+  if (!mounted) {
+    return (
+      <div className="wrap">
+        <PetEmpty action="book" title="加载统计…" sub="跃跃在帮你整理记录" />
+      </div>
+    );
+  }
+
+  function doProtect() {
+    if (!gapKey) return;
+    const r = game.useStreakProtect();
+    if (!r.ok) return;
+    stats.patch(gapKey.key);
+    setTick((x) => x + 1);
+  }
+
   return (
     <div className="wrap">
       <header className="hero">
@@ -92,10 +131,29 @@ export default function StatsPage() {
         <p className="tagline">记录每一次学习 · 见证词汇量成长</p>
       </header>
 
+      {(protectN > 0 || gapKey) && (
+        <div className="protect-card">
+          <span className="pc-tag">补签卡 ×{protectN}</span>
+          <div className="pc-m">
+            <b>{gapKey ? "连击断了，可以补回来" : "宝箱里有几率开出补签卡"}</b>
+            <span>
+              {gapKey
+                ? `断签 ${gapKey.days} 天（${gapKey.key}），用一张补签卡恢复连击`
+                : "三件事全完成开宝箱，有 10% 概率开出"}
+            </span>
+          </div>
+          {gapKey && protectN > 0 && (
+            <button className="start-btn" onClick={doProtect}>
+              补回连击 →
+            </button>
+          )}
+        </div>
+      )}
+
       <div className="stat-cards">
         <div className="stat-card big">
           <div className="stat-num">{streak}</div>
-          <div className="stat-name">🔥 连续打卡（天）</div>
+          <div className="stat-name">连续打卡（天）</div>
         </div>
         <div className="stat-card">
           <div className="stat-num">{totalDays}</div>
@@ -126,7 +184,7 @@ export default function StatsPage() {
       <section className="home-section">
         <div className="section-row">
           <h2 className="section-h">记忆状态分布</h2>
-          <span className="section-sub">全词库 {dist.total} 词 · 新词 → 学习中 → 已掌握</span>
+          <span className="section-sub">词库 {dist.total} 词 · 新词 → 学习中 → 已掌握</span>
         </div>
         <div className="dist-card">
           <div className="dist-bar">
@@ -158,7 +216,7 @@ export default function StatsPage() {
             </span>
           </div>
           <div className="dist-hint">
-            💡 学习中（{dist.learning} 词）是记忆的关键期：去
+            学习中（{dist.learning} 词）是记忆的关键期：去
             <a className="link" href="/review?tab=due">复习中心</a>
             把它们巩固到"已掌握"！
           </div>
@@ -291,9 +349,59 @@ export default function StatsPage() {
         </section>
       )}
 
+      <ShareSection />
+
       <footer className="footer">
         学习记录保存在本机浏览器（localStorage），换设备或清缓存会丢失
       </footer>
     </div>
+  );
+}
+
+function ShareSection() {
+  const [link, setLink] = useState("");
+  const [err, setErr] = useState("");
+  const [copied, setCopied] = useState(false);
+
+  async function create() {
+    try {
+      const r = await fetch("/api/share", { method: "POST" });
+      const d = await r.json();
+      if (r.ok && d.token) {
+        setLink(`${window.location.origin}/share/${d.token}`);
+        setErr("");
+      } else {
+        setErr(d.error || "请先登录后再分享");
+      }
+    } catch {
+      setErr("生成失败，请稍后重试");
+    }
+  }
+
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(link);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      /* ignore */
+    }
+  }
+
+  return (
+    <section className="home-section">
+      <h2 className="section-h">👨‍👩‍👧 家长周报</h2>
+      <p className="share-tip">生成一个只读链接发给家长，家长无需注册即可查看孩子本周学习情况</p>
+      {link ? (
+        <div className="share-link-row">
+          <input className="share-input" readOnly value={link} onFocus={(e) => e.target.select()} />
+          <button className="start-btn" onClick={copy}>{copied ? "已复制 ✓" : "复制链接"}</button>
+          <a className="ghost-btn" href={link} target="_blank" rel="noreferrer">预览</a>
+        </div>
+      ) : (
+        <button className="start-btn" onClick={create}>📤 生成家长周报链接</button>
+      )}
+      {err && <div className="auth-error">{err}</div>}
+    </section>
   );
 }

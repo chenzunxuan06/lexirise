@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { loadWords } from "@/lib/loadWords";
 import { speak } from "@/lib/tts";
+import LexiTabs from "../components/LexiTabs";
 
 const GRADES = [
   { value: 7, label: "七年级" },
@@ -67,6 +68,8 @@ export default function PhrasesPage() {
           教材固定搭配共 <b>{totalPhrases}</b> 条 · 中考单选/完形高频考点 · 点条目朗读
         </p>
       </header>
+
+      <LexiTabs />
 
       <div className="controls">
         <input

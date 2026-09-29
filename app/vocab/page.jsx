@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import { speak, speakZh } from "@/lib/tts";
 import { favs } from "@/lib/memory";
 import ExampleBlock from "../components/ExampleBlock";
+import LexiTabs from "../components/LexiTabs";
+import PetEmpty from "../components/PetEmpty";
 
 const GRADES = [
   { value: 0, label: "全部" },
@@ -227,8 +229,8 @@ export default function VocabPage() {
     <div className="wrap">
       <header className="hero">
         <div className="brand">
-          <h1>词库</h1>
-          <span className="en">Word Bank</span>
+          <h1>词料库</h1>
+          <span className="en">Words · Phrases · Affixes</span>
         </div>
         <p className="tagline">按 年级 → 册 → 单元 浏览 · 搜索全库 · 点卡片看详情</p>
         {m && (
@@ -241,6 +243,8 @@ export default function VocabPage() {
         )}
       </header>
 
+      <LexiTabs />
+
       <div className="controls">
         <input
           className="search"
@@ -250,7 +254,7 @@ export default function VocabPage() {
         />
       </div>
 
-      {!data && <div className="empty-state">加载词库中…</div>}
+      {!data && <PetEmpty />}
 
       {data && searching && (
         <section className="grade-block">
@@ -400,7 +404,7 @@ export default function VocabPage() {
       )}
 
       <footer className="footer">
-        词跃 LexiRise · 沪教牛津版 · 数据 {m ? m.total : "…"} 词
+        词跃 LexiRise · 沪教牛津版同步 · 单词/短语/词根词缀随时查
       </footer>
 
       {active && <WordModal w={active} onClose={() => setActive(null)} />}

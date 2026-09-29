@@ -1,11 +1,21 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { loadWords } from "@/lib/loadWords";
 import { speak, speakSlow, speakZh, stopSpeak, unlockAudio } from "@/lib/tts";
-import { memory, wrongBook, favs, stats } from "@/lib/memory";
+import { memory, wrongBook, favs, stats, plan, exams } from "@/lib/memory";
+import { game } from "@/lib/game";
+import { composeDailyDeck, todaySummary } from "@/lib/progress";
+import { sync } from "@/lib/sync";
+import { sound } from "@/lib/sound";
+import { track } from "@/lib/analytics";
 import ExampleBlock from "../components/ExampleBlock";
 import { ContrastBox } from "../components/AiExplain";
+import GameBar from "../components/GameBar";
+import ResolvePanel from "../components/ResolvePanel";
+import ChapterHead from "../components/ChapterHead";
+import PetImage from "../components/PetImage";
+import PetEmpty from "../components/PetEmpty";
 
 const GRADES = [
   { value: 0, label: "全部" },
@@ -42,6 +52,28 @@ function shuffle(arr) {
 
 function gradeName(g) {
   return g === 7 ? "七年级" : g === 8 ? "八年级" : g === 9 ? "九年级" : "";
+}
+
+/**
+ * 今日模式自动组题：到期复习词 + 错词（占比≥1/3）+ 新词补足每日目标
+ * 口径已统一到 lib/progress.js（方向C 阶段-1b），首页"今天该背 N 词"与实际出题数一致
+ */
+
+/** 今日模式固定用"选中文"题型组选项 */
+function makeQuizItem(w, poolForOpts) {
+  const item = { word: w, id: w.id };
+  const target = w.definition_zh || w.word_en;
+  const others = shuffle(
+    poolForOpts
+      .filter((x) => x.id !== w.id)
+      .map((x) => ({ t: x.definition_zh || x.word_en, id: x.id }))
+      .filter((x) => x.t && x.t !== target)
+  );
+  const opts = shuffle([{ t: target, id: w.id }, ...others.slice(0, 3)]);
+  item.options = opts.map((o) => o.t);
+  item.optionIds = opts.map((o) => o.id);
+  item.correct = target;
+  return item;
 }
 
 function ProgressBar({ idx, total }) {
@@ -133,11 +165,13 @@ function Feedback({ word, ok, pickedCorrect, onNext, onPracticeAgain, wrongChoic
 export default function TrainPage() {
   const [data, setData] = useState(null);
 
-  const [source, setSource] = useState("bank"); // bank | custom
-  const [customWords, setCustomWords] = useState([]);
   const [grade, setGrade] = useState(0);
-  const [selectedUnits, setSelectedUnits] = useState(new Set());
+  const [selSem, setSelSem] = useState("1"); // 学期筛选：all | 1 | 2（默认上册，符合学校进度）
+  const [selUnit, setSelUnit] = useState("all"); // 单元筛选：all | 单元号 | "x-y"（学期为全部时的 册-单元）
   const [typeFilter, setTypeFilter] = useState("all"); // all | word | phrase
+  const [source, setSource] = useState("book"); // book 教材词库 | custom 我的词表（缺陷 #4 修复）
+  const [customWords, setCustomWords] = useState([]);
+  const [autoStartCustom, setAutoStartCustom] = useState(false);
   const [mode, setMode] = useState("quiz");
   const [size, setSize] = useState(20);
 
@@ -145,6 +179,18 @@ export default function TrainPage() {
   const [deck, setDeck] = useState([]);
   const [idx, setIdx] = useState(0);
   const [results, setResults] = useState([]);
+  const [daily, setDaily] = useState(false); // 今日模式（自动组题：复习+错词+新词）
+  const [clearedCount, setClearedCount] = useState(0); // 本轮消灭的错词数
+  const [clearToast, setClearToast] = useState(false); // 消灭瞬间的提示
+  const [coachAct, setCoachAct] = useState("book"); // 陪练位动作帧
+  const flashT = useRef(null);
+  function flashAct(a, ms = 1200) {
+    setCoachAct(a);
+    clearTimeout(flashT.current);
+    flashT.current = setTimeout(() => setCoachAct("book"), ms);
+  }
+  const [combo, setCombo] = useState(0); // 连对计数
+  const [comboMsg, setComboMsg] = useState(""); // 连对提示文案
 
   const [flipped, setFlipped] = useState(false);
   const [answered, setAnswered] = useState(false);
@@ -153,21 +199,23 @@ export default function TrainPage() {
   const [hintLevel, setHintLevel] = useState(0);
 
   useEffect(() => {
-    // 登录用户拉取"我的词表"（负 id 与主库隔离）
+    // 我的词表（缺陷 #4 修复）：加载自定义词，负 id 与教材词库隔离（防记忆曲线串数据）
+    const q0 = new URLSearchParams(window.location.search);
+    if (q0.get("custom") === "1") setSource("custom");
     fetch("/api/words")
       .then((r) => (r.ok ? r.json() : { words: [] }))
-      .then((d) => {
-        const cw = (d.words || []).map((w) => ({
-          ...w,
-          id: -w.id,
-          cid: w.id,
-          entry_type: "word",
-          grade: null,
-          semester: null,
-          unit: null,
-        }));
-        setCustomWords(cw);
-      })
+      .then((d) =>
+        setCustomWords(
+          (d.words || []).map((w) => ({
+            ...w,
+            id: -w.id,
+            entry_type: "word",
+            grade: null,
+            semester: null,
+            unit: null,
+          }))
+        )
+      )
       .catch(() => {});
   }, []);
 
@@ -180,11 +228,9 @@ export default function TrainPage() {
         const m = q.get("mode");
         const wid = q.get("word");
         const t = q.get("type");
-        const c = q.get("custom");
         const runMode = m && MODES.some((x) => x.key === m) ? m : null;
         if (runMode) setMode(runMode);
         if (t === "word" || t === "phrase") setTypeFilter(t);
-        if (c === "1") setSource("custom");
 
         const g = q.get("grade");
         const sem = q.get("semester");
@@ -224,6 +270,20 @@ export default function TrainPage() {
           return item;
         };
 
+        if (m === "daily") {
+          // 今日模式：自动组题直达，跳过设置页
+          const { deck: deckWords } = composeDailyDeck(d.words);
+          const items = deckWords.map((w) => makeOpts(w, d.words));
+          setDaily(true);
+          startDeck(items);
+          return;
+        }
+        if (q.get("custom") === "1" && runMode) {
+          // 我的词表直达（缺陷 #4）：词源切到 custom，等词加载后自动开题
+          setSource("custom");
+          setAutoStartCustom(true);
+          return;
+        }
         if (wid) {
           const w = d.words.find((x) => String(x.id) === wid);
           if (w) {
@@ -236,7 +296,8 @@ export default function TrainPage() {
         }
         if (unitPool && unitPool.length) {
           setGrade(Number(g));
-          setSelectedUnits(new Set([`${sem}-${un}`]));
+          setSelSem(String(sem));
+          setSelUnit(String(un));
           const items = shuffle(unitPool)
             .slice(0, Math.min(20, unitPool.length))
             .map((w) => makeOpts(w, unitPool));
@@ -262,41 +323,77 @@ export default function TrainPage() {
     }
   }, [idx, phase, mode, cur]);
 
+  // 训练完成时惰性评估成就徽章
+  useEffect(() => {
+    if (phase !== "done" || !data) return;
+    track("train_done", { daily, total: results.length });
+    const exs = exams.list();
+    const examBest = exs.length ? Math.max(...exs.map((e) => e.score || 0)) : 0;
+    game.refreshAchievements({
+      learnedCount: memory.learnedCount(),
+      masteredCount: memory.masteredCount(),
+      wrongCount: wrongBook.count(),
+      streak: stats.streakDays(),
+      examBest,
+      totalWords: data.words.length,
+    });
+  }, [phase, data]);
+
   const pool = useMemo(() => {
-    if (source === "custom") return customWords;
+    if (source === "custom") {
+      // 我的词表：不按年级/单元过滤
+      const ws = customWords.filter((w) => w.word_en);
+      if (typeFilter === "word") return ws.filter((w) => w.entry_type !== "phrase");
+      if (typeFilter === "phrase") return ws.filter((w) => w.entry_type === "phrase");
+      return ws;
+    }
     if (!data) return [];
     let ws = data.words.filter((w) => w.word_en);
     if (grade) ws = ws.filter((w) => w.grade === grade);
     if (typeFilter === "word") ws = ws.filter((w) => w.entry_type !== "phrase");
     if (typeFilter === "phrase") ws = ws.filter((w) => w.entry_type === "phrase");
-    if (selectedUnits.size > 0)
-      ws = ws.filter((w) => selectedUnits.has(`${w.semester ?? 0}-${w.unit ?? 0}`));
+    if (selSem !== "all") ws = ws.filter((w) => String(w.semester) === selSem);
+    if (selUnit !== "all") {
+      if (selUnit.includes("-")) {
+        const [sm, un] = selUnit.split("-");
+        ws = ws.filter((w) => String(w.semester) === sm && String(w.unit) === un);
+      } else {
+        ws = ws.filter((w) => String(w.unit) === selUnit);
+      }
+    }
     return ws;
-  }, [data, grade, typeFilter, selectedUnits, source, customWords]);
+  }, [data, grade, typeFilter, selSem, selUnit, source, customWords]);
 
+  // 缺陷 #4：custom=1 直达 → 我的词表就绪后自动开题
+  useEffect(() => {
+    if (!autoStartCustom || source !== "custom" || phase !== "setup") return;
+    if (!customWords.length) return; // 等加载（未登录则永远空 → 停在设置页显示提示）
+    setAutoStartCustom(false);
+    buildDeck();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoStartCustom, source, phase, customWords.length]);
+
+  // 单元下拉：学期已选 → 该册 Unit；学期=全部 → 带"上册/下册"前缀区分
   const availableUnits = useMemo(() => {
     if (!data) return [];
-    const s = new Set();
+    const map = new Map();
     data.words.forEach((w) => {
-      if (!grade || w.grade === grade) s.add(`${w.semester ?? 0}-${w.unit ?? 0}`);
+      const okGrade = !grade || w.grade === grade;
+      if (!okGrade || !w.unit || !w.semester) return;
+      if (selSem !== "all" && String(w.semester) !== selSem) return;
+      const key = selSem === "all" ? `${w.semester}-${w.unit}` : String(w.unit);
+      if (!map.has(key)) {
+        map.set(key, {
+          v: key,
+          t:
+            selSem === "all"
+              ? `${w.semester === 1 ? "上册" : "下册"} Unit ${w.unit}`
+              : `Unit ${w.unit}`,
+        });
+      }
     });
-    return [...s].sort();
-  }, [data, grade]);
-
-  function unitLabel(key) {
-    const [sm, un] = key.split("-").map(Number);
-    if (!un) return "未分组";
-    return (sm === 1 ? "上" : sm === 2 ? "下" : "") + `U${un}`;
-  }
-
-  function toggleUnit(u) {
-    setSelectedUnits((prev) => {
-      const n = new Set(prev);
-      if (n.has(u)) n.delete(u);
-      else n.add(u);
-      return n;
-    });
-  }
+    return [...map.values()].sort((a, b) => a.v.localeCompare(b.v, "en", { numeric: true }));
+  }, [data, grade, selSem]);
 
   function makeItem(w, poolForOpts) {
     const item = { word: w, id: w.id };
@@ -335,12 +432,26 @@ export default function TrainPage() {
     setDeck(items);
     setIdx(0);
     setResults([]);
+    setClearedCount(0);
+    setCombo(0);
+    setComboMsg("");
     setFlipped(false);
     setAnswered(false);
     setPicked(null);
     setInput("");
     setHintLevel(0);
+    advancedRef.current = false; // 重置前进守卫
     setPhase("running");
+  }
+
+  function startDaily() {
+    if (!data) return;
+    unlockAudio();
+    const { deck: deckWords } = composeDailyDeck(data.words);
+    const items = deckWords.map((w) => makeQuizItem(w, data.words));
+    setDaily(true);
+    setMode("quiz");
+    startDeck(items);
   }
 
   function recordAnswer(ok) {
@@ -348,7 +459,37 @@ export default function TrainPage() {
     const prev = memory.get(w.id);
     const isNew = !prev || prev.lv === 0;
     memory.record(w.id, ok, isNew);
-    if (!ok) wrongBook.add(w.id);
+    if (!ok) {
+      wrongBook.add(w.id);
+      setCombo(0);
+      sound.bad();
+      flashAct("hungry", 1100);
+    } else {
+      // 连对 combo + XP
+      const nxt = combo + 1;
+      setCombo(nxt);
+      game.reward(isNew ? "correct" : "review");
+      sound.ok();
+      flashAct("cheer", 1200);
+      if (nxt === 3 || nxt === 5) {
+        sound.combo(nxt); // 连击进度由题卡徽章呈现
+      }
+      if (nxt === 10) {
+        sound.combo(10);
+        game.reward("combo10");
+        setComboMsg("🔥🔥 连对 x10，额外 +5 XP！");
+        setTimeout(() => setComboMsg(""), 1800);
+      }
+      // 错词消灭机制：连对 2 次自动移出错题本
+      const r = wrongBook.addOk(w.id);
+      if (r === "cleared") {
+        game.reward("wrong_cleared");
+        flashAct("cheer", 1800);
+        setClearedCount((c) => c + 1);
+        setClearToast(true);
+        setTimeout(() => setClearToast(false), 1600);
+      }
+    }
     stats.add({
       n: isNew ? 1 : 0,
       review: isNew ? 0 : 1,
@@ -358,7 +499,28 @@ export default function TrainPage() {
     setResults((prevR) => [...prevR, { id: w.id, correct: ok }]);
   }
 
+  // 多邻国式节奏：每道题只允许前进一次（手动/自动二选一，防重复跳题）
+  const advancedRef = useRef(false);
+
+  // 切到新一题时解锁守卫（第一题答完推进后保持锁定，直到新题渲染）
+  useEffect(() => {
+    advancedRef.current = false;
+  }, [idx]);
+
+  // 答对自动进下一题（0.75s）；答错停留手动。置于答题状态之上，绕开事件闭包时序。
+  const [lastOk, setLastOk] = useState(false);
+  useEffect(() => {
+    if (lastOk && answered && idx < deck.length) {
+      const t = setTimeout(() => next(), 750);
+      return () => clearTimeout(t);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastOk, answered, idx]);
+
   function next() {
+    if (advancedRef.current) return;
+    advancedRef.current = true;
+    setLastOk(false);
     if (idx + 1 >= deck.length) {
       setPhase("done");
       stopSpeak();
@@ -381,7 +543,9 @@ export default function TrainPage() {
     if (answered) return;
     setPicked(opt);
     setAnswered(true);
-    recordAnswer(opt === deck[idx].correct);
+    const ok = opt === deck[idx].correct;
+    setLastOk(ok);
+    recordAnswer(ok);
   }
 
   // 听写判分用规范化键：与朗读文本对齐（连字符=空格、剥括号/星号、省略号→something），
@@ -405,6 +569,7 @@ export default function TrainPage() {
     const target = normKey(deck[idx].word.word_en);
     const ok = key !== "" && key === target;
     setAnswered(true);
+    setLastOk(ok);
     recordAnswer(ok);
   }
 
@@ -426,40 +591,76 @@ export default function TrainPage() {
   }
 
   if (!data) {
-    return <div className="wrap"><div className="empty-state">加载词库中…</div></div>;
+    return <div className="wrap"><PetEmpty /></div>;
   }
+
+  // 章首动态数据（今日待办，统一口径 lib/progress.js）
+  const summary = todaySummary(data.words);
+  const todoCount = summary.todo;
+  const dueCount = summary.due;
+  const wrongCount = summary.wrong;
+  const newLeft = summary.fresh;
 
   return (
     <div className="wrap">
+      <ChapterHead
+        variant="mag"
+        chNo="01"
+        chLabel={["ROUND", "TRAIN", "DAILY"]}
+        ribbon={<>词跃 · TRAIN <b>今日修炼</b></>}
+        ribbonRight="每日一轮"
+        title={<>今天 <span className="ch-hl">{todoCount} 题</span>，主打消灭错词</>}
+        sub={`到期 ${dueCount} · 错词 ${wrongCount} · 新词 ${newLeft}`}
+        quote="答对修炼、消灭盖章——一轮结束有结算章。"
+      />
+      <GameBar />
+      {clearToast && <div className="clear-toast">🎉 消灭错词 +1</div>}
+      {comboMsg && <div className="combo-toast">{comboMsg}</div>}
       {phase === "setup" && (
         <div className="train-setup">
+          <div className="daily-entry" onClick={startDaily} role="button" tabIndex={0}>
+            <div className="de-ic" aria-hidden="true" />
+            <div className="de-m">
+              <div className="de-t">今日模式</div>
+              <div className="de-s">自动安排：到期复习 + 错词重练 + 新词，一键开始</div>
+            </div>
+            <span className="de-go">开始 →</span>
+          </div>
           <div className="section-row">
-            <h2 className="section-h">训练设置</h2>
-            <span className="section-sub">先选范围，再选模式</span>
+            <h2 className="section-h">自定义训练</h2>
+            <span className="section-sub">想自己挑范围和模式？在这里设置</span>
           </div>
 
           <div className="setup-card">
-            <div className="setup-label">⓪ 选择词源</div>
+            <div className="setup-label">① 词源</div>
             <div className="tabs">
               <button
-                className={"tab" + (source === "bank" ? " active" : "")}
-                onClick={() => setSource("bank")}
+                className={"tab" + (source === "book" ? " active" : "")}
+                onClick={() => setSource("book")}
               >
-                📖 教材词库
+                教材词库
               </button>
-              <button
-                className={"tab" + (source === "custom" ? " active" : "")}
-                disabled={customWords.length === 0}
-                onClick={() => setSource("custom")}
-                title={customWords.length === 0 ? "请先登录并在「我的词表」导入单词" : ""}
-              >
-                📋 我的词表{customWords.length > 0 ? `（${customWords.length}）` : ""}
-              </button>
+              {sync.user ? (
+                <button
+                  className={"tab" + (source === "custom" ? " active" : "")}
+                  onClick={() => setSource("custom")}
+                >
+                  我的词表（{customWords.length}）
+                </button>
+              ) : (
+                <span className="tab muted-tab" title="登录后可用" style={{ opacity: 0.5 }}>
+                  我的词表（需登录）
+                </span>
+              )}
             </div>
 
-            {source === "bank" && (
-              <>
-            <div className="setup-label">① 选择年级</div>
+            {source === "custom" && customWords.length === 0 && (
+              <div className="setup-hint">
+                我的词表还没有词 — 去 <a className="link" href="/mywords">我的词表</a> 导入即可在这里练
+              </div>
+            )}
+
+            <div className="setup-label">③ 选择年级</div>
             <div className="tabs">
               {GRADES.map((g) => (
                 <button
@@ -467,7 +668,8 @@ export default function TrainPage() {
                   className={"tab" + (grade === g.value ? " active" : "")}
                   onClick={() => {
                     setGrade(g.value);
-                    setSelectedUnits(new Set());
+                    setSelSem("all");
+                    setSelUnit("all");
                   }}
                 >
                   {g.label}
@@ -475,32 +677,37 @@ export default function TrainPage() {
               ))}
             </div>
 
-            {availableUnits.length > 0 && (
-              <>
-                <div className="setup-label">② 选择单元（默认全部）</div>
-                <div className="chips">
+            <div className="setup-label">④ 选择范围</div>
+            <div className="duo-sel">
+              <div className="sel-wrap">
+                <span className="sel-cap">学期</span>
+                <select
+                  value={selSem}
+                  onChange={(e) => {
+                    setSelSem(e.target.value);
+                    setSelUnit("all");
+                  }}
+                >
+                  <option value="all">全部学期</option>
+                  <option value="1">上册</option>
+                  <option value="2">下册</option>
+                </select>
+              </div>
+              <div className="sel-wrap">
+                <span className="sel-cap">单元</span>
+                <select value={selUnit} onChange={(e) => setSelUnit(e.target.value)}>
+                  <option value="all">全部单元</option>
                   {availableUnits.map((u) => (
-                    <button
-                      key={u}
-                      className={
-                        "chip" +
-                        (selectedUnits.size === 0 || selectedUnits.has(u) ? " on" : "")
-                      }
-                      onClick={() => toggleUnit(u)}
-                    >
-                      {unitLabel(u)}
-                    </button>
+                    <option key={u.v} value={u.v}>{u.t}</option>
                   ))}
-                  {selectedUnits.size > 0 && (
-                    <button className="chip clear" onClick={() => setSelectedUnits(new Set())}>
-                      清除
-                    </button>
-                  )}
-                </div>
-              </>
+                </select>
+              </div>
+            </div>
+            {grade !== 0 && (
+              <div className="sel-range">当前范围 <b>{pool.length}</b> 个单词</div>
             )}
 
-            <div className="setup-label">②½ 词条类型</div>
+            <div className="setup-label">⑤ 词条类型</div>
             <div className="tabs">
               {[
                 { k: "all", label: "全部（含短语）" },
@@ -516,10 +723,8 @@ export default function TrainPage() {
                 </button>
               ))}
             </div>
-              </>
-            )}
 
-            <div className="setup-label">③ 训练模式</div>
+            <div className="setup-label">⑥ 训练模式</div>
             <div className="mode-grid">
               {MODES.map((m) => (
                 <button
@@ -527,14 +732,13 @@ export default function TrainPage() {
                   className={"mode-card" + (mode === m.key ? " active" : "")}
                   onClick={() => setMode(m.key)}
                 >
-                  <div className="mode-icon">{m.icon}</div>
                   <div className="mode-name">{m.label}</div>
                   <div className="mode-desc">{m.desc}</div>
                 </button>
               ))}
             </div>
 
-            <div className="setup-label">④ 题量</div>
+            <div className="setup-label">⑦ 题量</div>
             <div className="tabs">
               {SIZES.map((s) => (
                 <button
@@ -561,8 +765,12 @@ export default function TrainPage() {
 
       {phase === "running" && cur && (mode === "quiz" || mode === "reverse" || mode === "listening") && (
         <div className="train-run">
+          <div className="train-coach">
+            <PetImage stage={game.state().stage || 1} action={coachAct} size={44} />
+          </div>
           <ProgressBar idx={idx} total={deck.length} />
           <div className="run-card">
+            {combo >= 2 && <span className="run-combo">🔥 连对 {combo}</span>}
             {mode === "quiz" && (
               <div className="run-head">
                 <span className="run-word">{cur.word.word_en}</span>
@@ -629,6 +837,9 @@ export default function TrainPage() {
 
       {phase === "running" && cur && mode === "flashcard" && (
         <div className="train-run">
+          <div className="train-coach">
+            <PetImage stage={game.state().stage || 1} action={coachAct} size={44} />
+          </div>
           <ProgressBar idx={idx} total={deck.length} />
           <div
             className={"flash-card" + (flipped ? " flipped" : "")}
@@ -672,13 +883,10 @@ export default function TrainPage() {
           {flipped && (
             <div className="flash-actions">
               <button className="known-no" onClick={() => flashKnown(false)}>
-                还没记住
-              </button>
-              <button className="known-mid" onClick={() => flashKnown(false)}>
-                有点模糊
+                不认识
               </button>
               <button className="known-yes" onClick={() => flashKnown(true)}>
-                记住了 ✓
+                认识
               </button>
             </div>
           )}
@@ -728,32 +936,38 @@ export default function TrainPage() {
 
       {phase === "done" && (
         <div className="train-done">
-          <h2 className="section-h">训练完成</h2>
-          <div className="done-card">
-            <div className="done-score">
-              {statsSummary.correct}
-              <span> / {statsSummary.total}</span>
-            </div>
-            <div className="done-label">
-              正确率 {statsSummary.total ? Math.round((statsSummary.correct / statsSummary.total) * 100) : 0}%
-              {wrongPool.length > 0 && (
-                <span className="done-extra"> · 有 {wrongPool.length} 个错词进入了错题本</span>
-              )}
-            </div>
-            <div className="done-actions">
-              {wrongPool.length > 0 && (
-                <button className="start-btn" onClick={practiceWrong}>
-                  🔁 重练错词
-                </button>
-              )}
-              <button className="start-btn" onClick={buildDeck}>
-                再来一次
-              </button>
-              <button className="ghost-btn" onClick={() => setPhase("setup")}>
-                返回设置
-              </button>
-            </div>
-          </div>
+          <ResolvePanel
+            kind="judge"
+            stamp={`正确率 ${
+              statsSummary.total
+                ? Math.round((statsSummary.correct / statsSummary.total) * 100)
+                : 0
+            }%`}
+            stampTone={statsSummary.total && statsSummary.correct / statsSummary.total >= 0.8 ? "fin" : "normal"}
+            kpis={[
+              { label: "答对", value: statsSummary.correct },
+              { label: "答错", value: statsSummary.total - statsSummary.correct },
+              { label: "消灭错词", value: clearedCount },
+              { label: "XP", value: `+${statsSummary.correct * 2 + clearedCount * 10}` },
+            ]}
+            list={wrongPool.map((w) => ({
+              word: w.word_en.replace(/^\*/, ""),
+              mark: "错",
+              def: w.definition_zh,
+              tag: "错题本",
+            }))}
+            actions={[
+              wrongPool.length > 0
+                ? { label: `错词再战（${wrongPool.length}）`, primary: true, onClick: practiceWrong }
+                : daily
+                ? { label: "再练一轮", primary: true, onClick: startDaily }
+                : { label: "再来一次", primary: true, onClick: buildDeck },
+              daily
+                ? { label: "去单元测验", href: "/exam" }
+                : { label: "返回设置", onClick: () => { setDaily(false); setPhase("setup"); } },
+              { label: daily ? "返回首页" : "返回设置", href: daily ? "/" : undefined, onClick: daily ? undefined : () => { setDaily(false); setPhase("setup"); } },
+            ]}
+          />
         </div>
       )}
     </div>
