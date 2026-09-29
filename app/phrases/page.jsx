@@ -51,7 +51,6 @@ export default function PhrasesPage() {
       .map(([u, ws]) => ({ unit: u, words: ws.sort((a, b) => a.id - b.id) }));
   }, [words, grade, semester, query]);
 
-  const totalPhrases = words.length;
 
   if (!data) {
     return <div className="wrap"><div className="empty-state">加载词库中…</div></div>;
@@ -65,7 +64,7 @@ export default function PhrasesPage() {
           <span className="en">Phrases</span>
         </div>
         <p className="tagline">
-          教材固定搭配共 <b>{totalPhrases}</b> 条 · 中考单选/完形高频考点 · 点条目朗读
+          教材固定搭配 · 中考单选/完形高频考点 · 点条目朗读
         </p>
       </header>
 

@@ -109,7 +109,7 @@ export default function BookToc() {
         <div className="bs-wlist-h">
           {book.name} · 本册词表
           <Link className="bs-wlist-all" href={`/vocab?grade=${book.g}&semester=${book.s}`}>
-            查看全部 {book.n} 词 ›
+            查看全部 ›
           </Link>
         </div>
         {catalog.words
@@ -128,7 +128,7 @@ export default function BookToc() {
           ))}
         <div className="bs-wlist-more">
           <button className="bs-wlist-all" onClick={() => router.push(`/vocab?grade=${book.g}&semester=${book.s}`)}>
-            展开全部 {book.n} 词 →
+            展开全部 →
           </button>
         </div>
       </div>

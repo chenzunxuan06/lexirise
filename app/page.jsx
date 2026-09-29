@@ -20,8 +20,8 @@ function GoalRing({ pct, done, goal }) {
       <svg width="108" height="108" viewBox="0 0 108 108">
         <defs>
           <linearGradient id="goalGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#159a71" />
-            <stop offset="100%" stopColor="#35d99e" />
+            <stop offset="0%" stopColor="#c8763a" />
+            <stop offset="100%" stopColor="#d98b4e" />
           </linearGradient>
         </defs>
         <circle cx="54" cy="54" r={R} fill="none" stroke="#edf0f8" strokeWidth="11" />
@@ -32,7 +32,7 @@ function GoalRing({ pct, done, goal }) {
           transform="rotate(-90 54 54)"
           style={{
             transition: "stroke-dashoffset 1.2s cubic-bezier(.34,1.25,.5,1)",
-            filter: "drop-shadow(0 0 5px rgba(46,196,142,.5))",
+            filter: "drop-shadow(0 0 5px rgba(200,118,58,.45))",
           }}
         />
       </svg>
