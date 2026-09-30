@@ -66,12 +66,15 @@ function makeQuizItem(w, poolForOpts) {
   const others = shuffle(
     poolForOpts
       .filter((x) => x.id !== w.id)
-      .map((x) => ({ t: x.definition_zh || x.word_en, id: x.id }))
+      .map((x) => ({ t: x.definition_zh || x.word_en, id: x.id, w: x }))
       .filter((x) => x.t && x.t !== target)
   );
-  const opts = shuffle([{ t: target, id: w.id }, ...others.slice(0, 3)]);
+  const opts = shuffle([{ t: target, id: w.id, w }, ...others.slice(0, 3)]);
   item.options = opts.map((o) => o.t);
   item.optionIds = opts.map((o) => o.id);
+  // 选项即词条（B3）：把每个选项对应的**词条本身**也存下来，
+  // 这样答完后点任意选项都能展开它自己的单词/释义，且自定义词表（负 id）也查得到
+  item.optionWordRefs = opts.map((o) => o.w || null);
   item.correct = target;
   return item;
 }
@@ -204,6 +207,8 @@ export default function TrainPage() {
   const [flipped, setFlipped] = useState(false);
   const [answered, setAnswered] = useState(false);
   const [picked, setPicked] = useState(null);
+  // 选项即词条（B3）：答题后展开的选项下标（同一时刻只展开一个；null = 都收起）
+  const [openOpt, setOpenOpt] = useState(null);
   const [input, setInput] = useState("");
   const [hintLevel, setHintLevel] = useState(0);
 
@@ -262,12 +267,13 @@ export default function TrainPage() {
             const others = shuffle(
               p
                 .filter((x) => x.id !== w.id)
-                .map((x) => ({ t: getId(x), id: x.id }))
+                .map((x) => ({ t: getId(x), id: x.id, w: x }))
                 .filter((x) => x.t && x.t !== target)
             );
-            const opts = shuffle([{ t: target, id: w.id }, ...others.slice(0, 3)]);
+            const opts = shuffle([{ t: target, id: w.id, w }, ...others.slice(0, 3)]);
             item.options = opts.map((o) => o.t);
             item.optionIds = opts.map((o) => o.id);
+            item.optionWordRefs = opts.map((o) => o.w || null); // 选项即词条（B3）
             item.correct = target;
           };
           if (mm === "quiz" || mm === "listening") {
@@ -447,6 +453,7 @@ export default function TrainPage() {
     setFlipped(false);
     setAnswered(false);
     setPicked(null);
+    setOpenOpt(null);
     setInput("");
     setHintLevel(0);
     advancedRef.current = false; // 重置前进守卫
@@ -533,15 +540,18 @@ export default function TrainPage() {
     advancedRef.current = false;
   }, [idx]);
 
-  // 答对自动进下一题（0.75s）；答错停留手动。置于答题状态之上，绕开事件闭包时序。
+  // 答对自动进下一题；答错停留手动。
+  // ⚠️ B3 起：**只要用户点开了某个选项看词条，就立刻取消自动前进**（改由「下一个」手动推进），
+  //    否则 0.75s 就把题翻走了，"点 C、D 也能看对应的单词"根本没时间做。
+  //    原时长也从 750ms 放宽到 1600ms，给"想看一眼别的选项"留一个节拍。
   const [lastOk, setLastOk] = useState(false);
   useEffect(() => {
-    if (lastOk && answered && idx < deck.length) {
-      const t = setTimeout(() => next(), 750);
+    if (lastOk && answered && idx < deck.length && openOpt === null) {
+      const t = setTimeout(() => next(), 1600);
       return () => clearTimeout(t);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lastOk, answered, idx]);
+  }, [lastOk, answered, idx, openOpt]);
 
   function next() {
     if (advancedRef.current) return;
@@ -555,6 +565,7 @@ export default function TrainPage() {
       setFlipped(false);
       setAnswered(false);
       setPicked(null);
+      setOpenOpt(null);
       setInput("");
       setHintLevel(0);
     }
@@ -960,29 +971,51 @@ export default function TrainPage() {
             {cur.word.phonetic && mode !== "reverse" && <div className="run-phon">{cur.word.phonetic}</div>}
             <HintPanel word={cur.word} hintLevel={hintLevel} setHintLevel={setHintLevel} mode={mode} />
             <div className="options">
-              {cur.options.map((opt, i) => (
-                <button
-                  key={i}
-                  className={
-                    "opt" +
-                    (answered
-                      ? opt === cur.correct
-                        ? " right"
-                        : picked === opt
-                        ? " wrong"
-                        : " dim"
-                      : "")
-                  }
-                  onClick={() => pickOption(opt)}
-                  disabled={answered}
-                >
-                  {mode === "reverse" ? (
-                    <span className="opt-word">{opt}</span>
-                  ) : (
-                    opt
-                  )}
-                </button>
-              ))}
+              {cur.options.map((opt, i) => {
+                const ow = cur.optionWordRefs ? cur.optionWordRefs[i] : null;
+                const isRight = opt === cur.correct;
+                const isPicked = picked === opt;
+                const open = openOpt === i;
+                return (
+                  <div className="opt-wrap" key={i}>
+                    <button
+                      className={
+                        "opt" +
+                        (answered ? (isRight ? " right" : isPicked ? " wrong" : " dim") : "") +
+                        (open ? " open" : "")
+                      }
+                      /* 没答 → 照旧判分；答完 → 点一下展开/收起**它自己**那条词条。
+                         判分逻辑一行没动（pickOption / recordAnswer 原样）。 */
+                      onClick={() => {
+                        if (!answered) return pickOption(opt);
+                        setOpenOpt(open ? null : i);
+                      }}
+                    >
+                      {mode === "reverse" ? <span className="opt-word">{opt}</span> : <span className="opt-title">{opt}</span>}
+                      {answered && <span className="opt-hint">{open ? "收起" : "看这个词"}</span>}
+                    </button>
+                    {answered && open && (
+                      <div className="opt-expand">
+                        {ow ? (
+                          <>
+                            <div className="oe-head">
+                              <span className="oe-word">{ow.word_en}</span>
+                              {ow.phonetic && <span className="oe-ph">{ow.phonetic}</span>}
+                              {isRight && <span className="oe-tag">正确答案</span>}
+                            </div>
+                            <div className="oe-def">
+                              {ow.pos && <span className="oe-pos">{ow.pos}</span>}
+                              {ow.definition_zh || "（这个词条还没有中文释义）"}
+                            </div>
+                          </>
+                        ) : (
+                          <div className="oe-def">{opt}</div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
             {answered && (
               <Feedback

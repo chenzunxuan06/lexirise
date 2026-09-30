@@ -867,3 +867,32 @@ body:has(.bs-shell) .bs-unit { padding-left: 0; padding-right: 0; }
 @media (max-width: 900px) {
   .db-blks { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+   选项即词条（2026-09-30 · 批次 B3）
+   答完题后点任意选项，展开**它自己**那条词条 —— 答错不再"闪一下就没"，
+   而是变成可以继续学的材料；一道题 4 个选项 = 4 个词都过一遍。
+   注意：.opt.dim 原本是 opacity:.55，但这些选项现在是**可点**的，
+   压暗到 55% 既看不清、也不像能点的 —— 这里覆盖成正常可读的次级色。
+   ============================================================ */
+.options .opt { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; }
+.options .opt.dim { opacity: 1; color: var(--soft, #6b6453); }
+.options .opt.open { border-color: var(--fox, #c8763a); }
+.opt-hint { font-size: 12px; font-weight: 400; color: var(--faint, #736b5b); flex-shrink: 0; }
+.opt-wrap { min-width: 0; }
+.opt-expand {
+  margin-top: 8px;
+  border-left: 3px solid var(--fox, #c8763a);
+  background: #fdfbf3;
+  border-radius: 0 8px 8px 0;
+  padding: 10px 14px;
+}
+.oe-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.oe-word { font-size: 17px; font-weight: 700; color: var(--ink, #2a2519); }
+.oe-ph { font-size: 12.5px; color: var(--soft, #6b6453); }
+.oe-tag {
+  font-size: 12px; color: var(--seal-g, #2f7d4f);
+  border: 1px solid var(--seal-g, #2f7d4f); border-radius: 5px; padding: 1px 7px;
+}
+.oe-def { font-size: 13px; color: var(--soft, #6b6453); margin-top: 5px; line-height: 1.55; }
+.oe-pos { color: var(--fox-ink, #9e551f); font-weight: 700; margin-right: 6px; }
