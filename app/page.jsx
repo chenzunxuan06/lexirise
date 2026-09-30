@@ -97,7 +97,16 @@ export default function HomePage() {
 
   // 今日待学总量（lib/progress.js 唯一口径：与训练页今日模式实际出题数一致）
   const summary = useMemo(() => todaySummary(words), [words, tick]);
-  const todoTotal = summary.todo;
+  // B4 口径统一：不再有"合计"（旧的 todoTotal 已删除）。
+  // 两块分开算、分开显示 —— 合计是个"越做越小"的数字，是「76 vs 77」那类问题的根。
+  const revCount = summary.review.count;
+  const freshCount = summary.fresh;
+  const twoEmpty = revCount === 0 && freshCount === 0;
+  const todayPhrase = twoEmpty
+    ? "已圆满"
+    : freshCount > 0
+    ? `复习 ${revCount} 词、新词 ${freshCount} 词`
+    : `复习 ${revCount} 词`;
   const ringPct = goal ? Math.round((today.n / goal) * 100) : 0;
   const acc = today.total ? Math.round((today.correct / today.total) * 100) : 100;
 
@@ -172,7 +181,7 @@ export default function HomePage() {
           </button>
           <div className="mag-big">
             {greet}，今天
-            <span className="mag-hl">{todoTotal > 0 ? `${todoTotal} 词` : "已圆满"}</span>
+            <span className="mag-hl">{todayPhrase}</span>
             拿下它
             <small>
               {petLine ||
@@ -236,7 +245,7 @@ export default function HomePage() {
         </div>
 
         <Link className="mag-cta" href="/train?mode=daily">
-          {todoTotal > 0 ? `开始今天的学习（${todoTotal} 词）→` : "再练一轮巩固一下 →"}
+          {twoEmpty ? "再练一轮巩固一下 →" : "开始今天的学习 →"}
         </Link>
 
         {/* 号外角标（里程碑事件） */}
@@ -293,10 +302,13 @@ export default function HomePage() {
         <GoalRing pct={ringPct} done={today.n} goal={goal} />
         <div className="hm-goal-r">
           <div className="t">
-            {todoTotal > 0 ? (
-              <>今天还剩 <b>{todoTotal} 词</b></>
-            ) : (
+            {twoEmpty ? (
               <>🎉 今日任务已完成</>
+            ) : (
+              <>
+                今天还剩 <b>复习 {revCount} 词</b>
+                {freshCount > 0 ? <> · 新词 {freshCount} 词</> : null}
+              </>
             )}
           </div>
           <div className="nums">
@@ -305,7 +317,7 @@ export default function HomePage() {
             <div><b>{acc}%</b><span>正确率</span></div>
           </div>
           <Link className="hm-cta" href="/train?mode=daily">
-            {todoTotal > 0 ? `▶ 开始今天的学习（${todoTotal} 词）` : "▶ 再练一轮巩固一下"}
+            {twoEmpty ? "▶ 再练一轮巩固一下" : "▶ 开始今天的学习"}
             {!g.daily.firstBonus && <small>首答 XP×2 今日可用 ✨</small>}
           </Link>
         </div>

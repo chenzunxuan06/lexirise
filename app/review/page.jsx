@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { loadWords } from "@/lib/loadWords";
 import { speak } from "@/lib/tts";
 import { memory, wrongBook, favs, stats } from "@/lib/memory";
+import { dueDeck } from "@/lib/progress";
 import { game } from "@/lib/game";
 import { sound } from "@/lib/sound";
 import GameBar from "../components/GameBar";
@@ -14,16 +15,8 @@ import ExampleBlock from "../components/ExampleBlock";
 import AiExplainCard from "../components/AiExplain";
 import ResolvePanel from "../components/ResolvePanel";
 
-const DAILY_NEW = 10; // 每次复习顺带学习的新词数
-
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
+// B4：`DAILY_NEW` 与本地 `shuffle` 已删除 ——
+// 复习页不再"顺带学新词"，甲板统一由 lib/progress.js 的 dueDeck() 提供。
 
 export default function ReviewPage() {
   const [data, setData] = useState(null);
@@ -79,11 +72,14 @@ export default function ReviewPage() {
     [data, custom]
   );
 
-  const dueWords = useMemo(() => memory.dueWords(words), [words, tick]);
-  const newWords = useMemo(() => {
-    const m = memory.load();
-    return shuffle(words.filter((w) => !m[w.id] || m[w.id].lv === 0)).slice(0, DAILY_NEW);
-  }, [words, tick]);
+  // B4 口径统一：到期词不再自己算，改用 lib 的统一口径（含每日上限 + 顺延）。
+  // 同时**去掉"顺带学 10 个新词"** —— 新词是可选择的，不归"复习中心"；
+  // 以前这里固定塞 10 个新词，与今日甲板的口径对不上，是"不知道先练哪个"的来源之一。
+  const rev = useMemo(
+    () => (data ? dueDeck(words, { withWrong: false }) : null),
+    [words, data]
+  );
+  const dueWords = useMemo(() => (rev ? rev.words : []), [rev]);
 
   const wrongList = useMemo(() => {
     const e = wrongBook.entries();
@@ -168,11 +164,8 @@ export default function ReviewPage() {
     }
   }
 
-  const reviewDeck = useMemo(() => {
-    if (!dueWords.length) return [];
-    const rest = newWords.filter((w) => !dueWords.some((d) => d.id === w.id));
-    return [...dueWords, ...rest];
-  }, [dueWords, newWords]);
+  // 甲板 = 纯到期词（B4：不再拼新词）
+  const reviewDeck = dueWords;
 
   const filteredReview = useMemo(() => memory.byStatus(reviewDeck, statusFilter), [reviewDeck, statusFilter]);
 
@@ -307,7 +300,10 @@ export default function ReviewPage() {
       {practicing.length === 0 && tab === "due" && (
         <div className="review-block">
           <div className="review-head">
-            <h2 className="section-h">到期复习（+ 新词 {newWords.length}）</h2>
+            <h2 className="section-h">
+              到期复习
+              {rev && rev.deferred > 0 ? `（今天 ${rev.due} 词 · 另有 ${rev.deferred} 个顺延到明天）` : ""}
+            </h2>
             <div className="review-actions">
               <div className="tabs mini-tabs">
                 {[

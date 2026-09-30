@@ -183,25 +183,31 @@ export function TodayBar() {
   const g = gs || game.state();
   const pet = petInfo();
 
-  const todo = sum ? sum.todo : 0;
+  // B4 口径统一：不再有"合计"，只有两块 —— 复习（到期+错题，必须做）与 新词（可选择）
+  const rev = sum ? sum.review : null;
+  const revCount = rev ? rev.count : 0;
+  const freshCount = sum ? sum.fresh : 0;
   const learnedAny = memory.learnedCount() > 0;
-  const doneState = todo === 0 && (todayN > 0 || learnedAny);
+  const twoEmpty = revCount === 0 && freshCount === 0;
+  const doneState = twoEmpty && (todayN > 0 || learnedAny);
 
   // 三态（v8 §2.6 展示纪律）：空态=引导（guide）/ 正常=墨底 / 完成=印章绿
-  const variant = todo === 0 && !learnedAny ? "guide" : doneState ? "fin" : "normal";
+  const variant = twoEmpty && !learnedAny ? "guide" : doneState ? "fin" : "normal";
   const heading =
     variant === "guide"
       ? "先挑一本要背的"
       : variant === "fin"
       ? "今天已完成"
-      : `今天该背 ${todo} 词`;
+      : freshCount > 0
+      ? `复习 ${revCount} 词 · 新词 ${freshCount} 词`
+      : `复习 ${revCount} 词`;
   const sub =
     variant === "guide"
       ? "从左栏选册，或点「今日」看安排"
       : variant === "fin"
       ? `今天背了 ${todayN} 个新词 · ${memory.masteredCount()} 个已掌握`
       : sum
-      ? `${sum.due} 个到期复习 + ${sum.fresh} 个新词 · 预计 ${Math.max(2, Math.round(todo * 0.35))} 分钟`
+      ? `复习 ${revCount} 词（到期 ${rev.due} · 错题 ${rev.wrong}）· 新词 ${freshCount} 词`
       : "";
 
   return (
@@ -231,7 +237,7 @@ export function TodayBar() {
       <div className="bs-coach">
         <PetImage stage={pet.stage} action={pet.hungry ? "hungry" : "idle"} size={58} />
         <div className="bs-says">
-          {sub || (sum && sum.due > 0 ? "有到期复习，先清掉它们最划算。" : "今天没有到期的，学点新的吧。")}
+          {sub || (rev && rev.dueAll > 0 ? "有到期复习，先清掉它们最划算。" : "今天没有到期的，学点新的吧。")}
         </div>
       </div>
       <div className="bs-side-foot">

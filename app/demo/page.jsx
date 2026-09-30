@@ -199,7 +199,7 @@ function FpCenter({ books, cur, n }) {
   return (
     <div className={s.fpC}>
       <div className={s.fpCbar}>
-        <b>今天该背 {n.todo} 词</b>
+        <b>复习 {n.review} 词 · 新词 {n.fresh} 词</b>
         <em>{cur ? cur.name : "八年级上册"}</em>
       </div>
       <div className={s.fpSecH}>六 册 目 录</div>
@@ -237,9 +237,9 @@ function FpRight({ n }) {
           <div className={s.fpRingIn}>38%</div>
         </div>
         <div className={s.fpBig} style={{ marginTop: 10 }}>
-          今天该背 <b>{n.todo}</b> 词
+          复习 <b>{n.review}</b> 词 · 新词 <b>{n.fresh}</b> 词
         </div>
-        <div className={s.fpSub}>到期 {n.due} · 新词 4</div>
+        <div className={s.fpSub}>到期 {n.due} · 错题 {n.wrong}</div>
       </div>
       <div className={s.fpCard}>
         <div className={s.fpSub}>连续打卡</div>
@@ -273,7 +273,8 @@ export default function DemoPage() {
         const g = game.state();
         setNums({
           due,
-          todo: sum.todo,
+          review: sum.review.count,
+          fresh: sum.fresh,
           wrong: wrongBook.count(),
           totalQ,
           lv: g.level || 1,
@@ -292,7 +293,7 @@ export default function DemoPage() {
       }))
     : baseBooks;
   const cur = books[2] || null; // 八上
-  const n = nums || { due: 12, todo: 16, wrong: 5, totalQ: 340, lv: 4, title: "单词新手" };
+  const n = nums || { due: 12, review: 16, fresh: 10, wrong: 5, totalQ: 340, lv: 4, title: "单词新手" };
   const apxNum = { A: `到期 ${n.due} · 错题 ${n.wrong}`, B: `累计 ${n.totalQ} 题`, C: `Lv.${n.lv} ${n.title}`, D: "复习包 · 练习", E: "51 对辨析" };
 
   return (

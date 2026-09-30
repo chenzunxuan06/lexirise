@@ -49,23 +49,32 @@ export default function BookToc() {
     [catalog, tick]
   );
 
+  // B4 口径统一：不再有"合计"，只有两块 —— 复习（到期+错题）与 新词（可选择）
+  const revCount = sum ? sum.review.count : 0;
+  const freshCount = sum ? sum.fresh : 0;
+  const twoEmpty = revCount === 0 && freshCount === 0;
+
   if (!catalog || !book) return null;
 
   return (
     <div className="bs-toc">
       {/* 快路径：今日状态行（一屏一个大行动） */}
       <StBar
-        variant={sum && sum.todo > 0 ? "normal" : "fin"}
+        variant={twoEmpty ? "fin" : "normal"}
         icon="▶"
         title={
-          sum && sum.todo > 0
-            ? `今天该背 ${sum.todo} 词`
-            : "今天已完成"
+          twoEmpty
+            ? "今天已完成"
+            : freshCount > 0
+            ? `复习 ${revCount} 词 · 新词 ${freshCount} 词`
+            : `复习 ${revCount} 词`
         }
         desc={
-          sum && sum.todo > 0
-            ? `${sum.due} 个到期复习 + ${sum.fresh} 个新词 · 约 ${Math.max(2, Math.round(sum.todo * 0.35))} 分钟`
-            : "全部打完卡，明天见"
+          twoEmpty
+            ? "全部打完卡，明天见"
+            : `到期 ${sum.review.due} · 错题 ${sum.review.wrong}` +
+              (sum.review.deferred > 0 ? ` · 另有 ${sum.review.deferred} 个顺延到明天` : "") +
+              ` · 新词 ${freshCount}`
         }
         go="开始 →"
         onGo={() => router.push("/train?mode=daily")}

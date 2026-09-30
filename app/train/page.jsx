@@ -654,10 +654,11 @@ export default function TrainPage() {
   }
 
   // 章首动态数据（今日待办，统一口径 lib/progress.js）
+  // B4：不再有"合计"（旧的 todoCount 已删除），只有两块 —— 复习（到期+错题）与新词
   const summary = todaySummary(data.words);
-  const todoCount = summary.todo;
-  const dueCount = summary.due;
-  const wrongCount = summary.wrong;
+  const dueCount = summary.review.due;
+  const dueAllCount = summary.review.dueAll;
+  const wrongCount = summary.review.wrong;
   const newLeft = summary.fresh;
 
   // 简报屏的汇总 = 已勾选那几块的条数之和（三块互斥，所以直接相加 == 实际开题数）
@@ -668,7 +669,8 @@ export default function TrainPage() {
 
   // 同源：进行中一律用开局锁定的 deck.length —— 与 <ProgressBar total={deck.length}> 同一个来源，
   // 保证"标题数字 == 进度条分母"，不会再出现 76 / 77 这种对不上账
-  const headerCount = phase === "setup" ? (brief ? pickedCount : todoCount) : deck.length;
+  // （B4：这里不再回退到任何"合计"，简报屏用已选数，进行中用甲板长度，其余场景不用这个数）
+  const headerCount = phase === "setup" ? pickedCount : deck.length;
 
   return (
     <div className="wrap">
@@ -678,10 +680,12 @@ export default function TrainPage() {
         chLabel={["ROUND", "TRAIN", "DAILY"]}
         ribbon={<>词跃 · TRAIN <b>今日修炼</b></>}
         ribbonRight="每日一轮"
-        title={<>今天 <span className="ch-hl">{headerCount} 题</span>，主打消灭错词</>}
+        title={phase === "setup" && !brief
+          ? <>自定义训练 <span className="ch-hl">{pool.length}</span> 词可选</>
+          : <>{fromBrief ? "今天" : "本轮"} <span className="ch-hl">{headerCount}</span> 题</>}
         sub={brief && preview
           ? `已选 ${pickedCount} 题 · 约 ${pickedMinutes} 分钟（可以取消不想做的）`
-          : `到期 ${dueCount} · 错词 ${wrongCount} · 新词 ${newLeft}`}
+          : `到期 ${dueCount}${dueAllCount > dueCount ? `（共 ${dueAllCount}，其余顺延）` : ""} · 错题 ${wrongCount} · 新词 ${newLeft}`}
         quote="答对修炼、消灭盖章——一轮结束有结算章。"
       />
       <GameBar />
