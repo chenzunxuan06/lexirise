@@ -5,7 +5,7 @@ import { loadWords } from "@/lib/loadWords";
 import { speak, speakSlow, speakZh, stopSpeak, unlockAudio } from "@/lib/tts";
 import { memory, wrongBook, favs, stats, plan, exams } from "@/lib/memory";
 import { game } from "@/lib/game";
-import { composeDailyDeck, todaySummary } from "@/lib/progress";
+import { composeDailyDeck, todaySummary, readReviewCap, saveReviewCap, REVIEW_CAP_CHOICES, DEFAULT_REVIEW_CAP } from "@/lib/progress";
 import { sync } from "@/lib/sync";
 import { sound } from "@/lib/sound";
 import { track } from "@/lib/analytics";
@@ -180,6 +180,15 @@ export default function TrainPage() {
   const [idx, setIdx] = useState(0);
   const [results, setResults] = useState([]);
   const [daily, setDaily] = useState(false); // 今日模式（自动组题：复习+错词+新词）
+  // 「开始前」简报屏（2026-09-30 B2）：不再一点就出题。
+  //   brief        = 是否正在显示简报屏
+  //   pickBlocks   = 三块的勾选状态（到期/错题默认勾，新词默认不勾，见下方 effect）
+  //   reviewCap    = 每日复习上限（0 = 不封顶）；初值用常量保证 SSR 与水合一致，真实值在 effect 里读
+  //   fromBrief    = 本轮是否从简报屏开始的（决定「退出本轮」回哪里）
+  const [brief, setBrief] = useState(false);
+  const [pickBlocks, setPickBlocks] = useState({ due: true, wrong: true, new: false });
+  const [reviewCap, setReviewCap] = useState(DEFAULT_REVIEW_CAP);
+  const [fromBrief, setFromBrief] = useState(false);
   const [clearedCount, setClearedCount] = useState(0); // 本轮消灭的错词数
   const [clearToast, setClearToast] = useState(false); // 消灭瞬间的提示
   const [coachAct, setCoachAct] = useState("book"); // 陪练位动作帧
@@ -271,11 +280,10 @@ export default function TrainPage() {
         };
 
         if (m === "daily") {
-          // 今日模式：自动组题直达，跳过设置页
-          const { deck: deckWords } = composeDailyDeck(d.words);
-          const items = deckWords.map((w) => makeOpts(w, d.words));
-          setDaily(true);
-          startDeck(items);
+          // 今日模式（2026-09-30 B2 修复）：**不再直达第一题**。
+          // 以前这里直接 composeDailyDeck + startDeck，用户点任何"开始"就被塞 76 题、还退不出去。
+          // 现在只打开「开始前」简报屏，让 ta 看清今天做什么、可以取消不想做的块，再自己按开始。
+          setBrief(true);
           return;
         }
         if (q.get("custom") === "1" && runMode) {
@@ -425,6 +433,7 @@ export default function TrainPage() {
     const n = size === 0 ? pool.length : Math.min(size, pool.length);
     const sample = shuffle(pool).slice(0, n);
     const items = sample.map((w) => makeItem(w, pool));
+    setFromBrief(false); // 自定义训练 → 「退出本轮」回自定义设置，不回简报屏
     startDeck(items);
   }
 
@@ -444,14 +453,31 @@ export default function TrainPage() {
     setPhase("running");
   }
 
+  /** 按「开始前」的选择开一轮（简报屏的「开始」与结算页的「再练一轮」共用）。
+   *  组题参数与简报屏预览**完全一致**（dueLimit + include），所以显示多少就出多少。 */
   function startDaily() {
     if (!data) return;
-    unlockAudio();
-    const { deck: deckWords } = composeDailyDeck(data.words);
-    const items = deckWords.map((w) => makeQuizItem(w, data.words));
+    const cap = readReviewCap();
+    const { deck: deckWords } = composeDailyDeck(data.words, {
+      dueLimit: cap,
+      include: { ...pickBlocks },
+    });
+    if (!deckWords.length) return; // 按钮在此之前已按 pickedCount===0 禁用，这里只是兜底
+    unlockAudio(); // 必须留在用户手势里：听力/听写模式 350ms 后要自动朗读
     setDaily(true);
+    setFromBrief(true);
     setMode("quiz");
-    startDeck(items);
+    startDeck(deckWords.map((w) => makeQuizItem(w, data.words)));
+  }
+
+  /** 退出本轮：已答的题**已经写进记忆曲线**（recordAnswer → memory.record），
+   *  这里只清本轮甲板，不撤销任何记录 —— 所以"退出去"不会白答。 */
+  function exitRound() {
+    setDeck([]);
+    setIdx(0);
+    setResults([]);
+    setPhase("setup");
+    setBrief(fromBrief); // 从简报屏来的 → 回简报屏；从自定义训练来的 → 回自定义设置
   }
 
   function recordAnswer(ok) {
@@ -590,6 +616,28 @@ export default function TrainPage() {
     startDeck(wrongPool.map((w) => makeItem(w, pool.length ? pool : data.words)));
   }
 
+  // ── 以下三个 hook 必须在下面的 early return **之前**（Rules of Hooks）──
+  // 「开始前」预览：与实际开题**同一个函数、同一组参数** → 显示多少就出多少。
+  // （这就是 2026-09-30 那个「标题 76 / 分母 77」的根：标题原本每次渲染重算，分母是开局快照。）
+  const preview = useMemo(() => {
+    if (!data || !brief) return null;
+    return composeDailyDeck(data.words, {
+      dueLimit: reviewCap,
+      include: { due: true, wrong: true, new: true }, // 要的是"每块各自有多少条"
+    });
+  }, [data, brief, reviewCap]);
+
+  // 到期为 0 时自动勾上「新词」——否则新用户打开会看到"已选 0 题"，以为坏了
+  const dueAllN = preview ? preview.dueAll : -1;
+  useEffect(() => {
+    if (dueAllN === 0) setPickBlocks((p) => (p.new ? p : { ...p, new: true }));
+  }, [dueAllN]);
+
+  // 读回记住的每日上限（放 effect 里读 localStorage，避免 SSR/水合不一致）
+  useEffect(() => {
+    setReviewCap(readReviewCap());
+  }, []);
+
   if (!data) {
     return <div className="wrap"><PetEmpty /></div>;
   }
@@ -601,6 +649,16 @@ export default function TrainPage() {
   const wrongCount = summary.wrong;
   const newLeft = summary.fresh;
 
+  // 简报屏的汇总 = 已勾选那几块的条数之和（三块互斥，所以直接相加 == 实际开题数）
+  const pickedCount = preview
+    ? (pickBlocks.due ? preview.due : 0) + (pickBlocks.wrong ? preview.wrong : 0) + (pickBlocks.new ? preview.fresh : 0)
+    : 0;
+  const pickedMinutes = Math.max(1, Math.round(pickedCount * 0.35));
+
+  // 同源：进行中一律用开局锁定的 deck.length —— 与 <ProgressBar total={deck.length}> 同一个来源，
+  // 保证"标题数字 == 进度条分母"，不会再出现 76 / 77 这种对不上账
+  const headerCount = phase === "setup" ? (brief ? pickedCount : todoCount) : deck.length;
+
   return (
     <div className="wrap">
       <ChapterHead
@@ -609,22 +667,121 @@ export default function TrainPage() {
         chLabel={["ROUND", "TRAIN", "DAILY"]}
         ribbon={<>词跃 · TRAIN <b>今日修炼</b></>}
         ribbonRight="每日一轮"
-        title={<>今天 <span className="ch-hl">{todoCount} 题</span>，主打消灭错词</>}
-        sub={`到期 ${dueCount} · 错词 ${wrongCount} · 新词 ${newLeft}`}
+        title={<>今天 <span className="ch-hl">{headerCount} 题</span>，主打消灭错词</>}
+        sub={brief && preview
+          ? `已选 ${pickedCount} 题 · 约 ${pickedMinutes} 分钟（可以取消不想做的）`
+          : `到期 ${dueCount} · 错词 ${wrongCount} · 新词 ${newLeft}`}
         quote="答对修炼、消灭盖章——一轮结束有结算章。"
       />
       <GameBar />
       {clearToast && <div className="clear-toast">🎉 消灭错词 +1</div>}
       {comboMsg && <div className="combo-toast">{comboMsg}</div>}
-      {phase === "setup" && (
+      {phase === "setup" && brief && preview && (
         <div className="train-setup">
-          <div className="daily-entry" onClick={startDaily} role="button" tabIndex={0}>
+          <div className="daily-brief">
+            <div className="db-h">今天要做的事</div>
+            <div className="db-sub">勾掉不想做的，题目数会跟着变。来源：记忆曲线 + 错题本 + 每日目标。</div>
+
+            <div className="db-blks">
+              <button
+                className={"db-blk" + (pickBlocks.due ? " on" : "")}
+                onClick={() => setPickBlocks((p) => ({ ...p, due: !p.due }))}
+              >
+                <span className="db-ck" aria-hidden="true" />
+                <span className="db-b">
+                  <span className="db-t">到期复习</span>
+                  <span className="db-d">
+                    {preview.dueAll === 0 ? (
+                      "今天没有到期的词"
+                    ) : (
+                      <>
+                        今天 <b>{preview.due}</b> 词
+                        {preview.deferred > 0 ? <> · 另有 <b>{preview.deferred}</b> 个顺延到明天</> : null}
+                      </>
+                    )}
+                  </span>
+                </span>
+              </button>
+
+              <button
+                className={"db-blk" + (pickBlocks.wrong ? " on" : "")}
+                onClick={() => setPickBlocks((p) => ({ ...p, wrong: !p.wrong }))}
+              >
+                <span className="db-ck" aria-hidden="true" />
+                <span className="db-b">
+                  <span className="db-t">错题重做</span>
+                  <span className="db-d">
+                    {preview.wrong > 0 ? <><b>{preview.wrong}</b> 词 · 连对 2 次移出错题本</> : "错题本是空的"}
+                  </span>
+                </span>
+              </button>
+
+              <button
+                className={"db-blk" + (pickBlocks.new ? " on" : "")}
+                onClick={() => setPickBlocks((p) => ({ ...p, new: !p.new }))}
+              >
+                <span className="db-ck" aria-hidden="true" />
+                <span className="db-b">
+                  <span className="db-t">今日新词</span>
+                  <span className="db-d">
+                    {preview.fresh > 0 ? <>来自教材 · <b>{preview.fresh}</b> 词</> : "今天的新词已经学完"}
+                  </span>
+                </span>
+              </button>
+            </div>
+
+            {preview.dueAll > 0 && (
+              <div className="db-caprow">
+                <span className="db-caplb">今天复习做多少：</span>
+                <span className="db-caps">
+                  {REVIEW_CAP_CHOICES.map((n) => (
+                    <button
+                      key={n}
+                      className={"db-cap" + (reviewCap === n ? " on" : "")}
+                      onClick={() => {
+                        setReviewCap(n);
+                        saveReviewCap(n); // 立即落库：下次进来还是这个值
+                      }}
+                    >
+                      {n === 0 ? "全部" : n}
+                    </button>
+                  ))}
+                </span>
+                <span className="db-capnote">选过的会记住</span>
+              </div>
+            )}
+
+            <div className="db-sum">
+              <span className="db-suml">
+                已选 <b>{pickedCount}</b> 题 · 约 <b>{pickedMinutes}</b> 分钟
+              </span>
+              <span className="db-btns">
+                <a className="db-ghost" href="/">稍后再说</a>
+                <button className="db-go" disabled={pickedCount === 0} onClick={startDaily}>
+                  开始 →
+                </button>
+              </span>
+            </div>
+            {pickedCount === 0 && <div className="db-empty">三块都没勾，先选一块再开始。</div>}
+          </div>
+
+          <div className="db-back">
+            <button className="link" onClick={() => setBrief(false)}>
+              想自己挑范围和模式？用「自定义训练」
+            </button>
+          </div>
+        </div>
+      )}
+
+      {phase === "setup" && !brief && (
+        <div className="train-setup">
+          <div className="daily-entry" onClick={() => setBrief(true)} role="button" tabIndex={0}>
             <div className="de-ic" aria-hidden="true" />
             <div className="de-m">
               <div className="de-t">今日模式</div>
-              <div className="de-s">自动安排：到期复习 + 错词重练 + 新词，一键开始</div>
+              <div className="de-s">先看看今天要做什么，可以取消不想做的</div>
             </div>
-            <span className="de-go">开始 →</span>
+            <span className="de-go">查看 →</span>
           </div>
           <div className="section-row">
             <h2 className="section-h">自定义训练</h2>
@@ -760,6 +917,15 @@ export default function TrainPage() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* 退出本轮（2026-09-30 B2）：以前进行中界面**没有任何出口**，
+          用户只能答完或关掉页面。已答的题已经写进记忆曲线，退出不会白答。 */}
+      {phase === "running" && (
+        <div className="run-toolbar">
+          <button className="run-exit" onClick={exitRound}>← 退出本轮</button>
+          <span className="run-exit-note">已答的题会自动记下来</span>
         </div>
       )}
 

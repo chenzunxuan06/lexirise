@@ -790,3 +790,80 @@ body:has(.bs-shell) .bs-unit { padding-left: 0; padding-right: 0; }
   padding: 26px 4px; text-align: center;
   font-size: 13px; font-weight: 700; color: #6b6453;
 }
+
+/* ============================================================
+   「开始前」简报屏 + 退出本轮（2026-09-30 · 批次 B2）
+   修的是：点任何"开始"入口就被塞 76 题、且进行中界面没有任何出口。
+   字号全部 ≥12px、次级文字用 --soft/--faint（已达标对比度）。
+   ============================================================ */
+.daily-brief {
+  background: var(--paper2, #fffdf7);
+  border: 1px solid var(--edge, #cfc7b4);
+  border-radius: 14px;
+  padding: 18px 20px;
+}
+.db-h { font-size: 19px; font-weight: 700; color: var(--ink, #2a2519); }
+.db-sub { font-size: 12.5px; color: var(--soft, #6b6453); margin-top: 4px; }
+.db-blks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 16px; }
+.db-blk {
+  display: flex; align-items: flex-start; gap: 10px; text-align: left;
+  background: var(--paper, #f7f3e8);
+  border: 1.5px solid var(--edge, #cfc7b4);
+  border-radius: 11px; padding: 13px 14px; cursor: pointer;
+  font-family: inherit; color: inherit;
+  transition: border-color .15s, background .15s;
+}
+.db-blk.on { border-color: var(--ink, #2a2519); background: #fdfbf3; }
+.db-ck {
+  width: 18px; height: 18px; flex: 0 0 18px; border-radius: 5px;
+  border: 1.5px solid var(--edge, #cfc7b4); margin-top: 2px; position: relative;
+}
+.db-blk.on .db-ck { background: var(--ink, #2a2519); border-color: var(--ink, #2a2519); }
+.db-blk.on .db-ck::after {
+  content: "\2713"; position: absolute; inset: 0; color: var(--paper, #f7f3e8);
+  font-size: 12px; line-height: 16px; text-align: center; font-weight: 700;
+}
+.db-b { display: block; min-width: 0; }
+.db-t { display: block; font-size: 14.5px; font-weight: 700; color: var(--ink, #2a2519); }
+.db-d { display: block; font-size: 12px; color: var(--soft, #6b6453); margin-top: 3px; line-height: 1.5; }
+.db-d b { color: var(--ink, #2a2519); font-weight: 700; }
+.db-caprow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 16px; font-size: 13px; color: var(--soft, #6b6453); }
+.db-caps { display: inline-flex; gap: 6px; }
+.db-cap {
+  border: 1px solid var(--edge, #cfc7b4); background: var(--paper, #f7f3e8);
+  border-radius: 8px; padding: 6px 14px; font-size: 13px; font-family: inherit;
+  color: var(--ink, #2a2519); cursor: pointer; font-variant-numeric: tabular-nums;
+}
+.db-cap.on { background: var(--ink, #2a2519); border-color: var(--ink, #2a2519); color: var(--paper, #f7f3e8); font-weight: 700; }
+.db-capnote { font-size: 12px; color: var(--faint, #736b5b); }
+.db-sum {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  flex-wrap: wrap; margin-top: 18px; padding-top: 15px;
+  border-top: 1px solid var(--paper-line, #e6dfcd);
+}
+.db-suml { font-size: 13px; color: var(--soft, #6b6453); }
+.db-suml b { font-size: 17px; color: var(--ink, #2a2519); font-weight: 700; font-variant-numeric: tabular-nums; }
+.db-btns { display: inline-flex; gap: 10px; align-items: center; }
+.db-ghost {
+  border: 1px solid var(--edge, #cfc7b4); border-radius: 10px; padding: 10px 18px;
+  font-size: 13.5px; color: var(--soft, #6b6453); text-decoration: none; background: var(--paper, #f7f3e8);
+}
+.db-go {
+  border: none; border-radius: 10px; padding: 11px 26px; font-size: 14.5px; font-weight: 700;
+  background: var(--ink, #2a2519); color: var(--paper, #f7f3e8); cursor: pointer; font-family: inherit;
+}
+.db-go[disabled] { opacity: .4; cursor: not-allowed; }
+.db-empty { font-size: 12.5px; color: var(--fox-ink, #9e551f); margin-top: 10px; }
+.db-back { text-align: center; margin-top: 14px; }
+.db-back .link { background: none; border: none; font-family: inherit; font-size: 13px; color: var(--soft, #6b6453); text-decoration: underline; cursor: pointer; padding: 8px; }
+
+.run-toolbar { display: flex; align-items: center; gap: 10px; margin: 0 0 10px; }
+.run-exit {
+  border: 1px solid var(--edge, #cfc7b4); background: var(--paper2, #fffdf7);
+  border-radius: 9px; padding: 9px 14px; font-size: 13px; font-family: inherit;
+  color: var(--ink, #2a2519); cursor: pointer;
+}
+.run-exit-note { font-size: 12px; color: var(--faint, #736b5b); }
+@media (max-width: 900px) {
+  .db-blks { grid-template-columns: 1fr; }
+}
