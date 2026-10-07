@@ -24,7 +24,7 @@ from collections import defaultdict, Counter
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from lemma import resolve   # T15 词形还原
-from corpus_clean import clean as clean_sentence, single_letter_break   # 语料清洗（修复 + 闸门 + 单字母断词判定）
+from corpus_clean import clean as clean_sentence, single_letter_break, fragment_mash   # 语料清洗（修复 + 闸门 + 两条引用闸门）
 
 logging.getLogger("pypdf").setLevel(logging.CRITICAL)
 from pypdf import PdfReader
@@ -572,6 +572,13 @@ def build(book, fname, grade, semester, words):
     # ⚠️ 第一版只记了句子下标、没记形式，等于把这份便宜丢了。
     cand = defaultdict(list)                  # wid -> [(句子下标, 命中的实际形式)]
     for si, s in enumerate(sentences):
+        # 【2026-10-07 补】碎片拼接的句子**不参与任何引用**（原句、兜底、T20 题库都不行）。
+        #   为什么在这里挡而不是在 keep() 里：这类句子本身是课本的一页内容（词框/表格），
+        #   删掉它会白白拉低"课本原句覆盖率"这个真实数字；但它**不能当句子引用给学生看**。
+        #   实测：4336 条引用里 404 条是这类；挡掉之后有 36 个词会失去原句
+        #   （它们本来就只在词汇表里出现过 —— 那正是"B 类"的真实情况，不是索引漏了）。
+        if fragment_mash(s["text"]):
+            continue
         for t in set(re.findall(r"[A-Za-z][A-Za-z'\-]*", s["text"].lower())):
             lem = resolve(t, vocab)           # T15：词形还原，词库负责消歧
             if lem is None:

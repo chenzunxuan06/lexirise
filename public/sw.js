@@ -11,10 +11,24 @@
 // 策略（仅线上生效）：
 //  - 页面导航：网络优先，失败回退缓存（离线可打开页面）
 //  - /_next/static/* 与图标/清单：缓存优先（秒开 + 离线）
-//  - words.json / affixes.json：缓存优先（词库离线可用）
+//  - 词库与语料数据（words/affixes/forms/cloze/corpus/morphology/sim-report）：
+//    缓存优先 —— 离线也能出题、也能显示课文原句
 //  - /api/*：绝不缓存（用户数据隐私 + 时效性）
 // 版本号：每次改动资源结构时 +1 使缓存刷新
-const CACHE = "lexirise-v7";
+//
+// ⚠️ 2026-10-07 补了三个洞（都是为了 10/11 的断网演练与答辩兜底）：
+//   ① 新页面没进预缓存：/forms、/cloze、/plan、/compare、/evidence 都不在 PRECACHE 里，
+//      而导航回退是 `caches.match(req) || caches.match("/")` ——
+//      **断网点「课文挖空」会看到首页**，现场会很难看。
+//   ② 新数据文件根本没被缓存：forms.json / cloze.json / corpus/*.json /
+//      morphology.json 既不在预缓存、也不在 fetch 的缓存优先名单里，
+//      所以离线时题库出不来、词详情页的"课本原句"整块消失。
+//   ③ 带查询串的导航匹配不上：预缓存的是 /cloze，而实际地址是
+//      /cloze?grade=8&semester=1&unit=3 —— 完整 URL 不同，缓存必然 miss。
+//      现在导航回退会**先按路径名（忽略查询串）找一次**。
+//   另外把预缓存从"要么全成、要么全废"的 addAll 换成逐个添加 ——
+//   一个资源 404 不该让整份预缓存作废。
+const CACHE = "lexirise-v8";
 
 /** 本地环境判定：本地一律不工作，并把历史缓存清干净 */
 const IS_LOCAL = (function () {
@@ -78,6 +92,15 @@ if (IS_LOCAL) {
     "/practice",
     "/unit",
     "/unit/words",
+    // 2026-10-07 补：课文考点层与配套页（断网演练要用）
+    "/forms",
+    "/cloze",
+    "/plan",
+    "/compare",
+    "/evidence",
+    "/confusable",
+    "/achievements",
+    "/settings",
     "/words.json",
     "/affixes.json",
     "/manifest.webmanifest",
@@ -87,22 +110,66 @@ if (IS_LOCAL) {
     "/icons/icon-512.png",
   ];
 
+  /**
+   * 需要"缓存优先"的数据文件（离线可用）。
+   * 语料按册分文件（/corpus/7A.json 等），所以用前缀判断而不是精确匹配。
+   * ⚠️ 这些**不进预缓存**：六册语料 gzip 后也有几百 KB，
+   *    装 SW 时全量拉一遍会跟首屏抢带宽。改成"访问过就缓存" ——
+   *    断网演练前本来就要在线点一遍，顺序天然满足。
+   */
+  function isCacheFirstData(path) {
+    return (
+      path === "/words.json" ||
+      path === "/affixes.json" ||
+      path === "/forms.json" ||
+      path === "/cloze.json" ||
+      path === "/morphology.json" ||
+      path === "/sim-report.json" ||
+      path.startsWith("/corpus/")
+    );
+  }
+
   self.addEventListener("install", (e) => {
     e.waitUntil(
       caches
         .open(CACHE)
-        .then((c) => c.addAll(PRECACHE))
+        // ⚠️ 逐个添加，而不是 addAll：addAll 是"要么全成、要么全废"，
+        //    任何一个资源 404 都会让整份预缓存作废（而 catch 把错误吞了，
+        //    表现就是"SW 装上了但什么都没缓存"，离线全白）。
+        .then((c) => Promise.allSettled(PRECACHE.map((u) => c.add(u))))
         .then(() => self.skipWaiting())
-        .catch(() => self.skipWaiting()) // 个别资源失败不阻塞安装
+        .catch(() => self.skipWaiting())
     );
   });
 
+  /**
+   * 激活后主动预热这几个小数据文件（合计 gzip 约 200 KB）。
+   *
+   * 为什么需要：**首次访问的文档不受 SW 控制** —— 浏览器要等 SW 激活、
+   * 下一次导航才把页面交给它。所以"第一次打开就断网"时，
+   * words.json / forms.json / cloze.json 这些还没进缓存，离线就是空的。
+   * 实测（_sw_probe.mjs）：第一轮访问 4 个页面，cache 里只有预缓存；
+   * 第二轮才出现 cloze.json。而"打开看一眼、然后断网演示"是最常见的用法。
+   *
+   * 为什么只热这几个：六册语料（/corpus/*.json）加起来 1 MB 以上，
+   * 每次 SW 版本更新都拉一遍对手机流量不友好 —— 那部分保持"访问过才缓存"。
+   * 放在 activate 之后（而不是 install 的预缓存里），是为了不跟首屏抢带宽。
+   */
+  const WARM = ["/words.json", "/affixes.json", "/forms.json", "/cloze.json", "/morphology.json"];
+
   self.addEventListener("activate", (e) => {
     e.waitUntil(
-      caches
-        .keys()
-        .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
-        .then(() => self.clients.claim())
+      (async () => {
+        const keys = await caches.keys();
+        await Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)));
+        await self.clients.claim();
+        try {
+          const c = await caches.open(CACHE);
+          await Promise.allSettled(WARM.map((u) => c.add(u)));
+        } catch (err) {
+          /* 预热失败不影响任何功能：真访问时照样会走网络 */
+        }
+      })()
     );
   });
 
@@ -127,17 +194,21 @@ if (IS_LOCAL) {
             caches.open(CACHE).then((c) => c.put(req, copy));
             return res;
           })
-          .catch(() => caches.match(req).then((m) => m || caches.match("/")))
+          .catch(() =>
+            caches
+              .match(req)
+              // ⚠️ 完整 URL 匹配不上时，**按路径名再找一次**（忽略查询串）：
+              //    预缓存的是 /cloze，而学生点进来的是
+              //    /cloze?grade=8&semester=1&unit=3 —— 不忽略查询串就会掉回首页。
+              .then((m) => m || caches.match(url.origin + url.pathname))
+              .then((m) => m || caches.match("/"))
+          )
       );
       return;
     }
 
-    // 静态资源 + 词库数据：缓存优先（后台更新）
-    if (
-      path.startsWith("/_next/static/") ||
-      path === "/words.json" ||
-      path === "/affixes.json"
-    ) {
+    // 静态资源 + 词库/语料数据：缓存优先（后台更新）
+    if (path.startsWith("/_next/static/") || isCacheFirstData(path)) {
       e.respondWith(
         caches.match(req).then((hit) => {
           const net = fetch(req)

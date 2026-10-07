@@ -1,49 +1,49 @@
 {
  "meta": {
-  "count": 423,
+  "count": 429,
   "byBook": {
-   "7A": 90,
-   "7B": 98,
-   "8A": 71,
-   "8B": 65,
+   "7A": 94,
+   "7B": 100,
+   "8A": 73,
+   "8B": 64,
    "9A": 40,
-   "9B": 59
+   "9B": 58
   },
-  "oneBlank": 363,
-  "twoBlank": 60,
+  "oneBlank": 367,
+  "twoBlank": 62,
   "dropped": {
-   "词数多于 20（T21 规格）": 152,
-   "词数少于 8（T21 规格）": 63,
-   "不是大写开头": 46,
-   "不是实词（虚词挖掉读不通）": 35,
-   "含分隔符（栏目语）": 34,
-   "省略号（多半是碎片）": 30,
-   "没有虚词（不像句子）": 22,
-   "太短": 18,
+   "词数多于 20（T21 规格）": 122,
+   "词数少于 8（T21 规格）": 67,
+   "不是大写开头": 44,
+   "不是实词（虚词挖掉读不通）": 34,
+   "含分隔符（栏目语）": 30,
+   "没有虚词（不像句子）": 23,
+   "太短": 19,
    "句首粘连了栏目名（页眉/小节名）": 17,
    "自检失败（填空顺序与原句对不上）": 16,
+   "省略号（多半是碎片）": 15,
    "空格在句首": 14,
    "疑似标题与正文粘连": 12,
-   "引号不配对（从对话中间截出）": 10,
    "句中还有句末标点（正文与署名/说明粘连）": 9,
    "含题号碎片（数字 + 大写词）": 9,
-   "含栏目语：read the": 6,
+   "引号不配对（从对话中间截出）": 9,
+   "含栏目语：read the": 7,
+   "含栏目语：in pairs": 5,
    "含栏目语：look at": 5,
    "以指令动词开头（作业要求，不是课文句子）": 4,
-   "含栏目语：in pairs": 4,
-   "含栏目语：discuss": 4,
+   "含栏目语：let's": 4,
    "含栏目语：write a": 4,
    "含栏目语：you will": 4,
    "含栏目语：complete the": 4,
    "可用词都出现多次或缺失": 3,
    "含栏目语：find out": 2,
-   "含栏目语：let's": 2,
    "含栏目语：reading comprehension": 2,
+   "含栏目语：discuss": 2,
    "疑似 PDF 断词（拼起来才是词表里的词）": 2,
    "冠词后跟代词（两栏文字交错）": 2,
-   "含栏目语：according to the": 2,
    "含栏目语：how to": 2,
    "含栏目语：speaking": 2,
+   "含栏目语：in groups": 2,
    "含栏目语：we will": 2,
    "含栏目语：tick": 2,
    "含栏目语：listen to": 2,
@@ -51,7 +51,7 @@
    "含栏目语：circle": 1,
    "含栏目语：work in groups": 1,
    "含栏目语：unit objectives": 1,
-   "含栏目语：in groups": 1,
+   "含栏目语：according to the": 1,
    "含中文": 1,
    "含栏目语：choose": 1,
    "含栏目语：match": 1
@@ -224,25 +224,6 @@
    "full": "The spaceship will leave the Earth at 9:00 a.m."
   },
   {
-   "id": "7A-s137-c1",
-   "book": "7A",
-   "grade": 7,
-   "semester": 1,
-   "unit": "7-1-1",
-   "section": "Focusing on culture",
-   "printPage": 15,
-   "blanks": [
-    {
-     "wid": "22",
-     "answer": "end",
-     "hint": "结局",
-     "pos": "n."
-    }
-   ],
-   "blanked": "How do you understand the sentence \"This felt like the ______ of the world to Wilbur\"? never without friends.",
-   "full": "How do you understand the sentence \"This felt like the end of the world to Wilbur\"? never without friends."
-  },
-  {
    "id": "7A-s138-c1",
    "book": "7A",
    "grade": 7,
@@ -260,6 +241,44 @@
    ],
    "blanked": "He loved her children and grandchildren, but they could never take her place in his ______.",
    "full": "He loved her children and grandchildren, but they could never take her place in his heart."
+  },
+  {
+   "id": "7A-s1214-c1",
+   "book": "7A",
+   "grade": 7,
+   "semester": 1,
+   "unit": "7-1-8",
+   "section": "Reading comprehension",
+   "printPage": 118,
+   "blanks": [
+    {
+     "wid": "288",
+     "answer": "collection",
+     "hint": "（常指同类的）收集物",
+     "pos": "n."
+    }
+   ],
+   "blanked": "His grandpa has hundreds of stamps, and he adds new ones to his ______ every month.",
+   "full": "His grandpa has hundreds of stamps, and he adds new ones to his collection every month."
+  },
+  {
+   "id": "7A-s451-c1",
+   "book": "7A",
+   "grade": 7,
+   "semester": 1,
+   "unit": "7-1-3",
+   "section": "Focusing on culture",
+   "printPage": 46,
+   "blanks": [
+    {
+     "wid": "102",
+     "answer": "follow",
+     "hint": "按……方式发展",
+     "pos": "v."
+    }
+   ],
+   "blanked": "These solar terms ______ the changes of the seasons and the weather.",
+   "full": "These solar terms follow the changes of the seasons and the weather."
   },
   {
    "id": "7A-s278-c1",
@@ -298,25 +317,6 @@
    ],
    "blanked": "The ______ went well, and our classmates really enjoyed it.",
    "full": "The presentation went well, and our classmates really enjoyed it."
-  },
-  {
-   "id": "7A-s451-c1",
-   "book": "7A",
-   "grade": 7,
-   "semester": 1,
-   "unit": "7-1-3",
-   "section": "Focusing on culture",
-   "printPage": 46,
-   "blanks": [
-    {
-     "wid": "102",
-     "answer": "follow",
-     "hint": "按……方式发展",
-     "pos": "v."
-    }
-   ],
-   "blanked": "These solar terms ______ the changes of the seasons and the weather.",
-   "full": "These solar terms follow the changes of the seasons and the weather."
   },
   {
    "id": "7A-s226-c1",
@@ -767,25 +767,6 @@
    "full": "When the forest disappeared, there were terrible sandstorms in the Beijing area."
   },
   {
-   "id": "7A-s612-c1",
-   "book": "7A",
-   "grade": 7,
-   "semester": 1,
-   "unit": "7-1-4",
-   "section": "Focusing on culture",
-   "printPage": 62,
-   "blanks": [
-    {
-     "wid": "126",
-     "answer": "north",
-     "hint": "北；北方",
-     "pos": "n."
-    }
-   ],
-   "blanked": "Think Think Saihanba is a forest park in the ______ of Hebei.",
-   "full": "Think Think Saihanba is a forest park in the north of Hebei."
-  },
-  {
    "id": "7A-s452-c1",
    "book": "7A",
    "grade": 7,
@@ -887,6 +868,44 @@
    "full": "This amazing planet is around 4.5 billion years old."
   },
   {
+   "id": "7A-s532-c1",
+   "book": "7A",
+   "grade": 7,
+   "semester": 1,
+   "unit": "7-1-4",
+   "section": "Reading",
+   "printPage": 53,
+   "blanks": [
+    {
+     "wid": "121",
+     "answer": "planet",
+     "hint": "行星",
+     "pos": "n."
+    }
+   ],
+   "blanked": "From bears to birds, from butterflies to seahorses, animals make our ______ lovely and interesting.",
+   "full": "From bears to birds, from butterflies to seahorses, animals make our planet lovely and interesting."
+  },
+  {
+   "id": "7A-s612-c1",
+   "book": "7A",
+   "grade": 7,
+   "semester": 1,
+   "unit": "7-1-4",
+   "section": "Focusing on culture",
+   "printPage": 62,
+   "blanks": [
+    {
+     "wid": "126",
+     "answer": "north",
+     "hint": "北；北方",
+     "pos": "n."
+    }
+   ],
+   "blanked": "Think Think Saihanba is a forest park in the ______ of Hebei.",
+   "full": "Think Think Saihanba is a forest park in the north of Hebei."
+  },
+  {
    "id": "7A-s773-c2",
    "book": "7A",
    "grade": 7,
@@ -910,6 +929,50 @@
    ],
    "blanked": "I really look forward to travelling into space ______—it will be an amazing ______!",
    "full": "I really look forward to travelling into space someday—it will be an amazing experience!"
+  },
+  {
+   "id": "7A-s611-c1",
+   "book": "7A",
+   "grade": 7,
+   "semester": 1,
+   "unit": "7-1-4",
+   "section": "Focusing on culture",
+   "printPage": 62,
+   "blanks": [
+    {
+     "wid": "141",
+     "answer": "protect",
+     "hint": "保护",
+     "pos": "v."
+    }
+   ],
+   "blanked": "What can we do to ______ the Earth?",
+   "full": "What can we do to protect the Earth?"
+  },
+  {
+   "id": "7A-s569-c2",
+   "book": "7A",
+   "grade": 7,
+   "semester": 1,
+   "unit": "7-1-4",
+   "section": "Vocabulary practice",
+   "printPage": 57,
+   "blanks": [
+    {
+     "wid": "139",
+     "answer": "plastic",
+     "hint": "塑料",
+     "pos": "n."
+    },
+    {
+     "wid": "140",
+     "answer": "pollution",
+     "hint": "污染",
+     "pos": "n."
+    }
+   ],
+   "blanked": "But there is more and more ______ ______ in the sea.",
+   "full": "But there is more and more plastic pollution in the sea."
   },
   {
    "id": "7A-s531-c1",
@@ -1121,7 +1184,7 @@
    "full": "When you breathe, e you hold two or more things together with a rope (or something similar)."
   },
   {
-   "id": "7A-s716-c1",
+   "id": "7A-s716-c2",
    "book": "7A",
    "grade": 7,
    "semester": 1,
@@ -1130,13 +1193,19 @@
    "printPage": 71,
    "blanks": [
     {
+     "wid": "170",
+     "answer": "spacesuit",
+     "hint": "航天服；宇航服",
+     "pos": "n."
+    },
+    {
      "wid": "178",
      "answer": "breathe",
      "hint": "呼吸",
      "pos": "v."
     }
    ],
-   "blanked": "There is no air on the Moon, so I will have to wear a spacesuit to help me ______.",
+   "blanked": "There is no air on the Moon, so I will have to wear a ______ to help me ______.",
    "full": "There is no air on the Moon, so I will have to wear a spacesuit to help me breathe."
   },
   {
@@ -1222,6 +1291,25 @@
    "full": "We need to tie the sleeping bag to the wall so that we won't float away in our sleep!"
   },
   {
+   "id": "7A-s713-c1",
+   "book": "7A",
+   "grade": 7,
+   "semester": 1,
+   "unit": "7-1-5",
+   "section": "Vocabulary practice",
+   "printPage": 71,
+   "blanks": [
+    {
+     "wid": "175",
+     "answer": "tie",
+     "hint": "（用线、绳等）拴",
+     "pos": "v."
+    }
+   ],
+   "blanked": "If you ______ something, d it is not very high.",
+   "full": "If you tie something, d it is not very high."
+  },
+  {
    "id": "7A-s759-c1",
    "book": "7A",
    "grade": 7,
@@ -1260,31 +1348,6 @@
    "full": "If something is low, a it is very heavy."
   },
   {
-   "id": "7A-s961-c2",
-   "book": "7A",
-   "grade": 7,
-   "semester": 1,
-   "unit": "7-1-6",
-   "section": "Focusing on culture",
-   "printPage": 94,
-   "blanks": [
-    {
-     "wid": "230",
-     "answer": "memory",
-     "hint": "回忆；记忆",
-     "pos": "n."
-    },
-    {
-     "wid": "241",
-     "answer": "wife",
-     "hint": "妻子",
-     "pos": "n."
-    }
-   ],
-   "blanked": "Emperor Shah Jahan built it in the 17th century in ______ of his ______.",
-   "full": "Emperor Shah Jahan built it in the 17th century in memory of his wife."
-  },
-  {
    "id": "7A-s793-c1",
    "book": "7A",
    "grade": 7,
@@ -1302,6 +1365,25 @@
    ],
    "blanked": "During the next 100 days, Zhurong drove 1,000 metres on the planet's ______ and continued its travel.",
    "full": "During the next 100 days, Zhurong drove 1,000 metres on the planet's surface and continued its travel."
+  },
+  {
+   "id": "7A-s803-c1",
+   "book": "7A",
+   "grade": 7,
+   "semester": 1,
+   "unit": "7-1-5",
+   "section": "Focusing on culture",
+   "printPage": 79,
+   "blanks": [
+    {
+     "wid": "202",
+     "answer": "surface",
+     "hint": "表面；表层；面",
+     "pos": "n."
+    }
+   ],
+   "blanked": "What did Zhurong do on the ______ of the red planet?",
+   "full": "What did Zhurong do on the surface of the red planet?"
   },
   {
    "id": "7A-s792-c1",
@@ -1460,6 +1542,31 @@
    ],
    "blanked": "There are also many ______ sites, such as the Yuewang Temple.",
    "full": "There are also many historic sites, such as the Yuewang Temple."
+  },
+  {
+   "id": "7A-s961-c2",
+   "book": "7A",
+   "grade": 7,
+   "semester": 1,
+   "unit": "7-1-6",
+   "section": "Focusing on culture",
+   "printPage": 94,
+   "blanks": [
+    {
+     "wid": "230",
+     "answer": "memory",
+     "hint": "回忆；记忆",
+     "pos": "n."
+    },
+    {
+     "wid": "241",
+     "answer": "wife",
+     "hint": "妻子",
+     "pos": "n."
+    }
+   ],
+   "blanked": "Emperor Shah Jahan built it in the 17th century in ______ of his ______.",
+   "full": "Emperor Shah Jahan built it in the 17th century in memory of his wife."
   },
   {
    "id": "7A-s932-c2",
@@ -1656,25 +1763,6 @@
    ],
    "blanked": "I like the egg and ______ race too.",
    "full": "I like the egg and spoon race too."
-  },
-  {
-   "id": "7A-s1136-c1",
-   "book": "7A",
-   "grade": 7,
-   "semester": 1,
-   "unit": "7-1-7",
-   "section": "Focusing on culture",
-   "printPage": 110,
-   "blanks": [
-    {
-     "wid": "273",
-     "answer": "spoon",
-     "hint": "勺；匙",
-     "pos": "n."
-    }
-   ],
-   "blanked": "Luckily the eggs are hard! ______ race too.",
-   "full": "Luckily the eggs are hard! spoon race too."
   },
   {
    "id": "7A-s1127-c1",
@@ -2044,25 +2132,6 @@
    "full": "What does water look like, and what form does it take?"
   },
   {
-   "id": "7B-s109-c1",
-   "book": "7B",
-   "grade": 7,
-   "semester": 2,
-   "unit": "7-2-1",
-   "section": "Writing",
-   "printPage": 12,
-   "blanks": [
-    {
-     "wid": "352",
-     "answer": "topic",
-     "hint": "话题；标题",
-     "pos": "n."
-    }
-   ],
-   "blanked": "The school website is calling for articles on the ______ \"a person I like\".",
-   "full": "The school website is calling for articles on the topic \"a person I like\"."
-  },
-  {
    "id": "7B-s1272-c1",
    "book": "7B",
    "grade": 7,
@@ -2080,6 +2149,25 @@
    ],
    "blanked": "Sadly, fires are quite common at ______ times of the year.",
    "full": "Sadly, fires are quite common at certain times of the year."
+  },
+  {
+   "id": "7B-s109-c1",
+   "book": "7B",
+   "grade": 7,
+   "semester": 2,
+   "unit": "7-2-1",
+   "section": "Writing",
+   "printPage": 12,
+   "blanks": [
+    {
+     "wid": "352",
+     "answer": "topic",
+     "hint": "话题；标题",
+     "pos": "n."
+    }
+   ],
+   "blanked": "The school website is calling for articles on the ______ \"a person I like\".",
+   "full": "The school website is calling for articles on the topic \"a person I like\"."
   },
   {
    "id": "7B-s249-c1",
@@ -2846,25 +2934,6 @@
    "full": "What are some possible reasons for the changes?"
   },
   {
-   "id": "7B-s733-c1",
-   "book": "7B",
-   "grade": 7,
-   "semester": 2,
-   "unit": "7-2-4",
-   "section": "Speaking",
-   "printPage": 60,
-   "blanks": [
-    {
-     "wid": "441",
-     "answer": "dolphin",
-     "hint": "海豚",
-     "pos": "n."
-    }
-   ],
-   "blanked": "As soon as he was safe on the beach, the ______ swam away.",
-   "full": "As soon as he was safe on the beach, the dolphin swam away."
-  },
-  {
    "id": "7B-s565-c1",
    "book": "7B",
    "grade": 7,
@@ -3027,6 +3096,25 @@
    ],
    "blanked": "It was huge and ______, with a large fin.",
    "full": "It was huge and grey, with a large fin."
+  },
+  {
+   "id": "7B-s733-c1",
+   "book": "7B",
+   "grade": 7,
+   "semester": 2,
+   "unit": "7-2-4",
+   "section": "Speaking",
+   "printPage": 60,
+   "blanks": [
+    {
+     "wid": "441",
+     "answer": "dolphin",
+     "hint": "海豚",
+     "pos": "n."
+    }
+   ],
+   "blanked": "As soon as he was safe on the beach, the ______ swam away.",
+   "full": "As soon as he was safe on the beach, the dolphin swam away."
   },
   {
    "id": "7B-s742-c1",
@@ -3294,42 +3382,23 @@
    "full": "It is now our duty to make sure we don't waste water or pollute it."
   },
   {
-   "id": "7B-s1181-c1",
+   "id": "7B-s1006-c1",
    "book": "7B",
    "grade": 7,
    "semester": 2,
-   "unit": "7-2-7",
+   "unit": "7-2-6",
    "section": "Reading",
-   "printPage": 101,
+   "printPage": 85,
    "blanks": [
     {
-     "wid": "554",
-     "answer": "research",
-     "hint": "研究；调查",
+     "wid": "514",
+     "answer": "electricity",
+     "hint": "电；电能",
      "pos": "n."
     }
    ],
-   "blanked": "Thanks to his groundbreaking ______, China became one of the few countries in the world to explore space.",
-   "full": "Thanks to his groundbreaking research, China became one of the few countries in the world to explore space."
-  },
-  {
-   "id": "7B-s1186-c1",
-   "book": "7B",
-   "grade": 7,
-   "semester": 2,
-   "unit": "7-2-7",
-   "section": "Reading",
-   "printPage": 101,
-   "blanks": [
-    {
-     "wid": "554",
-     "answer": "research",
-     "hint": "研究；调查",
-     "pos": "n."
-    }
-   ],
-   "blanked": "Thanks to his groundbreaking ______, China became one of the few countries in the world to explore space.",
-   "full": "Thanks to his groundbreaking research, China became one of the few countries in the world to explore space."
+   "blanked": "We usually watch a movie together on Friday nights, but the TV doesn't work without ______.",
+   "full": "We usually watch a movie together on Friday nights, but the TV doesn't work without electricity."
   },
   {
    "id": "7B-s1002-c1",
@@ -3433,25 +3502,6 @@
    "full": "Qian Xuesen was a pioneer in the development of China's aerospace science and technology."
   },
   {
-   "id": "7B-s1188-c1",
-   "book": "7B",
-   "grade": 7,
-   "semester": 2,
-   "unit": "7-2-7",
-   "section": "Reading",
-   "printPage": 101,
-   "blanks": [
-    {
-     "wid": "547",
-     "answer": "pioneer",
-     "hint": "先锋；先驱",
-     "pos": "n."
-    }
-   ],
-   "blanked": "Can you guess the meaning of ______ (line 1) from the context?",
-   "full": "Can you guess the meaning of pioneer (line 1) from the context?"
-  },
-  {
    "id": "7B-s1178-c2",
    "book": "7B",
    "grade": 7,
@@ -3496,6 +3546,25 @@
    "full": "They use technology, such as satellite images, to find them."
   },
   {
+   "id": "7B-s1188-c1",
+   "book": "7B",
+   "grade": 7,
+   "semester": 2,
+   "unit": "7-2-7",
+   "section": "Reading",
+   "printPage": 101,
+   "blanks": [
+    {
+     "wid": "547",
+     "answer": "pioneer",
+     "hint": "先锋；先驱",
+     "pos": "n."
+    }
+   ],
+   "blanked": "Can you guess the meaning of ______ (line 1) from the context?",
+   "full": "Can you guess the meaning of pioneer (line 1) from the context?"
+  },
+  {
    "id": "7B-s1179-c1",
    "book": "7B",
    "grade": 7,
@@ -3513,6 +3582,44 @@
    ],
    "blanked": "One of Qian's greatest achievements was in the field of aerospace ______.",
    "full": "One of Qian's greatest achievements was in the field of aerospace engineering."
+  },
+  {
+   "id": "7B-s1181-c1",
+   "book": "7B",
+   "grade": 7,
+   "semester": 2,
+   "unit": "7-2-7",
+   "section": "Reading",
+   "printPage": 101,
+   "blanks": [
+    {
+     "wid": "554",
+     "answer": "research",
+     "hint": "研究；调查",
+     "pos": "n."
+    }
+   ],
+   "blanked": "Thanks to his groundbreaking ______, China became one of the few countries in the world to explore space.",
+   "full": "Thanks to his groundbreaking research, China became one of the few countries in the world to explore space."
+  },
+  {
+   "id": "7B-s1186-c1",
+   "book": "7B",
+   "grade": 7,
+   "semester": 2,
+   "unit": "7-2-7",
+   "section": "Reading",
+   "printPage": 101,
+   "blanks": [
+    {
+     "wid": "554",
+     "answer": "research",
+     "hint": "研究；调查",
+     "pos": "n."
+    }
+   ],
+   "blanked": "Thanks to his groundbreaking ______, China became one of the few countries in the world to explore space.",
+   "full": "Thanks to his groundbreaking research, China became one of the few countries in the world to explore space."
   },
   {
    "id": "7B-s1174-c1",
@@ -3806,6 +3913,25 @@
    "full": "During holidays, I usually perform in dance shows."
   },
   {
+   "id": "7B-s1540-c1",
+   "book": "7B",
+   "grade": 7,
+   "semester": 2,
+   "unit": "7-2-8",
+   "section": "Cross-curricular",
+   "printPage": 128,
+   "blanks": [
+    {
+     "wid": "350",
+     "answer": "personality",
+     "hint": "性格；个性",
+     "pos": "n."
+    }
+   ],
+   "blanked": "In one way or another, these questions can teach you a lot about your ______.",
+   "full": "In one way or another, these questions can teach you a lot about your personality."
+  },
+  {
    "id": "8A-s21-c1",
    "book": "8A",
    "grade": 8,
@@ -3920,29 +4046,23 @@
    "full": "You know what to expect in most situations and the host country no longer feels all that new."
   },
   {
-   "id": "8A-s498-c2",
+   "id": "8A-s367-c1",
    "book": "8A",
    "grade": 8,
    "semester": 1,
    "unit": "8-1-3",
-   "section": "Cross-curricular",
-   "printPage": 48,
+   "section": "Reading comprehension",
+   "printPage": 38,
    "blanks": [
     {
-     "wid": "696",
-     "answer": "positive",
-     "hint": "正面的；积极的",
+     "wid": "697",
+     "answer": "negative",
+     "hint": "消极的",
      "pos": "adj."
-    },
-    {
-     "wid": "698",
-     "answer": "effect",
-     "hint": "影响",
-     "pos": "n."
     }
    ],
-   "blanked": "If we communicate in the right way, we can have a ______ ______ on people's lives.",
-   "full": "If we communicate in the right way, we can have a positive effect on people's lives."
+   "blanked": "Do you think the internet has ______ effects on our daily lives?",
+   "full": "Do you think the internet has negative effects on our daily lives?"
   },
   {
    "id": "8A-s436-c2",
@@ -3970,23 +4090,29 @@
    "full": "What are the positive and negative effects of the internet on their lives?"
   },
   {
-   "id": "8A-s367-c1",
+   "id": "8A-s498-c2",
    "book": "8A",
    "grade": 8,
    "semester": 1,
    "unit": "8-1-3",
-   "section": "Reading comprehension",
-   "printPage": 38,
+   "section": "Cross-curricular",
+   "printPage": 48,
    "blanks": [
     {
-     "wid": "697",
-     "answer": "negative",
-     "hint": "消极的",
+     "wid": "696",
+     "answer": "positive",
+     "hint": "正面的；积极的",
      "pos": "adj."
+    },
+    {
+     "wid": "698",
+     "answer": "effect",
+     "hint": "影响",
+     "pos": "n."
     }
    ],
-   "blanked": "Do you think the internet has ______ effects on our daily lives?",
-   "full": "Do you think the internet has negative effects on our daily lives?"
+   "blanked": "If we communicate in the right way, we can have a ______ ______ on people's lives.",
+   "full": "If we communicate in the right way, we can have a positive effect on people's lives."
   },
   {
    "id": "8A-s100-c1",
@@ -4006,6 +4132,25 @@
    ],
    "blanked": "Yuan spent his ______ life developing different kinds of hybrid rice.",
    "full": "Yuan spent his whole life developing different kinds of hybrid rice."
+  },
+  {
+   "id": "8A-s340-c1",
+   "book": "8A",
+   "grade": 8,
+   "semester": 1,
+   "unit": "8-1-3",
+   "section": "First thoughts",
+   "printPage": 37,
+   "blanks": [
+    {
+     "wid": "699",
+     "answer": "opinion",
+     "hint": "意见；看法",
+     "pos": "n."
+    }
+   ],
+   "blanked": "For example, in line 14, Dr Li's ______ is \"one of the most important changes will come in energy use\".",
+   "full": "For example, in line 14, Dr Li's opinion is \"one of the most important changes will come in energy use\"."
   },
   {
    "id": "8A-s137-c1",
@@ -4050,25 +4195,6 @@
    ],
    "blanked": "And then we need to ______ the train or ______ schedule.",
    "full": "And then we need to check the train or flight schedule."
-  },
-  {
-   "id": "8A-s1076-c1",
-   "book": "8A",
-   "grade": 8,
-   "semester": 1,
-   "unit": "8-1-7",
-   "section": "Reading",
-   "printPage": 101,
-   "blanks": [
-    {
-     "wid": "829",
-     "answer": "list",
-     "hint": "清单",
-     "pos": "n."
-    }
-   ],
-   "blanked": "Words like first, second, last but not least, etc. are used to ______ separate ideas of equal importance.",
-   "full": "Words like first, second, last but not least, etc. are used to list separate ideas of equal importance."
   },
   {
    "id": "8A-s486-c1",
@@ -4258,6 +4384,25 @@
    ],
    "blanked": "There will be fewer accidents because cars will drive themselves, and they will share ______ with the smart city ______.",
    "full": "There will be fewer accidents because cars will drive themselves, and they will share data with the smart city network."
+  },
+  {
+   "id": "8A-s332-c1",
+   "book": "8A",
+   "grade": 8,
+   "semester": 1,
+   "unit": "8-1-3",
+   "section": "First thoughts",
+   "printPage": 36,
+   "blanks": [
+    {
+     "wid": "676",
+     "answer": "network",
+     "hint": "网络",
+     "pos": "n."
+    }
+   ],
+   "blanked": "The ______ of interconnected smart devices is called the Internet of Things (IoT ).",
+   "full": "The network of interconnected smart devices is called the Internet of Things (IoT )."
   },
   {
    "id": "8A-s352-c1",
@@ -4700,6 +4845,25 @@
    ],
    "blanked": "People can fly ______ they like and enjoy the view at the same time.",
    "full": "People can fly anywhere they like and enjoy the view at the same time."
+  },
+  {
+   "id": "8A-s676-c1",
+   "book": "8A",
+   "grade": 8,
+   "semester": 1,
+   "unit": "8-1-4",
+   "section": "Cross-curricular",
+   "printPage": 64,
+   "blanks": [
+    {
+     "wid": "626",
+     "answer": "original",
+     "hint": "原来的；起初的",
+     "pos": "adj."
+    }
+   ],
+   "blanked": "Few people know that he simply improved on Thomas Newcomen's ______ design.",
+   "full": "Few people know that he simply improved on Thomas Newcomen's original design."
   },
   {
    "id": "8A-s702-c1",
@@ -5271,6 +5435,25 @@
    "full": "My mother and I will continue to visit Liu Yun in our spare time."
   },
   {
+   "id": "8B-s31-c1",
+   "book": "8B",
+   "grade": 8,
+   "semester": 2,
+   "unit": "8-2-1",
+   "section": "Reading",
+   "printPage": 5,
+   "blanks": [
+    {
+     "wid": "889",
+     "answer": "spirits",
+     "hint": "[pl.] 情绪；心境",
+     "pos": "n."
+    }
+   ],
+   "blanked": "Football is his favourite sport, and he was in low ______ because he could not play it any more.",
+   "full": "Football is his favourite sport, and he was in low spirits because he could not play it any more."
+  },
+  {
    "id": "8B-s16-c2",
    "book": "8B",
    "grade": 8,
@@ -5294,25 +5477,6 @@
    ],
    "blanked": "For example, we organized a painting competition to ______ their ______.",
    "full": "For example, we organized a painting competition to raise their spirits."
-  },
-  {
-   "id": "8B-s31-c1",
-   "book": "8B",
-   "grade": 8,
-   "semester": 2,
-   "unit": "8-2-1",
-   "section": "Reading",
-   "printPage": 5,
-   "blanks": [
-    {
-     "wid": "889",
-     "answer": "spirits",
-     "hint": "[pl.] 情绪；心境",
-     "pos": "n."
-    }
-   ],
-   "blanked": "Football is his favourite sport, and he was in low ______ because he could not play it any more.",
-   "full": "Football is his favourite sport, and he was in low spirits because he could not play it any more."
   },
   {
    "id": "8B-s57-c1",
@@ -5625,25 +5789,6 @@
    "full": "On the river, there is a man sitting alone on a boat."
   },
   {
-   "id": "8B-s211-c1",
-   "book": "8B",
-   "grade": 8,
-   "semester": 2,
-   "unit": "8-2-2",
-   "section": "First thoughts",
-   "printPage": 21,
-   "blanks": [
-    {
-     "wid": "919",
-     "answer": "clap",
-     "hint": "鼓掌；拍手",
-     "pos": "v."
-    }
-   ],
-   "blanked": "We always ______ our hands when we enjoy a play or show. cheering (5) on your face.",
-   "full": "We always clap our hands when we enjoy a play or show. cheering (5) on your face."
-  },
-  {
    "id": "8B-s213-c1",
    "book": "8B",
    "grade": 8,
@@ -5775,6 +5920,25 @@
    ],
    "blanked": "In fact, we use the phrase \"give someone the ______\" to show that someone said yes.",
    "full": "In fact, we use the phrase \"give someone the nod\" to show that someone said yes."
+  },
+  {
+   "id": "8B-s302-c1",
+   "book": "8B",
+   "grade": 8,
+   "semester": 2,
+   "unit": "8-2-2",
+   "section": "Writing",
+   "printPage": 28,
+   "blanks": [
+    {
+     "wid": "929",
+     "answer": "nod",
+     "hint": "点头",
+     "pos": "v."
+    }
+   ],
+   "blanked": "Understanding the different meanings of a simple gesture like a ______ can help us improve our communication.",
+   "full": "Understanding the different meanings of a simple gesture like a nod can help us improve our communication."
   },
   {
    "id": "8B-s314-c1",
@@ -6485,25 +6649,6 @@
    "full": "Dad looked at them as if they were crazy."
   },
   {
-   "id": "8B-s1330-c1",
-   "book": "8B",
-   "grade": 8,
-   "semester": 2,
-   "unit": "8-2-8",
-   "section": "Grammar",
-   "printPage": 122,
-   "blanks": [
-    {
-     "wid": "1109",
-     "answer": "refuse",
-     "hint": "拒绝；回绝",
-     "pos": "v."
-    }
-   ],
-   "blanked": "Why did your father ______ to believe you? d An alien saw us and made a terrible noise.",
-   "full": "Why did your father refuse to believe you? d An alien saw us and made a terrible noise."
-  },
-  {
    "id": "9A-s623-c1",
    "book": "9A",
    "grade": 9,
@@ -6719,25 +6864,6 @@
    "full": "At first, he was very satisfied with it."
   },
   {
-   "id": "9A-s197-c1",
-   "book": "9A",
-   "grade": 9,
-   "semester": 1,
-   "unit": "9-1-2",
-   "section": "Reading comprehension",
-   "printPage": 22,
-   "blanks": [
-    {
-     "wid": "1160",
-     "answer": "prison",
-     "hint": "监狱；牢狱",
-     "pos": "n."
-    }
-   ],
-   "blanked": "Send this crown d to Archimedes. f Send him to ______!",
-   "full": "Send this crown d to Archimedes. f Send him to prison!"
-  },
-  {
    "id": "9A-s337-c1",
    "book": "9A",
    "grade": 9,
@@ -6776,6 +6902,25 @@
    "full": "It was a shame to let go of the fish, but Jim understood what he had to do."
   },
   {
+   "id": "9A-s383-c1",
+   "book": "9A",
+   "grade": 9,
+   "semester": 1,
+   "unit": "9-1-3",
+   "section": "Vocabulary practice",
+   "printPage": 39,
+   "blanks": [
+    {
+     "wid": "1200",
+     "answer": "awful",
+     "hint": "很坏的；极讨厌的",
+     "pos": "adj."
+    }
+   ],
+   "blanked": "But at that moment, I felt really ______.",
+   "full": "But at that moment, I felt really awful."
+  },
+  {
    "id": "9A-s1082-c1",
    "book": "9A",
    "grade": 9,
@@ -6793,31 +6938,6 @@
    ],
    "blanked": "Do you think Jim Smiley would continue to make bets ______?",
    "full": "Do you think Jim Smiley would continue to make bets afterwards?"
-  },
-  {
-   "id": "9A-s819-c2",
-   "book": "9A",
-   "grade": 9,
-   "semester": 1,
-   "unit": "9-1-5",
-   "section": "Focusing on culture",
-   "printPage": 79,
-   "blanks": [
-    {
-     "wid": "1240",
-     "answer": "aim",
-     "hint": "目的；目标",
-     "pos": "n."
-    },
-    {
-     "wid": "1237",
-     "answer": "calm",
-     "hint": "使平静",
-     "pos": "v."
-    }
-   ],
-   "blanked": "Change the form if necessary. ______ board game ______ (1) Kate has an active lifestyle.",
-   "full": "Change the form if necessary. aim board game calm (1) Kate has an active lifestyle."
   },
   {
    "id": "9A-s460-c1",
@@ -6839,7 +6959,7 @@
    "full": "But somehow those three little words Are the hardest ones to share."
   },
   {
-   "id": "9A-s521-c1",
+   "id": "9A-s521-c2",
    "book": "9A",
    "grade": 9,
    "semester": 1,
@@ -6848,13 +6968,19 @@
    "printPage": 53,
    "blanks": [
     {
+     "wid": "1162",
+     "answer": "prove",
+     "hint": "证明；证实",
+     "pos": "v."
+    },
+    {
      "wid": "1202",
      "answer": "affect",
      "hint": "影响",
      "pos": "v."
     }
    ],
-   "blanked": "How can I prove to her that having hobbies won't ______ my schoolworl<?",
+   "blanked": "How can I ______ to her that having hobbies won't ______ my schoolworl<?",
    "full": "How can I prove to her that having hobbies won't affect my schoolworl<?"
   },
   {
@@ -6957,6 +7083,25 @@
    ],
    "blanked": "The ______ hurried down from the control room above.",
    "full": "The director hurried down from the control room above."
+  },
+  {
+   "id": "9A-s715-c1",
+   "book": "9A",
+   "grade": 9,
+   "semester": 1,
+   "unit": "9-1-5",
+   "section": "Reading comprehension",
+   "printPage": 70,
+   "blanks": [
+    {
+     "wid": "1226",
+     "answer": "director",
+     "hint": "（电影、戏剧等的）导演",
+     "pos": "n."
+    }
+   ],
+   "blanked": "The ______ was nervous after one of the contestants passed out.",
+   "full": "The director was nervous after one of the contestants passed out."
   },
   {
    "id": "9A-s703-c1",
@@ -7307,50 +7452,6 @@
    "full": "These voyages allowed China to trade valuable goods like gold, silver and silk."
   },
   {
-   "id": "9B-s319-c2",
-   "book": "9B",
-   "grade": 9,
-   "semester": 2,
-   "unit": "9-2-3",
-   "section": "Project",
-   "printPage": 35,
-   "blanks": [
-    {
-     "wid": "1419",
-     "answer": "result",
-     "hint": "结果",
-     "pos": "n."
-    },
-    {
-     "wid": "1412",
-     "answer": "temperature",
-     "hint": "温度；气温",
-     "pos": "n."
-    }
-   ],
-   "blanked": "As a ______ of the greenhouse effect, the Earth's ______ is increasing.",
-   "full": "As a result of the greenhouse effect, the Earth's temperature is increasing."
-  },
-  {
-   "id": "9B-s324-c1",
-   "book": "9B",
-   "grade": 9,
-   "semester": 2,
-   "unit": "9-2-3",
-   "section": "Project",
-   "printPage": 35,
-   "blanks": [
-    {
-     "wid": "1419",
-     "answer": "result",
-     "hint": "结果",
-     "pos": "n."
-    }
-   ],
-   "blanked": "This can ______ in floods and even more damage to the environment.",
-   "full": "This can result in floods and even more damage to the environment."
-  },
-  {
    "id": "9B-s9-c1",
    "book": "9B",
    "grade": 9,
@@ -7520,6 +7621,50 @@
    ],
    "blanked": "He also wrote about China's ______, with its large cities and systems of communication.",
    "full": "He also wrote about China's development, with its large cities and systems of communication."
+  },
+  {
+   "id": "9B-s319-c2",
+   "book": "9B",
+   "grade": 9,
+   "semester": 2,
+   "unit": "9-2-3",
+   "section": "Project",
+   "printPage": 35,
+   "blanks": [
+    {
+     "wid": "1419",
+     "answer": "result",
+     "hint": "结果",
+     "pos": "n."
+    },
+    {
+     "wid": "1412",
+     "answer": "temperature",
+     "hint": "温度；气温",
+     "pos": "n."
+    }
+   ],
+   "blanked": "As a ______ of the greenhouse effect, the Earth's ______ is increasing.",
+   "full": "As a result of the greenhouse effect, the Earth's temperature is increasing."
+  },
+  {
+   "id": "9B-s324-c1",
+   "book": "9B",
+   "grade": 9,
+   "semester": 2,
+   "unit": "9-2-3",
+   "section": "Project",
+   "printPage": 35,
+   "blanks": [
+    {
+     "wid": "1419",
+     "answer": "result",
+     "hint": "结果",
+     "pos": "n."
+    }
+   ],
+   "blanked": "This can ______ in floods and even more damage to the environment.",
+   "full": "This can result in floods and even more damage to the environment."
   },
   {
    "id": "9B-s332-c1",
@@ -8293,25 +8438,6 @@
    "full": "It was a shame, but we had to leave."
   },
   {
-   "id": "9B-s715-c1",
-   "book": "9B",
-   "grade": 9,
-   "semester": 2,
-   "unit": "9-2-5",
-   "section": "Grammar",
-   "printPage": 75,
-   "blanks": [
-    {
-     "wid": "1495",
-     "answer": "badminton",
-     "hint": "羽毛球运动",
-     "pos": "n."
-    }
-   ],
-   "blanked": "Follow the example. ______ cycling football swimming S1: What sport do you like best?",
-   "full": "Follow the example. badminton cycling football swimming S1: What sport do you like best?"
-  },
-  {
    "id": "9B-s903-c1",
    "book": "9B",
    "grade": 9,
@@ -8329,25 +8455,6 @@
    ],
    "blanked": "A Below are three important parts of a healthy ______.",
    "full": "A Below are three important parts of a healthy lifestyle."
-  },
-  {
-   "id": "9B-s806-c1",
-   "book": "9B",
-   "grade": 9,
-   "semester": 2,
-   "unit": "9-2-6",
-   "section": "Reading",
-   "printPage": 84,
-   "blanks": [
-    {
-     "wid": "1506",
-     "answer": "quarrel",
-     "hint": "争吵",
-     "pos": "n."
-    }
-   ],
-   "blanked": "My best friend and I also just had a ______.",
-   "full": "My best friend and I also just had a quarrel."
   },
   {
    "id": "9B-s879-c1",
@@ -8430,6 +8537,25 @@
    ],
    "blanked": "Seeing a funny film or telling jokes with friends will often ______ you up when you are ______.",
    "full": "Seeing a funny film or telling jokes with friends will often cheer you up when you are low."
+  },
+  {
+   "id": "9B-s806-c1",
+   "book": "9B",
+   "grade": 9,
+   "semester": 2,
+   "unit": "9-2-6",
+   "section": "Reading",
+   "printPage": 84,
+   "blanks": [
+    {
+     "wid": "1506",
+     "answer": "quarrel",
+     "hint": "争吵",
+     "pos": "n."
+    }
+   ],
+   "blanked": "My best friend and I also just had a ______.",
+   "full": "My best friend and I also just had a quarrel."
   },
   {
    "id": "9B-s869-c2",

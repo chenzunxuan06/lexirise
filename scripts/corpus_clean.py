@@ -60,6 +60,14 @@ def repair(s):
             if i + 1 < len(toks):
                 a = toks[i].strip('.,;:!?"()')
                 b = toks[i + 1].strip('.,;:!?"()')
+                # ①b 带连字符的换行断词："dif- ferent" -> "different"
+                #    为什么原来漏了：下一行那条规则要求 a.isalpha()，而 "dif-" 末尾带连字符，
+                #    于是它连判断都没进 —— 实测语料里还留着 "dif ferent" 这种（出现在被引用的原句里）。
+                if a.endswith("-") and a[:-1].isalpha() and b.isalpha() and (a[:-1] + b).lower() in D:
+                    out.append(a[:-1] + b)
+                    fixes.append("断词(连字符) " + a + "+" + b)
+                    i += 2
+                    continue
                 if a.isalpha() and b.isalpha() and a.lower() not in D and (a.lower() + b.lower()) in D:
                     out.append(a + b)
                     fixes.append("断词 " + a + "+" + b)
@@ -76,6 +84,22 @@ def repair(s):
     s = s2
     s = re.sub(r"\s{2,}", " ", s).strip()
     return s, fixes
+
+
+def fragment_mash(s):
+    """这句是不是"把不相干的几段拼成了一句"（词框/表格/题干被 PDF 抽平）。
+
+    判据只有一条：**句末标点后面直接跟小写字母**。
+      "Why or why not? end glad heart rise wake up watch over Your ideas 4 Discuss the question below."
+      "What did Simon do in the art class? diary luckily pack realize success In Australia, students go ..."
+
+    正文里不会出现 ". " 后面接小写（英文句子首字母必大写）。
+    唯一会误伤的是缩写（Mr. / e.g. / etc.）—— 教材正文里极少，实测抽样 12 条全是真拼接。
+
+    为什么单列：quality() 是**排序**用的，它奖励长句，于是这种又长又杂的串反而容易排到前面，
+    被当成"课本原句"显示给学生。实测 4336 条引用里 404 条是这类（9.3%）。
+    """
+    return bool(re.search(r"[.!?]\s+[a-z]", s))
 
 
 def single_letter_break(s):

@@ -14,7 +14,10 @@ build_phrases.py —— 给语料补【短语索引】（第二版：容忍占�
 所以本版：首词允许词形变化（含常见不规则动词），尾词允许复数，be 允许各种形式，
 one's/somebody/... 换成对应的正则。**中间词一律保持精确** —— 放宽只放该放的地方。
 """
-import json, os, re
+import json, os, re, sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from corpus_clean import fragment_mash   # 与 build_corpus 共用同一道闸门（不要另写一份判据）
 
 ROOT = r"E:\初二"
 CORPUS = os.path.join(ROOT, "web", "public", "corpus")
@@ -132,12 +135,22 @@ def main():
             pat = pattern_for(w["word_en"])
             if pat is None:
                 continue
-            found = [i for i, t in enumerate(sents) if pat.search(t)]
+            # ⚠️ 与 build_corpus 用同一道闸门：碎片拼接的句子不能当"课文原句"引用。
+            #    第一版漏了这里 —— 结果 61 条短语引用指向
+            #    "Why or why not? end glad heart rise wake up watch over Your ideas 4 Discuss ..."
+            #    这种词框串（而且它还会被并进 byWordAny，把词条那边也带脏）。
+            found = [i for i, t in enumerate(sents) if pat.search(t) and not fragment_mash(t)]
             if found:
                 by_phrase[str(w["id"])] = found[:3]
                 hit += 1
         c["byPhrase"] = by_phrase
-        anyk = dict(c.get("byWordAny") or {})
+        # ⚠️ 这里是**替换**短语那部分，不是累加。
+        #    第一版写成 anyk = dict(byWordAny); anyk.update(by_phrase) —— 于是
+        #    上一轮合并进去的短语条目永远留在文件里：**改了判据也清不掉旧结果**。
+        #    实测：给短语加上"碎片拼接"闸门后重跑，脏引用一条没少（因为旧的那批还在）。
+        #    正确做法 = 先删掉所有短语 id 的条目（词的条目由 build_corpus 负责，保持不动），再合并本轮结果。
+        phrase_ids = {str(w["id"]) for w in phrases}
+        anyk = {k: v for k, v in (c.get("byWordAny") or {}).items() if k not in phrase_ids}
         anyk.update(by_phrase)
         c["byWordAny"] = anyk
         json.dump(c, open(path, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
