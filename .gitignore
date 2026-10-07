@@ -10,3 +10,7 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 .env.local
+
+# 语料工具链是 Python（scripts/*.py），字节码缓存不要提交
+__pycache__/
+*.pyc

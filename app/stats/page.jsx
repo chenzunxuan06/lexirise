@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { loadWords } from "@/lib/loadWords";
 import { memory, wrongBook, favs, stats, exams } from "@/lib/memory";
 import { game } from "@/lib/game";
+import { todaySummary as focusToday } from "@/lib/focus";
 import PetEmpty from "../components/PetEmpty";
 
 export default function StatsPage() {
@@ -25,6 +26,14 @@ export default function StatsPage() {
   const streak = stats.streakDays();
   const totalDays = stats.totalDays();
   const today = stats.today();
+  // 纸间专注的今日汇总。和其他统计同一批取，口径一致（都用 lib/memory 的日期口径）。
+  const focus = useMemo(() => {
+    try {
+      return focusToday();
+    } catch {
+      return { count: 0, ms: 0, byUse: {} };
+    }
+  }, [tick, mounted]);
   const examList = useMemo(() => exams.list(), [tick]);
   const avgScore = examList.length
     ? Math.round(examList.reduce((s, e) => s + (e.score || 0), 0) / examList.length)
@@ -336,6 +345,35 @@ export default function StatsPage() {
             </div>
           ))}
         </div>
+      </section>
+
+      {/* 纸间专注（2026-10-05）——
+          它记的是屏幕外的事：背单词、背课文、写试卷、看纸质书。
+          注意：这是学生自己申报的时长，不是测量出来的数据，所以这里只说
+          「你今天做了什么」，不做任何「专注度 / 完成率」的判词 ——
+          那会变成监督，而监督是明确砍掉的。 */}
+      <section className="home-section">
+        <div className="section-row">
+          <h2 className="section-h">纸间专注</h2>
+          <span className="section-sub">在屏幕外做的事</span>
+        </div>
+        {focus.count > 0 ? (
+          <div className="stats">
+            {Object.keys(focus.byUse).map((k) => (
+              <span className="stat" key={k}>
+                {k} <b>{focus.byUse[k].count}</b>
+              </span>
+            ))}
+            <span className="stat">
+              今天共 <b>{Math.round(focus.ms / 60000)}</b> 分钟
+            </span>
+          </div>
+        ) : (
+          <p className="share-tip">
+            今天还没去过纸间。背书、写试卷的时候点顶栏的「专注」，
+            屏幕上只剩时间，我帮你把这一段记下来。
+          </p>
+        )}
       </section>
 
       {data && data.meta && (

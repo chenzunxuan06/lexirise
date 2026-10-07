@@ -430,9 +430,26 @@ body:has(.demo-page) .app-main { padding: 0; max-width: none; }
   .bs-wr-df { font-size: 12px; }
 }
 
-/* ----------  ResolvePanel?6?---------- */
+
+/* 右栏的纸间记录（2026-10-05）：有记录才出现，安静的一小块 */
+.bs-focus {
+  margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--edge, #cfc7b4);
+}
+.bs-focus-h { font-size: 12px; font-weight: 900; color: var(--faint, #736b5b); letter-spacing: 0.4px; margin-bottom: 6px; }
+.bs-focus-r { display: flex; justify-content: space-between; font-size: 13px; color: var(--soft, #6b6453); padding: 2px 0; }
+.bs-focus-r b { color: var(--ink, #2a2519); }
+.bs-focus-f { display: flex; justify-content: space-between; align-items: baseline; font-size: 12px; color: var(--faint, #736b5b); margin-top: 6px; }
+.bs-focus-f button { font: inherit; font-size: 12px; font-weight: 900; cursor: pointer; background: none; border: none; color: var(--fox-ink, #9e551f); padding: 0; }
+
+/* ----------  ResolvePanel 结算面板 ---------- */
 .bs-resolve { }
 .bs-resolve .bs-stbar + * { margin-top: 12px; }
+/* 收工那一声（lib/praise.js 出文案）。安静、居中、不抢印章的位置。 */
+.bs-praise { text-align: center; margin: 14px 0 2px; }
+.bs-praise-hello {
+  font-size: 16px; font-weight: 900; color: var(--ink, #2a2519); letter-spacing: 0.2px;
+}
+.bs-praise-fact { font-size: 13px; color: var(--soft, #6b6453); margin-top: 5px; }
 .bs-kpis {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 4px 0 2px;
 }

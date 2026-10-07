@@ -8,6 +8,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { loadWords } from "@/lib/loadWords";
+import { useQuestionTimer } from "@/lib/timing";
 import { speak } from "@/lib/tts";
 import { memory, stats, plan } from "@/lib/memory";
 import { game } from "@/lib/game";
@@ -38,6 +39,7 @@ export default function Onboarding() {
   const [petName, setPetName] = useState("跃跃");
   const [quiz, setQuiz] = useState([]); // [{word, options, answer}]
   const [qi, setQi] = useState(0);
+  const elapsedMs = useQuestionTimer(qi);
   const [picked, setPicked] = useState(null);
   const [okCount, setOkCount] = useState(0);
   const [combo, setCombo] = useState(0);
@@ -118,7 +120,7 @@ export default function Onboarding() {
     const q = quiz[qi];
     const ok = opt === q.answer;
     const prev = memory.get(q.word.id);
-    memory.record(q.word.id, ok, !prev || prev.lv === 0);
+    memory.record(q.word.id, ok, !prev || prev.lv === 0, { mode: "onboarding", elapsed: elapsedMs() });
     stats.add({ n: !prev || prev.lv === 0 ? 1 : 0, review: 0, correct: ok ? 1 : 0, total: 1 });
     if (ok) { setOkCount((c) => c + 1); setCombo((c) => c + 1); }
     else setCombo(0);

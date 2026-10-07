@@ -17,6 +17,8 @@ import { memory, plan, stats, wrongBook, onChange } from "@/lib/memory";
 import { todaySummary } from "@/lib/progress";
 import { game, onGameChange, petInfo, petStageName } from "@/lib/game";
 import { readSettings, onSettingsChange } from "@/lib/settings";
+import { openFocus } from "@/lib/focus-ui";
+import { todaySummary as focusToday } from "@/lib/focus";
 import PetImage from "./PetImage";
 
 /* 当前册上下文：目录页(左栏) ↔ 首页目录(中间栏) 同步 */
@@ -175,6 +177,16 @@ export function TodayBar() {
 
   const words = cats ? cats.words : [];
   const sum = useMemo(() => (words.length ? todaySummary(words) : null), [words, tick]);
+  // 纸间专注：今天在屏幕外做了什么。
+  // 放右栏而不是今日页，是因为书壳模式下今日页是「目录」，插块会破坏书的感觉；
+  // 而右栏每一页都在 —— 关掉覆盖层立刻就能看到，用户 2026-10-05 反馈的就是这一点。
+  const focus = useMemo(() => {
+    try {
+      return focusToday();
+    } catch {
+      return { count: 0, ms: 0, byUse: {} };
+    }
+  }, [tick]);
   const goal = plan.load().dailyNew || 10;
   const todayN = stats.today().n;
   const pct = goal ? Math.round((todayN / goal) * 100) : 0;
@@ -240,6 +252,22 @@ export function TodayBar() {
           {sub || (rev && rev.dueAll > 0 ? "有到期复习，先清掉它们最划算。" : "今天没有到期的，学点新的吧。")}
         </div>
       </div>
+      {/* 纸间专注：有记录才出现（克制）；点一下能直接再去坐一会儿 */}
+      {focus.count > 0 && (
+        <div className="bs-focus">
+          <div className="bs-focus-h">纸间 · 今天</div>
+          {Object.keys(focus.byUse).map((k) => (
+            <div className="bs-focus-r" key={k}>
+              <span>{k}</span>
+              <b>{focus.byUse[k].count} 次</b>
+            </div>
+          ))}
+          <div className="bs-focus-f">
+            共 {Math.round(focus.ms / 60000)} 分钟
+            <button type="button" onClick={openFocus}>再去 ›</button>
+          </div>
+        </div>
+      )}
       <div className="bs-side-foot">
         Lv.{g.level} {g.title}
       </div>
@@ -290,6 +318,11 @@ export default function BookShell({ children, currentBook, onPickBook, catalog }
           <Link href="/settings" className={"bs-tab bs-gear" + (isActive("/settings") ? " on" : "")} aria-label="设置">
             ⚙
           </Link>
+          {/* 纸间专注：全局可用，任何页面都能唤起。
+              它不是路由，是一层全屏覆盖层（见 app/components/FocusLayer.jsx）。 */}
+          <button type="button" className="bs-tab bs-focus-tab" onClick={openFocus} title="纸间专注 —— 去背书、写试卷，我帮你记着">
+            专注
+          </button>
         </nav>
         <span className="bs-head-meta">
           {new Date().getMonth() + 1}月{new Date().getDate()}日

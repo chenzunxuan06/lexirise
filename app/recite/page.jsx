@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { loadWords } from "@/lib/loadWords";
 import { speak, speakSlow, unlockAudio } from "@/lib/tts";
 import { memory, wrongBook, stats } from "@/lib/memory";
+import { useQuestionTimer } from "@/lib/timing";
 import ExampleBlock from "../components/ExampleBlock";
 import GameBar from "../components/GameBar";
 import ChapterHead from "../components/ChapterHead";
@@ -129,6 +130,7 @@ function ReciteInner() {
   }, [data, paramsKey]);
 
   const cur = deck[idx];
+  const elapsedMs = useQuestionTimer(idx);
 
   // 自动朗读
   useEffect(() => {
@@ -143,7 +145,7 @@ function ReciteInner() {
     const w = cur;
     const prev = memory.get(w.id);
     const isNew = !prev || prev.lv === 0;
-    memory.record(w.id, ok, isNew);
+    memory.record(w.id, ok, isNew, { mode: "recite", elapsed: elapsedMs(), rating: ok ? 1 : 0 });
     if (!ok) {
       wrongBook.add(w.id);
       setWrongList((l) => [...l, w]);

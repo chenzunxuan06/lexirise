@@ -80,6 +80,23 @@ export default function BookToc() {
         onGo={() => router.push("/train?mode=daily")}
       />
 
+      {/* 用所给词的适当形式填空（T20）—— 学校考得最多的题型，词跃此前完全空白。
+          放这里而不是顶栏：它不是每天必做的那件事（那是 StBar 的位置），
+          而是一个「想练词形变化时找得到」的入口。 */}
+      {/* 带上当前册的参数：这样题库页顶部会直接列出本册各单元供切换，
+          而不是只能"六册混着抽"。单元级入口在单元页（见 app/unit/page.jsx）。 */}
+      <Link href={`/forms?grade=${book.g}&semester=${book.s}`} className="bs-forms-entry">
+        <b>✏️ 用所给词的适当形式填空</b>
+        <span>课文原句挖空 · 答案就是课文里的那个形式</span>
+      </Link>
+
+      {/* 课文挖空（T21）—— 与上面那条互补：那条挖**变形**，这条挖**原形**。
+          两套题取的是同一份语料索引里互补的两半（asked=true / asked=false）。 */}
+      <Link href={`/cloze?grade=${book.g}&semester=${book.s}`} className="bs-forms-entry">
+        <b>📖 课文挖空</b>
+        <span>给中文意思，填课文里的那个词</span>
+      </Link>
+
       {/* 当前册标题 */}
       <div className="bs-ct">
         <em>CONTENTS</em>

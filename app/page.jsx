@@ -6,6 +6,8 @@ import { loadWords, wordOfTheDay } from "@/lib/loadWords";
 import { speak } from "@/lib/tts";
 import { memory, wrongBook, stats, plan, onChange } from "@/lib/memory";
 import { todaySummary } from "@/lib/progress";
+import { todaySummary as focusToday } from "@/lib/focus";
+import { openFocus } from "@/lib/focus-ui";
 import { game, onGameChange, petStageName } from "@/lib/game";
 import { track } from "@/lib/analytics";
 import PetImage from "./components/PetImage";
@@ -122,6 +124,17 @@ export default function HomePage() {
 
   const hour = new Date().getHours();
   const greet = hour < 6 ? "夜深了" : hour < 12 ? "早上好" : hour < 18 ? "下午好" : "晚上好";
+
+  // 纸间专注：今天在屏幕外做了什么（背单词/背课文/写试卷/看纸质书）。
+  // 为什么放今日页：用户 2026-10-05 反馈 —— 「收好了」之后那一屏就没了，
+  // 记录没有一个找得到的地方。统计页里有，但那是深处；今日页才是每天都会看的。
+  const focus = useMemo(() => {
+    try {
+      return focusToday();
+    } catch {
+      return { count: 0, ms: 0, byUse: {} };
+    }
+  }, [tick]);
 
   // 今日三件事完成状态
   const taskReviewDone = due === 0 && (today.review > 0 || learned > 0);
@@ -355,6 +368,40 @@ export default function HomePage() {
           <div className="st">{taskNewDone ? <span className="ck">✓</span> : <span className="cnt">{Math.max(0, goal - today.n)}</span>}</div>
         </Link>
       </section>
+
+      {/* ===== 纸间专注（有记录才出现，没记录不占地方）===== */}
+      {focus.count > 0 && (
+        <section className="hm-todo">
+          <div className="tt">
+            <span>纸间专注</span>
+            <div className="tt-prog">
+              <span>共 {Math.round(focus.ms / 60000)} 分钟</span>
+            </div>
+          </div>
+          {Object.keys(focus.byUse).map((k) => (
+            <div className="row" key={k}>
+              <div className="ic" style={{ background: "#f2ece0" }}>⏳</div>
+              <div className="m">
+                {k}
+                <small>在屏幕外做的</small>
+              </div>
+              <div className="st">
+                <span className="cnt">{focus.byUse[k].count}</span>
+              </div>
+            </div>
+          ))}
+          <div className="row">
+            <div className="ic" style={{ background: "#f2ece0" }}>▶</div>
+            <div className="m">
+              再去坐一会儿
+              <small>背书、写试卷时点这里，屏幕上只剩时间</small>
+            </div>
+            <div className="st">
+              <button type="button" className="cc-btn" onClick={openFocus}>去 →</button>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ===== 开宝箱 ===== */}
       {chestOk && (

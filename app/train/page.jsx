@@ -4,8 +4,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { loadWords } from "@/lib/loadWords";
 import { speak, speakSlow, speakZh, stopSpeak, unlockAudio } from "@/lib/tts";
 import { memory, wrongBook, favs, stats, plan, exams } from "@/lib/memory";
+import { useQuestionTimer } from "@/lib/timing";
 import { game } from "@/lib/game";
-import { composeDailyDeck, todaySummary, readReviewCap, saveReviewCap, REVIEW_CAP_CHOICES, DEFAULT_REVIEW_CAP } from "@/lib/progress";
+import { composeDailyDeck, todaySummary, readReviewCap, saveReviewCap, REVIEW_CAP_CHOICES, DEFAULT_REVIEW_CAP, anyBookDone } from "@/lib/progress";
 import { sync } from "@/lib/sync";
 import { sound } from "@/lib/sound";
 import { track } from "@/lib/analytics";
@@ -324,6 +325,8 @@ export default function TrainPage() {
 
   // 听写/听力模式：进入每题自动朗读
   const cur = deck[idx];
+  // 反应时：从这道题出现在屏幕上开始算（支撑线 1 的核心输入，见 lib/timing.js）
+  const elapsedMs = useQuestionTimer(idx);
   useEffect(() => {
     if (phase === "running" && cur) {
       if (mode === "listening") {
@@ -350,6 +353,7 @@ export default function TrainPage() {
       streak: stats.streakDays(),
       examBest,
       totalWords: data.words.length,
+      bookDone: anyBookDone(data.words),   // 「一册全通」：任一册整册学完
     });
   }, [phase, data]);
 
@@ -491,7 +495,7 @@ export default function TrainPage() {
     const w = deck[idx].word;
     const prev = memory.get(w.id);
     const isNew = !prev || prev.lv === 0;
-    memory.record(w.id, ok, isNew);
+    memory.record(w.id, ok, isNew, { mode: "train", elapsed: elapsedMs() });
     if (!ok) {
       wrongBook.add(w.id);
       setCombo(0);

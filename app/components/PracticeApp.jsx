@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { speak } from "@/lib/tts";
 import { memory, wrongBook, stats } from "@/lib/memory";
+import { useQuestionTimer } from "@/lib/timing";
 import { game } from "@/lib/game";
 import { sound } from "@/lib/sound";
 
@@ -122,6 +123,7 @@ export default function PracticeApp() {
   }
 
   const cur = questions[idx];
+  const elapsedMs = useQuestionTimer(idx);
   const isFill = cur && cur.type === "fill";
   const isFillIn = cur && cur.type === "fill-in";
   const isRecall = cur && cur.type === "recall";
@@ -132,7 +134,7 @@ export default function PracticeApp() {
     if (!q || !q.wordId) return;
     const prev = memory.get(q.wordId);
     const isNew = !prev || prev.lv === 0;
-    memory.record(q.wordId, ok, isNew);
+    memory.record(q.wordId, ok, isNew, { mode: "practice", elapsed: elapsedMs() });
     if (!ok) {
       wrongBook.add(q.wordId);
       setCombo(0);

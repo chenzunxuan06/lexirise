@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { loadWords } from "@/lib/loadWords";
 import { speak } from "@/lib/tts";
 import { memory, wrongBook, favs, stats } from "@/lib/memory";
+import { useQuestionTimer } from "@/lib/timing";
 import { dueDeck } from "@/lib/progress";
 import { game } from "@/lib/game";
 import { sound } from "@/lib/sound";
@@ -14,6 +15,7 @@ import PetEmpty from "../components/PetEmpty";
 import ExampleBlock from "../components/ExampleBlock";
 import AiExplainCard from "../components/AiExplain";
 import ResolvePanel from "../components/ResolvePanel";
+import { unitKeyOf } from "@/lib/units";
 
 // B4：`DAILY_NEW` 与本地 `shuffle` 已删除 ——
 // 复习页不再"顺带学新词"，甲板统一由 lib/progress.js 的 dueDeck() 提供。
@@ -113,13 +115,17 @@ export default function ReviewPage() {
   }
 
   const cur = practicing[idx];
+  const elapsedMs = useQuestionTimer(idx);
 
   function answer(ok) {
     if (!cur) return;
     const w = cur.word;
     const prev = memory.get(w.id);
     const isNew = !prev || prev.lv === 0;
-    memory.record(w.id, ok, isNew);
+    // review 是**自评**模式：ok 是我们喂给调度器的结论，rating 是他自己说的那句。
+    // 两者在这一行里数值相同，但要分开记 —— 支撑线 1 要比对的是
+    // 「他这次说自己认识」和「这个词之后在客观题里到底对不对」。
+    memory.record(w.id, ok, isNew, { mode: "review", elapsed: elapsedMs(), rating: ok ? 1 : 0 });
     if (!ok) wrongBook.add(w.id);
     // 奖励闭环（与训练页一致）：答对结算 / 连对 combo / 错词消灭
     if (ok) {
@@ -174,7 +180,7 @@ export default function ReviewPage() {
     const shown = filteredReview.slice(0, showAll ? filteredReview.length : 24);
     const map = new Map();
     shown.forEach((w) => {
-      const k = `${w.grade}-${w.semester}-${w.unit}`;
+      const k = unitKeyOf(w);
       if (!map.has(k)) map.set(k, { key: k, grade: w.grade, semester: w.semester, unit: w.unit, words: [] });
       map.get(k).words.push(w);
     });

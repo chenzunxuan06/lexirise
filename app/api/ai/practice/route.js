@@ -6,6 +6,7 @@
 // 输出: { questions: [{wordId, word, definition_zh, type, q, q_zh, options?, answer, explain}] }
 // 缓存: 按 用户+日期+版本（auto）/ 用户+单元+日期+版本（unit）
 import { NextResponse } from "next/server";
+import { unitKey } from "@/lib/units";
 import { getUserFromRequest } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { aiConfigured, chatRobust } from "@/lib/ai";
@@ -135,7 +136,7 @@ export async function POST(req) {
   const uid = user ? user.id : 0;
   const today = new Date().toISOString().slice(0, 10);
   const cacheKey = useUnit
-    ? `practice:${uid}:unit:${grade}-${semester}-${unit}:${CACHE_VER}:${today}`
+    ? `practice:${uid}:unit:${unitKey(grade, semester, unit)}:${CACHE_VER}:${today}`
     : `practice:${uid}:${mode}:${grade || "x"}:${CACHE_VER}:${today}`;
   const cached = await aiCacheGet(cacheKey);
   if (cached) {

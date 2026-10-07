@@ -588,6 +588,45 @@ a { color: inherit; text-decoration: none; }
   padding: 3px 10px;
   margin-top: 12px;
 }
+/* ---- 课本原句（T18）----
+   和 .example 用同一套排版语言，只用左侧一道竖条区分主次：
+   课本原句是主，抓来的例句是兜底。不用色块、不加图标，守展示纪律的克制原则。 */
+.tb-ex {
+  margin-top: 20px;
+  background: var(--surface-2);
+  border-left: 3px solid var(--primary);
+  border-radius: 14px;
+  padding: 14px 18px;
+}
+.tb-ex .label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  letter-spacing: 0.4px;
+}
+.tb-ex .en {
+  font-size: 16px;
+  color: var(--text);
+  margin: 6px 0 0;
+  line-height: 1.5;
+}
+.tb-ex .src {
+  font-size: 12.5px;
+  color: var(--text-soft);
+  margin: 5px 0 0;
+}
+.tb-ex .tbi + .tbi {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border);
+}
+.tb-ex.compact {
+  margin-top: 12px;
+  padding: 10px 14px;
+}
+.tb-ex.compact .en { font-size: 14px; margin-top: 4px; }
+.tb-ex.compact .src { font-size: 12px; margin-top: 3px; }
+
 .example .label-row {
   display: flex;
   align-items: center;
@@ -4140,3 +4179,161 @@ body {
 }
 .rg-group-h span { color: #6b6453; font-size: 12px; }
 .rg-group-list { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 6px; }
+
+
+/* ----------------------------------------------------------------
+   「用所给词的适当形式填空」/forms（T20）
+   字号底线 12px；出处必须显示（和 T18 同理：每句话都要能翻书核实）
+   ---------------------------------------------------------------- */
+.fm-wrap { max-width: 720px; margin: 0 auto; padding: 28px 20px 60px; }
+.fm-head { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; color: var(--text-soft, #6b6453); }
+.fm-src { font-size: 12.5px; }
+.fm-body { margin-top: 18px; background: var(--surface, #fffdf6); border: 1px solid var(--border, #e2dccb); border-radius: var(--radius, 14px); padding: 22px 20px; box-shadow: var(--shadow, 0 2px 10px rgba(0,0,0,.04)); }
+.fm-sent { font-family: Georgia, serif; font-size: 19px; line-height: 1.85; color: var(--text, #26221d); margin: 0; }
+.fm-blank { display: inline-block; min-width: 88px; padding: 0 6px; border-bottom: 2px solid var(--primary, #c8763a); text-align: center; font-weight: 900; }
+.fm-blank.ok { color: #2f7d4f; border-bottom-color: #2f7d4f; }
+.fm-blank.no { color: #c0392b; border-bottom-color: #c0392b; }
+.fm-hint { margin-top: 16px; font-size: 14px; color: var(--text-soft, #6b6453); }
+.fm-hint b { font-family: Georgia, serif; font-size: 16px; color: var(--text, #26221d); }
+.fm-answer { display: flex; gap: 10px; margin-top: 14px; }
+.fm-input { flex: 1; font: inherit; font-family: Georgia, serif; font-size: 18px; padding: 12px 14px; border: 1.5px solid var(--border, #e2dccb); border-radius: 10px; background: #fff; color: var(--text, #26221d); }
+.fm-input.ok { border-color: #2f7d4f; }
+.fm-input.no { border-color: #c0392b; }
+.fm-btn { font: inherit; font-size: 14px; font-weight: 900; cursor: pointer; border: none; border-radius: 10px; padding: 0 22px; background: var(--surface-2, #f1ece0); color: var(--text-soft, #6b6453); }
+.fm-btn.primary { background: var(--text, #26221d); color: #f7f3e8; }
+.fm-btn:disabled { opacity: .45; cursor: default; }
+.fm-fb { margin-top: 18px; padding-top: 14px; border-top: 1px dashed var(--border, #e2dccb); }
+.fm-fb-t { font-size: 15px; font-weight: 900; }
+.fm-fb.ok .fm-fb-t { color: #2f7d4f; }
+.fm-fb.no .fm-fb-t { color: #c0392b; }
+.fm-fb-s { font-family: Georgia, serif; font-size: 16px; line-height: 1.7; color: var(--text, #26221d); margin-top: 8px; }
+.fm-fb-src { font-family: inherit; font-size: 12.5px; color: var(--text-soft, #6b6453); margin-top: 4px; }
+.fm-foot { display: flex; justify-content: space-between; align-items: baseline; margin-top: 18px; font-size: 12.5px; color: var(--text-soft, #6b6453); }
+.fm-foot a { color: var(--primary, #c8763a); }
+
+/* 出题范围条（2026-10-07）—— /cloze 与 /forms 共用。
+   学生要练的是"这周听写那个单元"，不是六册混在一起的随机题。
+   单元后的小数字是该范围里这个单元有几道（来自题库本身）。 */
+.fm-scope { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; font-size: 12.5px; }
+.fm-scope-tag { flex: 0 0 auto; padding: 4px 11px; border-radius: 999px; background: var(--text, #26221d); color: #f7f3e8; font-weight: 900; }
+.fm-scope-units { display: flex; flex-wrap: wrap; gap: 6px; }
+.fm-chip { display: inline-flex; align-items: baseline; gap: 4px; padding: 4px 10px; border: 1px solid var(--border, #e2dccb); border-radius: 999px; color: var(--text-soft, #6b6453); text-decoration: none; background: var(--surface, #fffdf6); }
+.fm-chip i { font-style: normal; font-size: 11px; opacity: .7; }
+.fm-chip.on { border-color: var(--primary, #c8763a); color: var(--primary, #c8763a); font-weight: 900; }
+.fm-scope-x { margin-left: auto; color: var(--primary, #c8763a); text-decoration: none; }
+
+/* ================================================================
+   课文挖空 /cloze（T21）—— 与 /forms 共用上面的 fm-* 视觉，
+   只补"多空"需要的三行。答案只认课文里的那个词。
+   ================================================================ */
+.cl-rows { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+.cl-row { display: flex; align-items: center; gap: 12px; }
+.cl-no { flex: 0 0 26px; text-align: center; font-size: 20px; color: var(--text-soft, #6b6453); }
+.cl-no.ok { color: #2f7d4f; }
+.cl-no.no { color: #c0392b; }
+.cl-hint { flex: 0 0 34%; font-size: 14px; color: var(--text-soft, #6b6453); }
+.cl-input { flex: 1; }
+
+/* 目录页上的入口（安静的一行，不抢「今日三件事」的位置） */
+.bs-forms-entry { display: flex; align-items: baseline; gap: 8px; margin: 10px 0 2px; padding: 10px 12px; border: 1px dashed var(--edge, #cfc7b4); border-radius: 8px; text-decoration: none; }
+.bs-forms-entry b { font-size: 13px; font-weight: 900; color: var(--ink, #2a2519); }
+.bs-forms-entry span { font-size: 12px; color: var(--soft, #6b6453); }
+
+/* ================================================================
+   纸间专注（全屏覆盖层）—— 2026-10-05
+   方向见 挑战杯-2026/词跃-纸间专注v3-方向-2026-10-05.md
+   纸色为底、内敛；屏幕上只有时间。字号底线 12px，对比度 AA。
+   ================================================================ */
+.focus-layer {
+  position: fixed; inset: 0; z-index: 200;
+  background: var(--paper, #f7f3e8);
+  color: var(--ink, #26221d);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px; overflow: auto;
+}
+
+/* ---- ① 选用途 + 计时方式 ---- */
+.focus-pick { width: min(720px, 100%); }
+.focus-head { margin-bottom: 18px; }
+.focus-head b { display: block; font-size: 22px; font-weight: 900; color: var(--ink, #26221d); }
+.focus-head span { display: block; font-size: 14px; color: var(--soft, #6b6453); margin-top: 4px; }
+.focus-sec {
+  font-size: 12px; font-weight: 900; color: var(--faint, #736b5b);
+  letter-spacing: 0.6px; margin: 18px 0 8px;
+}
+.focus-uses { display: grid; grid-template-columns: repeat(auto-fit, minmax(126px, 1fr)); gap: 10px; }
+.focus-use {
+  display: flex; flex-direction: column; gap: 3px; align-items: flex-start;
+  background: var(--surface, #fffdf6); border: 1.5px solid var(--edge, #cfc7b4);
+  border-radius: 8px; padding: 12px 14px; cursor: pointer; font: inherit; text-align: left;
+}
+.focus-use b { font-size: 15px; font-weight: 900; color: var(--ink, #26221d); }
+.focus-use span { font-size: 12px; color: var(--soft, #6b6453); }
+.focus-use.on { border-color: var(--fox, #c8763a); background: #fdf3e6; }
+.focus-use.on b { color: var(--fox-ink, #9e551f); }
+
+.focus-other { margin-top: 10px; }
+.focus-other input {
+  width: 100%; font: inherit; font-size: 14px; padding: 10px 12px;
+  border: 1.5px solid var(--edge, #cfc7b4); border-radius: 8px;
+  background: var(--surface, #fffdf6); color: var(--ink, #26221d);
+}
+.focus-other-hints { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+
+.focus-modes { display: flex; gap: 10px; flex-wrap: wrap; }
+.focus-mode {
+  font: inherit; font-size: 14px; font-weight: 900; cursor: pointer;
+  background: var(--surface, #fffdf6); border: 1.5px solid var(--edge, #cfc7b4);
+  border-radius: 999px; padding: 8px 20px; color: var(--soft, #6b6453);
+}
+.focus-mode.on { background: var(--ink, #26221d); border-color: var(--ink, #26221d); color: var(--paper, #f7f3e8); }
+.focus-mode-hint { font-size: 13px; color: var(--soft, #6b6453); margin-top: 8px; }
+
+.focus-plan { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
+.focus-plan-label { font-size: 13px; color: var(--soft, #6b6453); }
+.focus-plan input {
+  font: inherit; font-size: 14px; width: 96px; padding: 8px 10px;
+  border: 1.5px solid var(--edge, #cfc7b4); border-radius: 8px;
+  background: var(--surface, #fffdf6); color: var(--ink, #26221d);
+}
+.focus-chip {
+  font: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
+  background: var(--surface, #fffdf6); border: 1px solid var(--edge, #cfc7b4);
+  border-radius: 999px; padding: 6px 14px; color: var(--soft, #6b6453);
+}
+.focus-chip.on { border-color: var(--fox, #c8763a); color: var(--fox-ink, #9e551f); background: #fdf3e6; }
+
+.focus-today { font-size: 13px; color: var(--soft, #6b6453); margin-top: 16px; }
+.focus-acts { display: flex; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
+.focus-acts button {
+  font: inherit; font-size: 14px; font-weight: 900; cursor: pointer;
+  border-radius: 8px; padding: 12px 28px; border: 1.5px solid var(--edge, #cfc7b4);
+  background: var(--surface, #fffdf6); color: var(--soft, #6b6453);
+}
+.focus-acts .focus-start,
+.focus-acts .focus-finish { background: var(--ink, #26221d); border-color: var(--ink, #26221d); color: var(--paper, #f7f3e8); }
+
+/* ---- ② 计时中：一屏一件大事，屏幕上只有时间 ---- */
+.focus-run { text-align: center; width: 100%; }
+.focus-date { font-size: 14px; color: var(--soft, #6b6453); letter-spacing: 0.4px; }
+.focus-clock {
+  font-size: clamp(56px, 13vw, 148px); font-weight: 900; line-height: 1.05;
+  letter-spacing: 0.01em; margin: 10px 0 6px;
+  /* 秒在跳，不用等宽数字的话整行会左右抖 */
+  font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1;
+}
+.focus-sub { font-size: 15px; color: var(--soft, #6b6453); }
+.focus-timeup { font-size: 14px; color: var(--fox-ink, #9e551f); margin-top: 10px; }
+.focus-run .focus-acts { justify-content: center; }
+
+/* ---- ③ 完成 ---- */
+.focus-done { text-align: center; width: min(560px, 100%); }
+.focus-done-use { font-size: 14px; color: var(--soft, #6b6453); }
+.focus-done-min { font-size: 56px; font-weight: 900; margin: 6px 0 2px; font-variant-numeric: tabular-nums; }
+.focus-praise { margin-top: 18px; }
+.focus-praise-hello { font-size: 17px; font-weight: 900; color: var(--ink, #26221d); }
+.focus-praise-fact { font-size: 13px; color: var(--soft, #6b6453); margin-top: 5px; }
+.focus-done .focus-acts { justify-content: center; }
+
+/* 书签条上的「专注」入口 */
+.bs-tab.bs-focus-tab { background: transparent; border: none; cursor: pointer; font: inherit; }

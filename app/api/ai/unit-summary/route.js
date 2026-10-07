@@ -5,6 +5,7 @@
 //       AI 只负责 intro（复习建议）与 key_words（重点词例句），不编造词条。
 // 缓存: unit:<g-s-u>:<日期>（每天刷新一次）
 import { NextResponse } from "next/server";
+import { unitKey } from "@/lib/units";
 import { getUserFromRequest } from "@/lib/auth";
 import { aiConfigured, chatRobust } from "@/lib/ai";
 import { aiCacheGet, aiCacheSet } from "@/lib/ai-cache";
@@ -48,7 +49,7 @@ export async function POST(req) {
   }
 
   const today = new Date().toISOString().slice(0, 10);
-  const cacheKey = `unit:v2:${grade}-${semester}-${unit}:${today}`;
+  const cacheKey = `unit:v2:${unitKey(grade, semester, unit)}:${today}`;
   const cached = await aiCacheGet(cacheKey);
   if (cached) return NextResponse.json(cached);
 

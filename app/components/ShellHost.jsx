@@ -11,6 +11,7 @@
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import BookShell, { useCatalog } from "./BookShell";
+import FocusLayer from "./FocusLayer";
 
 /** 窄屏判定（≤900px）；首帧 false 保证 SSR 与水合一致 */
 function useNarrow() {
@@ -52,10 +53,13 @@ export default function ShellHost({ children }) {
   }
 
   // 窄屏：经典单栏 + 底部导航（复用 BottomTab），书壳不参与；bs-narrow 提供页面级边距
+  // 纸间专注挂在 ShellHost 这一层：宽窄两条分支都能用（手机端也要能专注）。
+  // 它自己 createPortal 到 body，所以放在 React 树的哪里都不影响覆盖全屏。
   if (narrow)
     return (
       <div className="bs-narrow">
         {children}
+        <FocusLayer />
       </div>
     );
 
@@ -63,12 +67,15 @@ export default function ShellHost({ children }) {
   if (pathname === "/demo") return <>{children}</>;
 
   return (
-    <BookShell
-      catalog={catalog}
-      currentBook={currentBook}
-      onPickBook={pickBook}
-    >
-      {children}
-    </BookShell>
+    <>
+      <BookShell
+        catalog={catalog}
+        currentBook={currentBook}
+        onPickBook={pickBook}
+      >
+        {children}
+      </BookShell>
+      <FocusLayer />
+    </>
   );
 }

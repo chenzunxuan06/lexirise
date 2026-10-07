@@ -159,6 +159,32 @@ function UnitPageInner() {
         }
       />
 
+      {/* 本单元的「课文考点」两题 —— T20 挖变形 / T21 挖原形，
+          两套题取的是同一份语料索引里互补的两半。
+          入口放在单元页，是因为学生要练的从来不是"六册随机十道"，
+          而是"这周听写这个单元"（2026-10-07 补的分单元出题）。 */}
+      <div className="bs-sect" style={{ marginTop: 26 }}>
+        本 单 元 考 点
+      </div>
+      <ZoomList className="bs-unit-acts">
+        <ARow
+          icon="✎"
+          title="用所给词的适当形式填空"
+          desc="课文原句挖空 · 答案就是课文里的那个形式"
+          onClick={() =>
+            router.push(`/forms?grade=${grade}&semester=${semester}&unit=${unit}`)
+          }
+        />
+        <ARow
+          icon="▤"
+          title="课文挖空"
+          desc="给中文意思，填课文里的那个词"
+          onClick={() =>
+            router.push(`/cloze?grade=${grade}&semester=${semester}&unit=${unit}`)
+          }
+        />
+      </ZoomList>
+
       {/* 这次背多少 */}
       <div className="bs-sect" style={{ marginTop: 26 }}>
         这 次 背 多 少

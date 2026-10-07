@@ -5,6 +5,9 @@ import { NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
 import { getUserFromRequest } from "@/lib/auth";
 
+// ⚠️ 白名单之外的事件会被【静默丢弃】（第 37 行的 continue）。
+// 客户端每新增一种事件名，必须同步登记到这里，否则前端看着上报成功、后端一条没存。
+// 由此产生的坑：tests/logging.test.mjs 用的是假 fetch，测不出这一层。
 const ALLOWED = new Set([
   "page_view",
   "train_start",
@@ -14,6 +17,8 @@ const ALLOWED = new Set([
   "pet_evolve",
   "badge_earned",
   "share_created",
+  "answer", // 逐题作答日志（lib/memory.js 的 record() 里上报）
+  "shadow_schedule", // 影子模式：新调度器"只算不用"的对比记录（lib/srs/shadow.js）
 ]);
 
 export async function POST(req) {

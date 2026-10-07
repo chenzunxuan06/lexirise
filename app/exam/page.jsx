@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { loadWords } from "@/lib/loadWords";
 import { speak } from "@/lib/tts";
 import { memory, wrongBook, stats, exams } from "@/lib/memory";
+import { useQuestionTimer } from "@/lib/timing";
 import { game } from "@/lib/game";
 import { track } from "@/lib/analytics";
 import { ContrastBox } from "../components/AiExplain";
@@ -138,6 +139,7 @@ export default function ExamPage() {
   }, [data, grade, semester, unit]);
 
   const cur = deck[idx];
+  const elapsedMs = useQuestionTimer(idx);
 
   function startExam() {
     if (!unitWords.length) return;
@@ -206,7 +208,7 @@ export default function ExamPage() {
     recordedRef.current.add(w.id);
     const prev = memory.get(w.id);
     const isNew = !prev || prev.lv === 0;
-    memory.record(w.id, ok, isNew);
+    memory.record(w.id, ok, isNew, { mode: "exam", elapsed: elapsedMs() });
     if (!ok) wrongBook.add(w.id);
     stats.add({ n: isNew ? 1 : 0, review: isNew ? 0 : 1, correct: ok ? 1 : 0, total: 1 });
     setResults((r) => [...r, { id: w.id, correct: ok, pickedId: pickedId ?? null }]);

@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { loadWords } from "@/lib/loadWords";
 import { memory, wrongBook, stats, exams } from "@/lib/memory";
 import { game, onGameChange, ACHIEVEMENTS, petInfo, petStageName } from "@/lib/game";
+import { anyBookDone } from "@/lib/progress";
 import PetImage from "../components/PetImage";
 import PetEmpty from "../components/PetEmpty";
 
@@ -50,6 +51,7 @@ export default function AchievementsPage() {
       examBest,
       level: game.state().level,
       totalWords: total,
+      bookDone: anyBookDone(words),   // 「一册全通」：任一册整册学完
     });
     if (n.length) setNewBadges(n);
     setTick((x) => x + 1);

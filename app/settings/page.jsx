@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { readSettings, saveSettings, onSettingsChange } from "@/lib/settings";
 import { plan } from "@/lib/memory";
 import { game } from "@/lib/game";
+import { PACES, readPace, applyPace } from "@/lib/pace";
 import PetEmpty from "../components/PetEmpty";
 
 const ONBOARD_FLAG = "lexirise:onboarded";
@@ -19,10 +20,12 @@ export default function SettingsPage() {
   const router = useRouter();
   const [settings, setSettings] = useState(readSettings);
   const [dailyNew, setDailyNew] = useState(0);
+  const [pace, setPace] = useState(null);
   const [gs, setGs] = useState(null);
 
   useEffect(() => {
     setDailyNew(plan.load().dailyNew || 10);
+    setPace(readPace());
     setGs(game.state());
     const offSettings = onSettingsChange(() => setSettings(readSettings()));
     return offSettings;
@@ -47,6 +50,16 @@ export default function SettingsPage() {
     const v = Math.max(1, Math.min(50, n));
     plan.setDailyNew(v);
     setDailyNew(v);
+    // 手动拧过旋钮就不再等于任何一档 —— 立刻反映成"自定义"
+    setPace(readPace());
+  }
+
+  /** 选一档节奏：两个旋钮一起写（见 lib/pace.js） */
+  function choosePace(key) {
+    applyPace(key);
+    const r = readPace();
+    setPace(r);
+    setDailyNew(r.dailyNew); // 下面的「每日目标」要跟着动，两个数字不能各说各话
   }
 
   function replayOnboard() {
@@ -121,6 +134,44 @@ export default function SettingsPage() {
           >
             <i />
           </button>
+        </div>
+      </div>
+
+      {/* 学习节奏（2026-10-07 新增）—— 每日预算的两档预设。
+          为什么把它放在「每日目标」上面：每日目标只是其中一个旋钮，
+          节奏才是"这周我到底想要什么"的那个选择。 */}
+      <div className="setup-card">
+        <div className="section-row">
+          <h2 className="section-h">🧭 学习节奏</h2>
+          <span className="section-sub">目前：{(pace || readPace()).label}</span>
+        </div>
+        <div className="settings-row">
+          <span>两档预算</span>
+          <div className="tabs mini-tabs">
+            {PACES.map((p) => (
+              <button
+                key={p.key}
+                className={"tab" + ((pace || readPace()).key === p.key ? " active" : "")}
+                onClick={() => choosePace(p.key)}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="settings-row">
+          <span>
+            {PACES.map((p) => p.label + "：新词 " + p.dailyNew + " · 复习上限 " + p.reviewCap).join("　｜　")}
+          </span>
+        </div>
+        <div className="settings-row">
+          {/* 丙：把取舍写在学生看得见的地方，而不是藏在报告里 */}
+          <span>
+            这两个目标在固定预算下<b>互相挤占</b>：考前档保住"下次听写还记得"，
+            假期档补"一学期后还记得"。实测每日 12 词时期末熟练词为 0，24–30 词才回得来
+            （研究报告 §3.2.3）—— 所以这不是哪个更好，是你现在更想要哪一个。
+            想自己调，用下面的「每日目标」加减，节奏会自动变成"自定义"。
+          </span>
         </div>
       </div>
 
