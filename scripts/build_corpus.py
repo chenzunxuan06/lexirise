@@ -571,13 +571,26 @@ def build(book, fname, grade, semester, words):
     # 换句话说，建索引这件事顺手就把 T20 的题库一起建好了。
     # ⚠️ 第一版只记了句子下标、没记形式，等于把这份便宜丢了。
     cand = defaultdict(list)                  # wid -> [(句子下标, 命中的实际形式)]
+    mash_by_token = defaultdict(list)         # 词条 id -> [含它的碎片句下标]（词表出处 byVocab 的原料）
     for si, s in enumerate(sentences):
-        # 【2026-10-07 补】碎片拼接的句子**不参与任何引用**（原句、兜底、T20 题库都不行）。
+        # 【2026-10-07 补】碎片拼接的句子**不参与"原句"引用**（原句、兜底、T20 题库都不行）。
         #   为什么在这里挡而不是在 keep() 里：这类句子本身是课本的一页内容（词框/表格），
         #   删掉它会白白拉低"课本原句覆盖率"这个真实数字；但它**不能当句子引用给学生看**。
         #   实测：4336 条引用里 404 条是这类；挡掉之后有 36 个词会失去原句
         #   （它们本来就只在词汇表里出现过 —— 那正是"B 类"的真实情况，不是索引漏了）。
+        #
+        #   ⚠️ 但**不能因此让这些词的覆盖率凭空掉掉**：它们的出处是真实可核实的
+        #   （就在本单元词表那一页）。所以碎片句里出现的词另外登记进 byVocab，
+        #   界面按"课本词汇表"单独标注 —— 句子归句子，词表归词表。
         if fragment_mash(s["text"]):
+            # ⚠️ 这里也要过一遍词形还原：词框里写的常常是变形
+            #    （"conducted" / "shelves"），按裸词匹配会漏掉那些词。
+            for t in set(re.findall(r"[A-Za-z][A-Za-z'\-]*", s["text"].lower())):
+                lem = resolve(t, vocab)
+                if lem is None:
+                    continue
+                for w in vocab[lem]:
+                    mash_by_token[str(w["id"])].append(si)
             continue
         for t in set(re.findall(r"[A-Za-z][A-Za-z'\-]*", s["text"].lower())):
             lem = resolve(t, vocab)           # T15：词形还原，词库负责消歧
@@ -599,6 +612,7 @@ def build(book, fname, grade, semester, words):
     by_word = {}       # 只收【本单元】的句子 —— 前端出处的正选
     by_word_any = {}   # 跨单元也收，留作备用
     by_word_form = {}  # wid -> [{si, surface, lemma, asked}] —— T20 的题库
+    by_vocab = {}      # wid -> [si]：正文里没有可引用的句子，但**词表那一页有这个词**
     for wid, pairs in cand.items():
         wu = id2unit.get(wid)
         key = lambda p: (-quality(sentences[p[0]]["text"], sentences[p[0]]["section"]), p[0])
@@ -647,6 +661,25 @@ def build(book, fname, grade, semester, words):
                 for p in chosen
             ]
 
+    # 【2026-10-07 补】词表出处：正文里没有可引用句子的词，如果它在某页"词框/词表"
+    # 里出现过，就把那一页记下来 —— 界面上标成「课本词汇表」，不冒充课文句子。
+    #
+    # 为什么要有它：碎片句被挡在"原句"之外以后，这些词的覆盖率会凭空掉 1.8 个百分点
+    # （994 → 973）。但它们**并不是没有出处** —— 出处就是本单元词表那一页，
+    # 而且可翻书核实。所以覆盖率不该由"能不能凑出一句假句子"来决定：
+    #   句子归句子（byWord / byWordAny），词表归词表（byVocab），界面分开标注。
+    for term, ws in vocab.items():
+        for w in ws:
+            wid = str(w["id"])
+            if wid in by_word_any or wid in by_word_form:
+                continue                      # 已经有真句子了，不用词表兜底
+            idxs = mash_by_token.get(wid)
+            if not idxs:
+                continue
+            wu = id2unit.get(wid)
+            same = [si for si in idxs if unit_of_sentence[si] == wu]
+            by_vocab[wid] = (same or idxs)[:1]
+
     # 句子 id 自描述：册-单元-页-序号，便于人工校对与定位
     # （对齐 词跃-课文语料索引方案.md §3 的 "7A-U1-R-003" 思路，这里把板块换成页码，更稳）
     for n, s in enumerate(sentences):
@@ -665,15 +698,18 @@ def build(book, fname, grade, semester, words):
         "byWord": dict(by_word),           # 本单元原句（正选）
         "byWordAny": dict(by_word_any),    # 含跨单元兜底（备用；出处可能不在本单元）
         "byWordForm": by_word_form,        # T20：课文里用的是哪个形式（适当形式填空的答案）
+        "byVocab": by_vocab,               # 只在词表/词框里出现过的词 → 那一页的出处
     }
     with open(os.path.join(OUTDIR, book + ".json"), "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, separators=(",", ":"))
 
     cov = len(by_word) / max(1, len(vocab))
+    cov_all = len(set(by_word_any) | set(by_vocab)) / max(1, len(vocab))
     cov_any = len(by_word_any) / max(1, len(vocab))
     print("  " + book + "  " + str(len(pages)) + " 页 -> " + str(len(sentences)) + " 句；"
           "本单元原句 " + str(len(by_word)) + " 词 (" + format(cov * 100, ".1f") + "%)"
           + " / 含跨单元兜底 " + str(len(by_word_any)) + " 词 (" + format(cov_any * 100, ".1f") + "%)"
+          + " / 含词表出处 " + str(len(set(by_word_any) | set(by_vocab))) + " 词 (" + format(cov_all * 100, ".1f") + "%)"
           + "；定位法=" + method
           + ("；印刷页偏移=" + str(offset) if offset else ""))
 

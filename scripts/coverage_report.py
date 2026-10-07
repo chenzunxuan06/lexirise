@@ -1,25 +1,19 @@
 # -*- coding: utf-8 -*-
-"""coverage_report.py —— 课本原句覆盖率：多少词拿得到原句，没拿到的缺在哪
+"""coverage_report.py —— 课本出处覆盖率：多少词有出处，没有的缺在哪
 
-数据来源**只有 public/corpus/*.json**（已经发布出去的语料），不读 PDF：
-  ① 跑得快，可以在每次改出题/建索引后随手跑一遍；
-  ② 量到的正是"学生实际能看到的东西" —— 覆盖率是说给学生和评委听的那个数，
-     它必须等于已发布语料能给出的东西，而不是"理论上能抽到多少"。
+数据来源**只有 public/corpus/*.json**（已经发布出去的语料），不读 PDF。
 
-没覆盖到的词分两类，这是本报告的重点（原版只统计了"多少"，没回答"为什么"）：
-  A 语料里**有**含它的句子，但那些句子过不了"可以展示给学生"的标准
-    （质量分低于底线 / 是词框模板 / 带单字母断词）→ **这是取舍，不是缺陷**
-  B 语料里**没有**这样的句子 → 它只出现在单元词汇表/表格/题干里（教材编排决定）
+【三档口径，2026-10-07 起】
+  A 有原句        —— byWordForm / byWordAny 里有它（界面显示「课本原句 + 出处」）
+  B 仅词表出处    —— 只在词表/词框里出现过（byVocab；界面标「课本词汇表 + 页码」）
+  C 真缺口        —— 两样都没有
 
-【A 类的措辞在 2026-10-07 改过，必须说明】
-  改之前 A 类写的是"索引没收到（可修，属于缺陷）"，而且当时确实是个缺陷：
-  选句逻辑是 if 本单元有候选: … else: 看别的单元，于是"本单元的候选全不合格"
-  的词一条原句都拿不到。**那条已经修了**（build_corpus.py 的兜底路径）。
-  修完之后 A 类仍然有 19 个 —— 但性质变了：它们的句子是**主动不要**的，
-  因为按"显示一句错的比不显示更糟"这条纪律，那些句子不该出现在学生眼前。
-  数字没变、结论变了，所以措辞必须跟着改：**不能拿一个已经修好的缺陷当挡箭牌。**
+为什么分三档：碎片拼接的假句子被挡掉之后，只有 A 会掉一截；
+但那些词**并不是没有出处**，只是出处性质不同（词表 ≠ 句子）。
+把 B 算进来，覆盖率才反映「这个词在课本里能不能被核实」，
+同时**界面不会拿一句假句子冒充课文原句**。
 """
-import json, os, re, random
+import json, os, random
 from collections import Counter
 
 ROOT = r"E:\初二"
@@ -28,62 +22,54 @@ words = json.load(open(os.path.join(ROOT, "web", "public", "words.json"), encodi
 
 BOOKS = {"7A": (7, 1), "7B": (7, 2), "8A": (8, 1), "8B": (8, 2), "9A": (9, 1), "9B": (9, 2)}
 
-
-def has_sentence(book, term):
-    """已发布语料里有没有含这个词（词边界、忽略大小写）的句子。"""
-    pat = re.compile(r"(?<![A-Za-z])" + re.escape(term) + r"(?![A-Za-z])", re.I)
-    return any(pat.search(s) for s in book["sentences"])
-
-
-print("=" * 74)
-print("一、逐册覆盖率（按已发布语料算）")
-print("=" * 74)
-print("  %-4s %-9s %-9s %-9s %-14s" % ("册", "单词", "有原句", "覆盖率", "短语(有原句)"))
-tot_w = tot_hit = tot_p = tot_phit = 0
-missing = []
+print("=" * 80)
+print("一、逐册覆盖率")
+print("=" * 80)
+print("  %-4s %-7s %-7s %-7s %-7s %-11s %-12s" % ("册", "单词", "有原句", "仅词表", "真缺口", "出处覆盖率", "短语(有出处)"))
+tot = Counter()
 for bk, (g, s) in BOOKS.items():
     p = os.path.join(CORPUS, bk + ".json")
     if not os.path.exists(p):
         print("  %-4s [缺语料文件]" % bk)
         continue
     c = json.load(open(p, encoding="utf-8"))
-    keys = set(c.get("byWordForm") or {}) | set(c.get("byWordAny") or {})
+    sent = set(c.get("byWordForm") or {}) | set(c.get("byWordAny") or {})
+    vocab = set(c.get("byVocab") or {})
     ws = [w for w in words if w["grade"] == g and w["semester"] == s and w["entry_type"] == "word"]
     ps = [w for w in words if w["grade"] == g and w["semester"] == s and w["entry_type"] == "phrase"]
-    hit = [w for w in ws if str(w["id"]) in keys]
-    phit = [w for w in ps if str(w["id"]) in keys]
-    tot_w += len(ws); tot_hit += len(hit); tot_p += len(ps); tot_phit += len(phit)
-    print("  %-4s %-9d %-9d %-9s %d / %d" % (bk, len(ws), len(hit),
-          "%.1f%%" % (100.0 * len(hit) / max(1, len(ws))), len(phit), len(ps)))
-    for w in ws:
-        if str(w["id"]) not in keys:
-            missing.append((bk, c, w))
-print("  " + "-" * 66)
-print("  合计：单词 %d，有原句 %d，覆盖率 %.1f%%；短语 %d / %d = %.1f%%" % (
-    tot_w, tot_hit, 100.0 * tot_hit / max(1, tot_w),
-    tot_phit, tot_p, 100.0 * tot_phit / max(1, tot_p)))
+    a = [w for w in ws if str(w["id"]) in sent]
+    b = [w for w in ws if str(w["id"]) not in sent and str(w["id"]) in vocab]
+    cgap = [w for w in ws if str(w["id"]) not in sent and str(w["id"]) not in vocab]
+    phit = [w for w in ps if str(w["id"]) in sent or str(w["id"]) in vocab]
+    tot["w"] += len(ws); tot["a"] += len(a); tot["b"] += len(b); tot["gap"] += len(cgap)
+    tot["p"] += len(ps); tot["ph"] += len(phit)
+    print("  %-4s %-7d %-7d %-7d %-7d %-11s %d / %d" % (
+        bk, len(ws), len(a), len(b), len(cgap),
+        "%.1f%%" % (100.0 * (len(a) + len(b)) / max(1, len(ws))), len(phit), len(ps)))
+print("  " + "-" * 76)
+print("  合计：单词 %d —— 有原句 %d、仅词表 %d、真缺口 %d → **出处覆盖率 %.1f%%**" % (
+    tot["w"], tot["a"], tot["b"], tot["gap"], 100.0 * (tot["a"] + tot["b"]) / max(1, tot["w"])))
+print("        短语 %d —— 有出处 %d → %.1f%%" % (tot["p"], tot["ph"], 100.0 * tot["ph"] / max(1, tot["p"])))
 
 print()
-print("=" * 74)
-print("二、没覆盖到的词，缺在哪（共 %d 个）" % len(missing))
-print("=" * 74)
-repair = [(bk, w) for bk, c, w in missing if has_sentence(c, str(w["word_en"]).lstrip("*").strip())]
-absent = [(bk, w) for bk, c, w in missing if not has_sentence(c, str(w["word_en"]).lstrip("*").strip())]
-print("  A 语料里有句子、但那些句子不该展示（质量底线/词框模板/单字母断词）：%d" % len(repair))
-for bk, w in repair[:25]:
-    print("      [%s] %-16s %s" % (bk, w["word_en"], (w.get("definition_zh") or "")[:16]))
-print()
-print("  B 语料里没有这样的句子（只在词汇表/表格/题干里出现）：%d" % len(absent))
-print("      按词性：%s" % dict(Counter((w.get("pos") or "?") for _, w in absent)))
-print("      其中带 * 前缀（非四会词）：%d" % len([1 for _, w in absent if str(w["word_en"]).startswith("*")]))
-print("      按册：%s" % dict(Counter(bk for bk, _ in absent)))
-print("      这说明教材把一部分词只放进了单元词汇表、没在正文里用过 ——")
-print("      覆盖率的天花板由教材编排决定，不是索引漏了。")
-
-print()
-print("=" * 74)
-print("三、B 类抽样 18 个（人眼复核用）")
-print("=" * 74)
+print("=" * 80)
+print("二、真缺口（教材正文与词表里都没用过）：%d 个" % tot["gap"])
+print("=" * 80)
+gap = []
+for bk, (g, s) in BOOKS.items():
+    p = os.path.join(CORPUS, bk + ".json")
+    if not os.path.exists(p):
+        continue
+    c = json.load(open(p, encoding="utf-8"))
+    sent = set(c.get("byWordForm") or {}) | set(c.get("byWordAny") or {})
+    vocab = set(c.get("byVocab") or {})
+    for w in words:
+        if (w["grade"] == g and w["semester"] == s and w["entry_type"] == "word"
+                and str(w["id"]) not in sent and str(w["id"]) not in vocab):
+            gap.append((bk, w))
+print("  按册：%s" % dict(Counter(bk for bk, _ in gap)))
+print("  按词性：%s" % dict(Counter((w.get("pos") or "?") for _, w in gap)))
+print("  其中带 * 前缀（非四会词）：%d" % len([1 for _, w in gap if str(w["word_en"]).startswith("*")]))
 random.seed(3)
-for bk, w in random.sample(absent, min(18, len(absent))):
-    print("  [%s] %-16s %-6s %s" % (bk, w["word_en"], w.get("pos") or "", (w.get("definition_zh") or "")[:20]))
+for bk, w in random.sample(gap, min(18, len(gap))):
+    print("    [%s] %-16s %-6s %s" % (bk, w["word_en"], w.get("pos") or "", (w.get("definition_zh") or "")[:20]))

@@ -46,6 +46,9 @@ export default function ExampleBlock({ w, compact = false }) {
   }, [id, compact]);
 
   const tbList = tb && tb.length ? tb : null;
+  // 「课本词汇表」出处：这个词只出现在词表页，正文里没有句子。
+  // 它不是句子，所以换标签、不给朗读按钮 —— 不能让学生以为课本里有这么一句。
+  const isVocab = !!(tbList && tbList[0] && tbList[0].vocab);
   if (!en && !tbList) return null;
 
   return (
@@ -53,19 +56,32 @@ export default function ExampleBlock({ w, compact = false }) {
       {tbList && (
         <div className={"tb-ex" + (compact ? " compact" : "")}>
           <div className="label-row">
-            <span className="label">课本原句</span>
+            {/* 措辞刻意不写"词汇表"：这些词的出处里既有单元词汇表，
+                也有"用所给词填空"那种练习词框（实测两种都有）。
+                写成"课本词汇"两种都盖得住，也不会像"原句"那样暗示这是一句话。 */}
+            <span className="label">{isVocab ? "课本词汇" : "课本原句"}</span>
             <span className="ex-btns">
-              <button className="mini-speak" title="朗读英文" onClick={() => speak(tbList[0].text)}>
-                🔊
-              </button>
+              {!isVocab && (
+                <button className="mini-speak" title="朗读英文" onClick={() => speak(tbList[0].text)}>
+                  🔊
+                </button>
+              )}
             </span>
           </div>
-          {tbList.map((it) => (
-            <div className="tbi" key={it.id}>
-              <div className="en">{it.text}</div>
-              {it.source ? <div className="src">{it.source}</div> : null}
-            </div>
-          ))}
+          {tbList.map((it) =>
+            it.vocab ? (
+              <div className="tbi" key={it.id}>
+                <div className="en">{w.word_en}</div>
+                {it.source ? <div className="src">{it.source}</div> : null}
+                <div className="zh">课本正文里没有用到这个词；它出现在本单元的词汇表或词汇练习里 —— 出处可翻书核实。</div>
+              </div>
+            ) : (
+              <div className="tbi" key={it.id}>
+                <div className="en">{it.text}</div>
+                {it.source ? <div className="src">{it.source}</div> : null}
+              </div>
+            )
+          )}
         </div>
       )}
 

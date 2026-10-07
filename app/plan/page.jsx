@@ -133,7 +133,8 @@ export default function PlanPage() {
       if (!alive) return;
       const flat = {};
       for (const k of Object.keys(m)) {
-        if (m[k] && m[k][0]) flat[k] = { text: m[k][0].text, source: m[k][0].source };
+        // 只要真句子：vocab 那条是「课本词汇表」出处（text 故意为空），这里不渲染它
+        if (m[k] && m[k][0] && !m[k][0].vocab) flat[k] = { text: m[k][0].text, source: m[k][0].source };
       }
       setCorpus(flat);
     });

@@ -153,6 +153,24 @@ def main():
         anyk = {k: v for k, v in (c.get("byWordAny") or {}).items() if k not in phrase_ids}
         anyk.update(by_phrase)
         c["byWordAny"] = anyk
+
+        # 词表出处兜底（与 build_corpus 的 byVocab 同一口径）：
+        # 正文里没有可引用的句子，但短语出现在词框/词表页里 —— 那一页就是它的出处。
+        # 同样是"替换短语那部分"，避免上一轮的条目残留。
+        by_vocab = {}
+        for w in phrases:
+            pid = str(w["id"])
+            if pid in by_phrase:
+                continue
+            pat = pattern_for(w["word_en"])
+            if pat is None:
+                continue
+            got = [i for i, t in enumerate(sents) if pat.search(t) and fragment_mash(t)]
+            if got:
+                by_vocab[pid] = got[:1]
+        vk = {k: v for k, v in (c.get("byVocab") or {}).items() if k not in phrase_ids}
+        vk.update(by_vocab)
+        c["byVocab"] = vk
         json.dump(c, open(path, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
         print("  %s 短语 %d，命中 %d (%.1f%%)" % (bk, len(phrases), hit, 100.0 * hit / max(1, len(phrases))))
         grand_ph += len(phrases); grand_hit += hit
