@@ -10,7 +10,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import BookShell, { useCatalog } from "./BookShell";
+import BookShell, { BookCtx, useCatalog } from "./BookShell";
 import FocusLayer from "./FocusLayer";
 import MobileHead from "./MobileHead";
 
@@ -68,11 +68,21 @@ export default function ShellHost({ children }) {
   // 它自己 createPortal 到 body，所以放在 React 树的哪里都不影响覆盖全屏。
   if (narrow)
     return (
-      <div className="bs-narrow">
-        <MobileHead book={headBook} />
-        {children}
-        <FocusLayer />
-      </div>
+      // BookCtx 与 BookShell 里给桌面分支的那份**同源**（同一对 state / 函数）：
+      // 窄屏不渲染书壳，页面（BookToc）拿不到上下文就只能停在默认册 —— 2026-10-08 之前
+      // 手机端"永远八年级上册、切不了册"的根因就在这。桌面那条分支仍然由 BookShell 提供，
+      // 本批一行没动它。
+      <BookCtx.Provider value={{ book: currentBook, pick: pickBook }}>
+        <div className="bs-narrow">
+          <MobileHead
+            book={headBook}
+            books={catalog && catalog.books ? catalog.books : []}
+            onPick={pickBook}
+          />
+          {children}
+          <FocusLayer />
+        </div>
+      </BookCtx.Provider>
     );
 
   // 设计评审页（/demo）：脱离书壳渲染，便于多方案并排对比

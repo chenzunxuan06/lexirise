@@ -23,7 +23,8 @@ import { todaySummary as focusToday } from "@/lib/focus";
 import PetImage from "./PetImage";
 
 /* 当前册上下文：目录页(左栏) ↔ 首页目录(中间栏) 同步 */
-const BookCtx = createContext({ book: null, pick: () => {} });
+// 桌面分支由这里提供；窄屏分支由 ShellHost 提供同一份取值（见 ShellHost.jsx）
+export const BookCtx = createContext({ book: null, pick: () => {} });
 export function useBookCtx() {
   return useContext(BookCtx);
 }
