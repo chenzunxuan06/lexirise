@@ -287,9 +287,6 @@ export default function BookShell({ children, currentBook, onPickBook, catalog }
     return onSettingsChange(() => setShell(readSettings().shell || "book"));
   }, []);
 
-  const isActive = (href) =>
-    href === "/" ? pathname === "/" : pathname.startsWith(href);
-
   const g = (typeof window !== "undefined" && game.state()) || null;
   const growthLabel = g ? `成长 Lv.${g.level}` : "成长";
 
@@ -316,9 +313,6 @@ export default function BookShell({ children, currentBook, onPickBook, catalog }
               {t.key === "growth" ? growthLabel : t.label}
             </Link>
           ))}
-          <Link href="/settings" className={"bs-tab bs-gear" + (isActive("/settings") ? " on" : "")} aria-label="设置">
-            ⚙
-          </Link>
           {/* 纸间专注：全局可用，任何页面都能唤起。
               它不是路由，是一层全屏覆盖层（见 app/components/FocusLayer.jsx）。 */}
           <button type="button" className="bs-tab bs-focus-tab" onClick={openFocus} title="纸间专注 —— 去背书、写试卷，我帮你记着">
