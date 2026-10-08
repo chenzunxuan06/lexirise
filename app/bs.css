@@ -915,29 +915,52 @@ body:has(.bs-shell) .bs-unit { padding-left: 0; padding-right: 0; }
 .oe-pos { color: var(--fox-ink, #9e551f); font-weight: 700; margin-right: 6px; }
 
 /* ============================================================
-   M1 · 止血三件（2026-10-08）—— 纯布局补丁，M2–M5 会逐条删除
+   M2 · 移动版窄头（2026-10-08）—— 取代原先浮在内容上的 ☰
 
-   ① 与 ☰ 让路
-   手机端 .sb-hamburger 是 position:fixed / 12,12 / 42×42 / z-index:70。
-   实测（390×844，13 个页面逐页量）：7 个页面的正文被它压住，
-   其中 /unit 的「‹ 返回目录」被压掉 65%，且三个采样点的命中链
-   第一层都是 ☰ —— 那片区域点下去开的是侧边栏，不是返回。
-   给这 7 个页面的**根元素**加 .m-clear-ham 即可（另外 6 个页面
-   最靠上的正文本来就在 y=78，不动）。
-   ⚠️ 为什么用 border-top 而不是 padding-top：
-      /plan 与 /evidence 的 padding 写在**行内 style** 上（maxWidth 那个
-      容器），普通 CSS 规则压不住，用 padding 就得加 !important；
-      而 border 没人设过，于是零 !important 就够。
+   背景：手机端那个 ☰ 是 position:fixed / 12,12 / 42×42 / z-index:70，
+   实测 13 个页面里 7 个的正文被它压住，其中 /unit 的「‹ 返回目录」被压掉
+   65%，而且那片区域点下去开的是侧边栏、不是返回。
+   M1 曾用 border-top 给这 7 个页面让路（那只是止血 —— ☰ 本身还浮着）；
+   这一批把入口搬进窄头。窄头是正文流里的**第一块**，于是：
+     · 不再有任何悬浮层压内容（M1 的 .m-clear-ham 已全部删除）；
+     · 手机的菜单 / 当前册 / 等级与桌面书签条同源同名（lib/nav.js）。
    ============================================================ */
 @media (max-width: 900px) {
-  .m-clear-ham { border-top: 54px solid transparent; }
+  .m-head {
+    position: sticky; top: 0; z-index: 60;
+    display: flex; align-items: center; gap: 6px;
+    height: calc(52px + env(safe-area-inset-top, 0px));
+    padding: env(safe-area-inset-top, 0px) 8px 0 2px;
+    background: var(--paper, #f7f3e8);
+    border-bottom: 1px solid var(--paper-line, #e6dfcd);
+  }
+  .m-head-btn {
+    flex: 0 0 44px; width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    border: none; border-radius: 10px; background: transparent;
+    font-family: inherit; font-size: 18px; line-height: 1;
+    color: var(--ink, #2a2519); cursor: pointer;
+  }
+  .m-head-book { font-size: 15px; font-weight: 700; color: var(--ink, #2a2519); }
+  .m-head-sp { flex: 1 1 auto; }
+  .m-head-lv { padding-right: 8px; font-size: 12px; font-weight: 600; color: var(--soft, #6b6453); }
 }
 
-/* ③ /forms 与 /cloze 的「检查」按钮折成竖排
+/* M1③ /forms 与 /cloze 的「检查」按钮折成竖排（替换者：M5 重做答题页布局）
    输入框与按钮同行时，按钮 71px 宽 − padding 0 22px = 可用 27px，
    而"检查"两个字要 28px → 差 1px 就折行。
    两个页面共用 .fm-answer + button.fm-btn.primary，一条规则同时修好。 */
 @media (max-width: 900px) {
   .fm-answer { flex-wrap: wrap; }
   .fm-answer .fm-btn { flex: 1 1 100%; min-height: 48px; }
+}
+
+/* M2 附带：抽屉是手机端**唯一的全量菜单**（入口就在窄头左侧）。
+   实测它原来的菜单项只有 33px 高 —— 手指点不准，而「手能点准」是这批的判据之一。
+   只加在窄屏里：桌面侧栏的密度是另一套审美，不动。
+   同时允许纵向滚动 —— 11 项 + 品牌位在小屏上可能一屏放不下。 */
+@media (max-width: 900px) {
+  .sidebar { overflow-y: auto; }
+  .sidebar .sb-item { min-height: 44px; }
+  .sidebar .sb-login { display: flex; align-items: center; justify-content: center; min-height: 44px; }
 }

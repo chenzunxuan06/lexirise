@@ -39,9 +39,23 @@ const GROUPS = [
 
 const isMobile = () => typeof window !== "undefined" && window.innerWidth <= 900;
 
-function closeDrawer() {
+/** 收起抽屉（只在窄屏有意义）—— 点任意导航项时调用 */
+export function closeDrawer() {
   const el = document.getElementById("app-sidebar");
   if (el && isMobile()) el.classList.remove("open");
+}
+
+/**
+ * 开合侧边栏：窄屏开合抽屉，宽屏折叠 / 展开侧栏。
+ * 2026-10-08（M2）：手机端的 ☰ 已经搬进 app/components/MobileHead.jsx
+ * （它现在是正文流里的第一块，不再浮在内容上），所以这里导出唯一一份实现给它复用 ——
+ * 两份拷贝迟早走形。
+ */
+export function toggleDrawer() {
+  const el = document.getElementById("app-sidebar");
+  if (!el) return;
+  if (isMobile()) el.classList.toggle("open");
+  else el.classList.toggle("collapsed");
 }
 
 export default function Sidebar() {
@@ -72,26 +86,17 @@ export default function Sidebar() {
 
   const showAdmin = user && user.role === "admin";
 
-  function toggleMenu() {
-    const el = document.getElementById("app-sidebar");
-    if (!el) return;
-    if (isMobile()) {
-      el.classList.toggle("open");
-    } else {
-      el.classList.toggle("collapsed");
-    }
-  }
-
   return (
     <>
-      <button className="sb-hamburger" onClick={toggleMenu} aria-label="打开菜单" title="菜单">
-        ☰
-      </button>
-
+      {/* 2026-10-08（M2）：原先这里有一个**浮在内容上**的 ☰（mobile-only，
+          fixed / 12,12 / 42×42 / z-index:70）。实测 13 个页面里 7 个的正文被它压住，
+          其中 /unit 的「‹ 返回目录」被压掉 65%，且那片区域点下去开的是侧边栏、不是返回。
+          入口已搬进窄头（app/components/MobileHead.jsx）—— 那儿是正文流里的第一块，
+          抽屉本身没变，只是不再有悬浮层压内容。 */}
       <aside className="sidebar" id="app-sidebar">
         <button
           className="sb-toggle"
-          onClick={toggleMenu}
+          onClick={toggleDrawer}
           title="收起 / 展开菜单"
         >
           «

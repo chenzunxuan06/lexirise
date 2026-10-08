@@ -10,6 +10,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { loadWords } from "@/lib/loadWords";
+import { NAV_TABS, navTabActive } from "@/lib/nav";
 import { memory, onChange } from "@/lib/memory";
 import { sync } from "@/lib/sync";
 
@@ -42,9 +43,6 @@ export default function BottomTab() {
     return off;
   }, []);
 
-  const isActive = (href) =>
-    href === "/" ? pathname === "/" : pathname.startsWith(href);
-
   // 页面切换时收起"我的"抽屉
   useEffect(() => {
     setMeOpen(false);
@@ -65,13 +63,16 @@ export default function BottomTab() {
     router.refresh();
   }
 
+  // 前四项来自 lib/nav.js —— 与桌面书签条**同一份定义**，两套名字不可能再走形。
+  // 「训练」退出底栏：它仍可从「今日」的首屏主动作与单元页进入（B2 之后 /train
+  // 本来就是"开始前一屏"，把它当一级 tab 会让"一进来就被塞题"的观感回来）。
+  // 到期角标跟着到期数走，所以落在「复习」上，不在「今日」。
+  // 第 5 项「我的」目前两个外壳各用各的入口（手机 = 弹层，桌面 = ⚙），
+  // 等 /me 我的页落地后再收进 nav.js。
   const tabs = useMemo(
     () => [
-      { href: "/", label: "首页" },
-      { href: "/train", label: "训练", badge: dueN },
-      { href: "/review", label: "复习" },
-      { href: "/achievements", label: "成就" },
-      { href: "#me", label: "我的", more: true },
+      ...NAV_TABS.map((t) => ({ ...t, badge: t.key === "review" ? dueN : 0 })),
+      { key: "me", href: "#me", label: "我的", more: true },
     ],
     [dueN]
   );
@@ -94,9 +95,9 @@ export default function BottomTab() {
             </button>
           ) : (
             <Link
-              key={t.href}
+              key={t.key}
               href={t.href}
-              className={"btab-item" + (isActive(t.href) ? " on" : "")}
+              className={"btab-item" + (navTabActive(t, pathname) ? " on" : "")}
             >
               <span className="bt-ic">
                 {t.badge > 0 && <em>{t.badge > 99 ? "99+" : t.badge}</em>}

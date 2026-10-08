@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import BookShell, { useCatalog } from "./BookShell";
 import FocusLayer from "./FocusLayer";
+import MobileHead from "./MobileHead";
 
 /** 窄屏判定（≤900px）；首帧 false 保证 SSR 与水合一致 */
 function useNarrow() {
@@ -55,9 +56,20 @@ export default function ShellHost({ children }) {
   // 窄屏：经典单栏 + 底部导航（复用 BottomTab），书壳不参与；bs-narrow 提供页面级边距
   // 纸间专注挂在 ShellHost 这一层：宽窄两条分支都能用（手机端也要能专注）。
   // 它自己 createPortal 到 body，所以放在 React 树的哪里都不影响覆盖全屏。
+  // 窄头显示哪一册：/unit、/recite 这类带 grade/semester 的地址会把 currentBook 设上；
+  // 首页没有参数，就取目录页一直以来的默认（八上，见 BookToc.jsx 同款默认）；
+  // 其余页面（/stats、/settings…）不显示册名 —— 宁可空着，也不在跟册无关的页面上撒谎。
+  const headBook =
+    currentBook ||
+    (pathname === "/" && catalog && catalog.books ? catalog.books[2] || null : null);
+
+  // 窄屏：移动版窄头（正文流第一块）+ 单栏内容；书壳不参与
+  // 纸间专注挂在 ShellHost 这一层：宽窄两条分支都能用。
+  // 它自己 createPortal 到 body，所以放在 React 树的哪里都不影响覆盖全屏。
   if (narrow)
     return (
       <div className="bs-narrow">
+        <MobileHead book={headBook} />
         {children}
         <FocusLayer />
       </div>

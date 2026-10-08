@@ -183,7 +183,7 @@ function FormsInner() {
   // 这个范围一道题都没有 —— 不能说"题库空了"，那会让学生以为产品坏了
   if (scoped && scoped.length === 0) {
     return (
-      <div className="wrap fm-wrap m-clear-ham">
+      <div className="wrap fm-wrap">
         <ScopeBar scope={scope} units={units} base="/forms" allHref="/forms" />
         <div className="empty-state" style={{ marginTop: 18 }}>
           <b>{scopeText(scope)}</b> 还没有题 —— 这个单元的课文里没有用到变形的地方。
@@ -237,7 +237,7 @@ function FormsInner() {
   const src = formatSource(cur);
 
   return (
-    <div className="wrap fm-wrap m-clear-ham">
+    <div className="wrap fm-wrap">
       <ScopeBar scope={scope} units={units} base="/forms" allHref="/forms" />
 
       <div className="fm-head">

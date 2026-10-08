@@ -18,6 +18,7 @@ import { todaySummary } from "@/lib/progress";
 import { game, onGameChange, petInfo, petStageName } from "@/lib/game";
 import { readSettings, onSettingsChange } from "@/lib/settings";
 import { openFocus } from "@/lib/focus-ui";
+import { NAV_TABS, navTabActive } from "@/lib/nav";
 import { todaySummary as focusToday } from "@/lib/focus";
 import PetImage from "./PetImage";
 
@@ -303,18 +304,17 @@ export default function BookShell({ children, currentBook, onPickBook, catalog }
           词跃 <small>LEXIRISE · 活页本</small>
         </Link>
         <nav className="bs-tabs" aria-label="书签导航">
-          <Link href="/" className={"bs-tab" + (isActive("/") ? " on" : "")}>
-            今日
-          </Link>
-          <Link href="/review" className={"bs-tab" + (isActive("/review") ? " on" : "")}>
-            复习
-          </Link>
-          <Link href="/vocab" className={"bs-tab" + (isActive("/vocab") || isActive("/phrases") || isActive("/affixes") ? " on" : "")}>
-            词料库
-          </Link>
-          <Link href="/achievements" className={"bs-tab" + (isActive("/achievements") || isActive("/stats") ? " on" : "")}>
-            {growthLabel}
-          </Link>
+          {/* 四项与手机底栏读**同一份定义**（lib/nav.js）——
+              两套名字对不上是"重复感"的老根因；只有「成长」在这里多带一个等级 */}
+          {NAV_TABS.map((t) => (
+            <Link
+              key={t.key}
+              href={t.href}
+              className={"bs-tab" + (navTabActive(t, pathname) ? " on" : "")}
+            >
+              {t.key === "growth" ? growthLabel : t.label}
+            </Link>
+          ))}
           <Link href="/settings" className={"bs-tab bs-gear" + (isActive("/settings") ? " on" : "")} aria-label="设置">
             ⚙
           </Link>

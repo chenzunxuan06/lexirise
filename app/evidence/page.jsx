@@ -275,7 +275,7 @@ const PRE = {
 const PROMPT = "cd web\nnode scripts/replay.mjs --students 12 --seed 20261005\n（约 0.5 秒跑完，写出 public/sim-report.json）";
 
 function Wrap({ children }) {
-  return <div className="m-clear-ham" style={{ maxWidth: 980, margin: "0 auto", padding: "24px 16px 64px" }}>{children}</div>;
+  return <div style={{ maxWidth: 980, margin: "0 auto", padding: "24px 16px 64px" }}>{children}</div>;
 }
 
 function Badge({ children }) {

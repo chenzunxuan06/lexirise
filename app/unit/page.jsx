@@ -93,7 +93,7 @@ function UnitPageInner() {
   const bookName = `${grade} 年级${semester === 1 ? "上" : "下"}册`;
 
   return (
-    <div className="bs-unit m-clear-ham">
+    <div className="bs-unit">
       <button className="bs-back" onClick={() => router.push("/")}>
         ‹ 返回目录
       </button>

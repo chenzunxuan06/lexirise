@@ -162,7 +162,7 @@ export default function PlanPage() {
   }
 
   return (
-    <div className="m-clear-ham" style={{ maxWidth: 860, margin: "0 auto", padding: "24px 16px 64px" }}>
+    <div style={{ maxWidth: 860, margin: "0 auto", padding: "24px 16px 64px" }}>
       <h1 style={{ fontSize: 24, margin: "0 0 4px", color: T.ink }}>备考计划</h1>
       <p style={{ color: T.soft, fontSize: 14, margin: "0 0 20px" }}>
         告诉系统你要考什么，它算出今晚该练哪些词 —— 每个词都说得出为什么。
