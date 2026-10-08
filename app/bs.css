@@ -1006,3 +1006,38 @@ body:has(.bs-shell) .bs-unit { padding-left: 0; padding-right: 0; }
   .sidebar .sb-item { min-height: 44px; }
   .sidebar .sb-login { display: flex; align-items: center; justify-content: center; min-height: 44px; }
 }
+
+/* ============================================================
+   M4 · 「我的」页（app/me/page.jsx，2026-10-08）
+   ------------------------------------------------------------
+   它取代了手机端那个「我的」底部弹层（.bt-sheet，已随本批下线），
+   并且让桌面活页本**第一次有账号入口** —— 在此之前书签条第 5 项只是个 ⚙。
+   手机与桌面共用这一页，所以样式不放进媒体查询。
+   ============================================================ */
+.me-page { max-width: 560px; }
+.me-h { margin: 0 2px 8px; font-size: 11px; letter-spacing: 2px; font-weight: 700; color: var(--faint, #736b5b); }
+.me-h-out { margin: 20px 2px 8px; }
+.me-card { background: var(--paper2, #fffdf7); border: 1px solid var(--line, #e6dfcd); border-radius: 13px; padding: 14px; }
+.me-note { margin: 0 0 12px; font-size: 13px; color: var(--soft, #6b6453); }
+.me-account { display: flex; align-items: center; gap: 12px; }
+.me-avatar { flex: 0 0 40px; width: 40px; height: 40px; border-radius: 50%; background: var(--paper, #f7f3e8); border: 1px solid var(--edge, #cfc7b4); }
+.me-account b { display: block; font-size: 16px; color: var(--ink, #2a2519); }
+.me-account small { display: block; margin-top: 3px; font-size: 12px; color: var(--soft, #6b6453); }
+.me-actions { margin-top: 12px; }
+.me-btn {
+  display: flex; align-items: center; justify-content: center; width: 100%; min-height: 46px;
+  border: 1.5px solid var(--ink, #2a2519); border-radius: 11px; background: var(--paper, #f7f3e8);
+  font-family: inherit; font-size: 15px; font-weight: 700; color: var(--ink, #2a2519);
+  text-decoration: none; cursor: pointer;
+}
+.me-btn-primary { background: var(--ink, #2a2519); color: var(--paper, #f7f3e8); }
+.me-list { background: var(--paper2, #fffdf7); border: 1px solid var(--line, #e6dfcd); border-radius: 13px; overflow: hidden; }
+.me-row {
+  display: flex; align-items: center; gap: 8px; width: 100%; min-height: 52px; padding: 12px 14px;
+  border: none; border-bottom: 1px solid var(--line, #e6dfcd); background: transparent;
+  font-family: inherit; font-size: 14.5px; color: var(--ink, #2a2519); text-align: left;
+  text-decoration: none; cursor: pointer;
+}
+.me-row:last-child { border-bottom: none; }
+.me-row em { margin-left: auto; font-style: normal; font-size: 12px; color: var(--soft, #6b6453); }
+.me-row i { font-style: normal; font-size: 15px; color: var(--fox, #c8763a); }
