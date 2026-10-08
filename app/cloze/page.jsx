@@ -205,7 +205,7 @@ function ClozeInner() {
   if (scoped && scoped.length === 0) {
     const all = bank.length;
     return (
-      <div className="wrap fm-wrap">
+      <div className="wrap fm-wrap m-clear-ham">
         <ScopeBar scope={scope} units={units} base="/cloze" allHref="/cloze" />
         <div className="empty-state" style={{ marginTop: 18 }}>
           <b>{scopeText(scope)}</b> 还没有题 —— 这个单元的课文里可挖的句子太少。
@@ -264,7 +264,7 @@ function ClozeInner() {
   const src = formatSource(cur);
 
   return (
-    <div className="wrap fm-wrap">
+    <div className="wrap fm-wrap m-clear-ham">
       <ScopeBar scope={scope} units={units} base="/cloze" allHref="/cloze" />
 
       <div className="fm-head">

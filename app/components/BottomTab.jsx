@@ -86,6 +86,10 @@ export default function BottomTab() {
               className={"btab-item" + (meOpen ? " on" : "")}
               onClick={() => setMeOpen((v) => !v)}
             >
+              {/* M1② 占位：其余四项是「图标 22px + 文字」，这一项缺图标，
+                  文字就被 flex 顶到最上面、与其它四项错开 24px（实测）。
+                  M4 把抽屉换成 /me 之后，这一行一起删。 */}
+              <span className="bt-ic" aria-hidden="true" />
               <span className="bt-lb">{t.label}</span>
             </button>
           ) : (

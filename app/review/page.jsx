@@ -192,7 +192,7 @@ export default function ReviewPage() {
   }
 
   return (
-    <div className="wrap">
+    <div className="wrap m-clear-ham">
       <ChapterHead
         variant="mag"
         chNo="01"

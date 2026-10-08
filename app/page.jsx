@@ -157,7 +157,7 @@ export default function HomePage() {
 
   if (shellMode === "book") {
     return (
-      <div className="wrap bs-home">
+      <div className="wrap bs-home m-clear-ham">
         <BookToc />
       </div>
     );
@@ -168,7 +168,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="wrap hm-wrap">
+    <div className="wrap hm-wrap m-clear-ham">
       {/* ===== 封面杂志区（A2 · 状态应征栏） ===== */}
       <section className="mag-cover">
         {/* 报头 */}
