@@ -17,6 +17,12 @@ import { loadWords } from "@/lib/loadWords";
 import { speak } from "@/lib/tts";
 import { StBar, MRow, WRow, ZoomList } from "./rows";
 import { useCatalog, useBookCtx, dotFor } from "./BookShell";
+import { useNarrow } from "@/lib/useNarrow";
+
+// 手机端折叠态保留的单元行数（M5③）。选 3 的理由：390×844 上"今日状态行 +
+// 两道课文考点 + 3 行单元"刚好是扫一眼能读完的一屏；8 行一起扑面时，
+// 这页就不再是"今天做什么"，而是一张目录表。
+const UNIT_FOLD = 3;
 
 export default function BookToc() {
   const router = useRouter();
@@ -25,6 +31,8 @@ export default function BookToc() {
   const [openUnit, setOpenUnit] = useState(null); // 展开的单元目录行（保留以高亮当前行）
   const [tick, setTick] = useState(0);
   const [sel, setSel] = useState(ctxBook || null);
+  const [allUnits, setAllUnits] = useState(false); // 手机上「展开全部」是否已按
+  const narrow = useNarrow(); // 只有窄屏才折叠 —— 桌面 8 行不变（纪律 7）
 
   useEffect(() => {
     const off = onChange(() => setTick((x) => x + 1));
@@ -107,9 +115,11 @@ export default function BookToc() {
       </div>
       <div className="bs-ct-line" />
 
-      {/* 单元目录行（放大预览；点行进单元页） */}
+      {/* 单元目录行（放大预览；点行进单元页）
+          M5③：窄屏默认只铺 3 行 + 「展开全部」—— 桌面（narrow=false）仍然是全 8 行。
+          折叠是**显示**上的事，不动任何数据口径：每行的「还剩 N / 这次背 N」照旧。 */}
       <ZoomList>
-        {book.unitList.map((u) => (
+        {(narrow && !allUnits ? book.unitList.slice(0, UNIT_FOLD) : book.unitList).map((u) => (
           <MRow
             key={u.unit}
             dot={dotFor(u.pct)}
@@ -129,6 +139,13 @@ export default function BookToc() {
           />
         ))}
       </ZoomList>
+
+      {/* 「展开全部」只在窄屏、且真的还有藏起来的行时出现 */}
+      {narrow && !allUnits && book.unitList.length > UNIT_FOLD && (
+        <button className="bs-more-units" onClick={() => setAllUnits(true)}>
+          展开全部 {book.unitList.length} 个单元 ▾
+        </button>
+      )}
 
       {/* 本册词表（词行预览，点喇叭朗读） */}
       <div className="bs-wlist">

@@ -13,19 +13,8 @@ import { usePathname, useRouter } from "next/navigation";
 import BookShell, { BookCtx, useCatalog } from "./BookShell";
 import FocusLayer from "./FocusLayer";
 import MobileHead from "./MobileHead";
-
-/** 窄屏判定（≤900px）；首帧 false 保证 SSR 与水合一致 */
-function useNarrow() {
-  const [narrow, setNarrow] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 900px)");
-    const apply = () => setNarrow(mq.matches);
-    apply();
-    mq.addEventListener("change", apply);
-    return () => mq.removeEventListener("change", apply);
-  }, []);
-  return narrow;
-}
+// 窄屏判定（≤900px）：M5 起提到 lib，全站一个来源（首页折叠 / /vocab / /settings 都要问它）
+import { useNarrow } from "@/lib/useNarrow";
 
 export default function ShellHost({ children }) {
   const catalog = useCatalog();

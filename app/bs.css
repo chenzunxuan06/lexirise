@@ -1101,3 +1101,15 @@ body:has(.bs-shell) .bs-unit { padding-left: 0; padding-right: 0; }
   .bs-unit > .bs-unit-qty ~ * { order: 3; }
 }
 
+/* M5③ 首页目录「展开全部」（2026-10-09）
+   只在窄屏渲染（BookToc 的 narrow 分支），桌面根本没有这个按钮；
+   放进媒体查询是双保险，也是纪律 7 的写法。 */
+@media (max-width: 900px) {
+  .bs-more-units {
+    display: block; width: 100%; min-height: 48px; margin-top: 10px;
+    border: 1px dashed var(--edge, #cfc7b4); border-radius: 10px;
+    background: transparent; font-family: inherit; font-size: 13px; font-weight: 700;
+    color: var(--fox-ink, #9e551f); cursor: pointer;
+  }
+}
+
