@@ -953,8 +953,13 @@ body:has(.bs-shell) .bs-unit { padding-left: 0; padding-right: 0; }
     font-family: inherit; font-size: 15px; font-weight: 700; color: var(--ink, #2a2519);
     cursor: pointer;
   }
-  /* ▾ 用伪元素：它纯粹是装饰，不该进 DOM 的文本（否则页面上"册名"就多一个字符） */
-  .m-head .m-head-book::after { content: "▾"; margin-left: 4px; font-size: 10px; color: var(--soft, #6b6453); }
+  /* ▾ 用伪元素：它纯粹是装饰，不该进 DOM 的文本（否则页面上"册名"就多一个字符）。
+     ⚠️ 只给**真按钮**加箭头。MobileHead 在没有册名的页面（/stats、/settings、/vocab …）
+     渲染的是一个空的 <span class="m-head-book"> 占位 —— 第一版按类名选中了它，
+     于是那些页面的窄头里冒出一个孤零零的 ▾，像一个点不动的下拉。
+     2026-10-09 从 M5 的截图里看出来的：断言当时只查了 textContent，
+     而伪元素不进 textContent，所以它一直是绿的（又一次"挑不动"）。 */
+  .m-head button.m-head-book::after { content: "▾"; margin-left: 4px; font-size: 10px; color: var(--soft, #6b6453); }
 
   /* 专注：纸间专注的覆盖层是 z-index 200，盖得住窄头(60)与底栏(80) */
   .m-head-focus {
