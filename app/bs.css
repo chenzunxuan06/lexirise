@@ -1083,3 +1083,21 @@ body:has(.bs-shell) .bs-unit { padding-left: 0; padding-right: 0; }
 .me-row em { margin-left: auto; font-style: normal; font-size: 12px; color: var(--soft, #6b6453); }
 .me-row i { font-style: normal; font-size: 15px; color: var(--fox, #c8763a); }
 
+/* ============================================================
+   M5② · 单元页（/unit）：把「这次背多少」提到动作区之后（2026-10-09）
+   ------------------------------------------------------------
+   390px 上这一页是长滚动：想直接开背，要先划过「本单元考点」与
+   「本单元词表」两段 —— 而"这次背多少"本来就是开背的按钮。
+   桌面是三栏、一屏放得下，位置也是对的，所以**只在窄屏动**：
+   把 .bs-unit 变成纵向 flex，用 order 重排，DOM 顺序一个字节不改。
+   为什么不改 JSX 顺序：那会连桌面一起动（纪律 7：桌面零回归是硬指标）。
+   ⚠️ 已知代价：flex 容器里相邻兄弟的 margin 不再合并，窄屏上下间距会比
+      原来略松一点。这是这条规则的代价，不是回归（也不是"顺手改版式"）。
+   ============================================================ */
+@media (max-width: 900px) {
+  .bs-unit { display: flex; flex-direction: column; }
+  .bs-unit > .bs-unit-qty { order: 1; }
+  .bs-unit > .bs-unit-extra { order: 2; }
+  .bs-unit > .bs-unit-qty ~ * { order: 3; }
+}
+

@@ -163,40 +163,49 @@ function UnitPageInner() {
           两套题取的是同一份语料索引里互补的两半。
           入口放在单元页，是因为学生要练的从来不是"六册随机十道"，
           而是"这周听写这个单元"（2026-10-07 补的分单元出题）。 */}
-      <div className="bs-sect" style={{ marginTop: 26 }}>
-        本 单 元 考 点
+      {/* 外包一层只为 M5②：窄屏下用 CSS order 把它排到「这次背多少」之后
+          （桌面 .bs-unit 不是 flex 容器，order 不生效 —— 这一层对桌面是透明的）。 */}
+      <div className="bs-unit-extra">
+        <div className="bs-sect" style={{ marginTop: 26 }}>
+          本 单 元 考 点
+        </div>
+        <ZoomList className="bs-unit-acts">
+          <ARow
+            icon="✎"
+            title="用所给词的适当形式填空"
+            desc="课文原句挖空 · 答案就是课文里的那个形式"
+            onClick={() =>
+              router.push(`/forms?grade=${grade}&semester=${semester}&unit=${unit}`)
+            }
+          />
+          <ARow
+            icon="▤"
+            title="课文挖空"
+            desc="给中文意思，填课文里的那个词"
+            onClick={() =>
+              router.push(`/cloze?grade=${grade}&semester=${semester}&unit=${unit}`)
+            }
+          />
+        </ZoomList>
       </div>
-      <ZoomList className="bs-unit-acts">
-        <ARow
-          icon="✎"
-          title="用所给词的适当形式填空"
-          desc="课文原句挖空 · 答案就是课文里的那个形式"
-          onClick={() =>
-            router.push(`/forms?grade=${grade}&semester=${semester}&unit=${unit}`)
-          }
-        />
-        <ARow
-          icon="▤"
-          title="课文挖空"
-          desc="给中文意思，填课文里的那个词"
-          onClick={() =>
-            router.push(`/cloze?grade=${grade}&semester=${semester}&unit=${unit}`)
-          }
-        />
-      </ZoomList>
 
-      {/* 这次背多少 */}
-      <div className="bs-sect" style={{ marginTop: 26 }}>
-        这 次 背 多 少
+      {/* 这次背多少
+          M5②（2026-10-09）：窄屏下整块提到动作区之后 —— 此前它被「本单元考点」
+          与「本单元词表」顶到了长滚动末端，想直接开背要先划过一屏。
+          位置由 bs.css 里的 order 决定，桌面一个像素没动（纪律 7）。 */}
+      <div className="bs-unit-qty">
+        <div className="bs-sect" style={{ marginTop: 26 }}>
+          这 次 背 多 少
+        </div>
+        <QuantityPick
+          grade={grade}
+          semester={semester}
+          unit={unit}
+          unitWords={unitWords.length}
+          left={left}
+          onStart={startQuantity}
+        />
       </div>
-      <QuantityPick
-        grade={grade}
-        semester={semester}
-        unit={unit}
-        unitWords={unitWords.length}
-        left={left}
-        onStart={startQuantity}
-      />
 
       {/* 本单元词表（预览前 6，去词表页看全部） */}
       <div className="bs-sect" style={{ marginTop: 26 }}>
