@@ -12,6 +12,7 @@ import { plan } from "@/lib/memory";
 import { game } from "@/lib/game";
 import { PACES, readPace, applyPace } from "@/lib/pace";
 import PetEmpty from "../components/PetEmpty";
+import { useNarrow } from "@/lib/useNarrow";
 
 const ONBOARD_FLAG = "lexirise:onboarded";
 const XP_CAP = 200;
@@ -22,6 +23,7 @@ export default function SettingsPage() {
   const [dailyNew, setDailyNew] = useState(0);
   const [pace, setPace] = useState(null);
   const [gs, setGs] = useState(null);
+  const narrow = useNarrow();
 
   useEffect(() => {
     setDailyNew(plan.load().dailyNew || 10);
@@ -80,7 +82,12 @@ export default function SettingsPage() {
         <p className="tagline">外观 · 声音 · 学习目标 · 引导</p>
       </header>
 
-      {/* 版式（方向C 活页本 / 经典） */}
+      {/* 版式（方向C 活页本 / 经典）
+          M5⑥：窄屏**不渲染**这张卡 —— 手机上两种版式都是底部导航，
+          这个开关换不来任何东西，只会让人以为"手机上也该选一个"。
+          为什么不写成 CSS 隐藏：判据是"DOM 里没有"，不是"看不见"
+          （隐藏起来的东西照样会被读屏、被复制、被下一版误当成还在）。 */}
+      {!narrow && (
       <div className="setup-card">
         <div className="section-row">
           <h2 className="section-h">📖 版式</h2>
@@ -107,6 +114,7 @@ export default function SettingsPage() {
           <span>桌面端显示书签 + 三栏；手机端两种都用底部导航</span>
         </div>
       </div>
+      )}
 
       {/* 外观（深色模式已下线，固定浅色纸墨风） */}
       <div className="setup-card">
