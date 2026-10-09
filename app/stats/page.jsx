@@ -131,7 +131,9 @@ export default function StatsPage() {
   }
 
   return (
-    <div className="wrap">
+    // .stats-page 是 M5④ 那一段手机样式的落点（见 bs.css 末尾）：
+    // 页面根元素带一个自己的类，窄屏规则才可能既盖住 globals、又不波及别处（/admin 也有 .stat-card）。
+    <div className="wrap stats-page">
       <header className="hero">
         <div className="brand">
           <h1>学习统计</h1>

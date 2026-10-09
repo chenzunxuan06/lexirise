@@ -1113,3 +1113,28 @@ body:has(.bs-shell) .bs-unit { padding-left: 0; padding-right: 0; }
   }
 }
 
+/* ============================================================
+   M5④ · 统计页（/stats）：卡片两列 + 收紧（2026-10-09）
+   ------------------------------------------------------------
+   .stat-cards 原本是 repeat(auto-fit, minmax(150px, 1fr)) —— 在 390px 上
+   "碰巧"也是两列，但那是算出来的，不是定下来的：换个断点、加个字，
+   就变成一列七张，一屏只看得见两张。这里把它**定死成两列**并收紧留白，
+   让首屏至少见到 4 张（判据就是这一条，见 cdp_mshell.js M5-4）。
+   桌面不动：auto-fit 在宽屏是 4–5 列，那个密度是对的。
+   ⚠️ 选择器以 .stats-page 开头（/stats 的页面根，见 app/stats/page.jsx）：
+      ① 特异度 0.2.0 > globals 里的 .stat-cards / .stat-card / .stat-num（0.1.0），
+         才盖得住 —— 原因与 M5① 那一段是同一条（bs.css 在产物里排在 globals.css 之前）；
+      ② 只作用在统计页。.stat-card 在 /admin 也有一套，不该被这里顺手改掉。
+   ⚠️ 断言也要挑得动：390px 上 auto-fit 本来就会算出两列，
+      所以「cols === 2」**证明不了这条规则生效**。cdp_mshell 的 M5-4 因此额外量了
+      .stat-card 的 padding —— 18px（globals）还是 14px（这里），一眼分得清。
+   ============================================================ */
+@media (max-width: 900px) {
+  .stats-page .stat-cards { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .stats-page .stat-card { padding: 14px 10px; }
+  .stats-page .stat-num { font-size: 26px; }
+  .stats-page .stat-name { font-size: 11.5px; margin-top: 4px; }
+}
+
+
+
