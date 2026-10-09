@@ -47,7 +47,6 @@ body:has(.demo-page) .app-main { padding: 0; max-width: none; }
 }
 .bs-tab:hover { background: rgba(200, 118, 58, .10); }
 .bs-tab.on { background: var(--ink, #2a2519); color: var(--paper, #f7f3e8); }
-.bs-tab.bs-gear { font-size: 17px; padding: 9px 12px; }
 .bs-head-meta { font-size: 13px; font-weight: 800; color: var(--soft, #6b6453); white-space: nowrap; }
 
 /* ---------- 涓夋爮 ---------- */
@@ -109,8 +108,6 @@ body:has(.demo-page) .app-main { padding: 0; max-width: none; }
 .bs-apx-t { font-size: 13px; font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .bs-apx-k { color: var(--fox-ink, #9e551f); font-weight: 900; }
 .bs-apx-m { font-size: 12px; font-weight: 800; color: var(--fox-ink, #9e551f); }
-.bs-dir-grp { margin-bottom: 14px; }
-.bs-dir-grp-lb { font-size: 12px; font-weight: 900; color: var(--faint, #736b5b); margin: 0 2px 4px; letter-spacing: 2px; }
 .bs-vol {
   display: flex; align-items: baseline; gap: 6px; width: 100%;
   background: none; border: none; padding: 7px 2px; cursor: pointer;
@@ -118,10 +115,8 @@ body:has(.demo-page) .app-main { padding: 0; max-width: none; }
 }
 .bs-vol .bs-vol-l { font-size: 13.5px; font-weight: 900; display: flex; align-items: baseline; gap: 6px; min-width: 0; }
 .bs-vol .bs-vol-l i.bs-dots { flex: 1; border-bottom: 1px dotted var(--dot-line, #948b76); margin: 0 2px 2px; }
-.bs-vol .bs-vol-r { font-size: 10.5px; font-weight: 800; color: var(--soft, #6b6453); white-space: nowrap; }
 .bs-vol:hover { background: rgba(200, 118, 58, .08); }
 .bs-vol.on { background: var(--ink, #2a2519); color: var(--paper, #f7f3e8); border-radius: 4px; padding: 7px 8px; }
-.bs-vol.on .bs-vol-r { color: #a89f89; }
 .bs-vol.done .bs-vol-l::before { content: "\2713"; font-size: 11px; color: var(--seal-g, #2f7d4f); }
 
 /* ---------- 右栏今日进度 ---------- */
@@ -560,13 +555,9 @@ body:has(.demo-page) .app-main { padding: 0; max-width: none; }
 .bs-resolve-btn { min-height: 46px; display: flex; align-items: center; justify-content: center; }
 .bs-back { min-height: 40px; }
 .bs-vol { display: flex; align-items: baseline; gap: 6px; width: 100%; background: none; border: none; padding: 8px 2px; cursor: pointer; font: inherit; text-align: left; color: #5c5544; }
-.bs-vol .bs-vol-r { font-size: 12px; font-weight: 800; color: var(--soft, #6b6453); white-space: nowrap; margin-left: auto; }
 .bs-vol.on { background: var(--ink, #2a2519); color: var(--paper, #f7f3e8); border-radius: 4px; padding: 8px; }
-.bs-vol.on .bs-vol-r { color: #a89f89; }
 .bs-dir-h, .bs-dir-grp-lb { font-weight: 900; letter-spacing: 2px; color: var(--faint, #736b5b); }
 .bs-dir-h { font-size: 11px; letter-spacing: 3px; margin: 2px 2px 10px; }
-.bs-dir-grp-lb { font-size: 10.5px; margin: 0 2px 4px; }
-.bs-dir-grp { margin-bottom: 14px; }
 .bs-sect { font-size: 11px; font-weight: 900; letter-spacing: 3px; color: var(--faint, #736b5b); margin-top: 24px; margin-bottom: 8px; }
 .bs-unit-h { display: flex; align-items: flex-start; gap: 16px; margin-top: 12px; }
 .bs-unit-num { font-size: 44px; font-weight: 900; line-height: .95; color: var(--fox, #c8763a); font-family: Georgia, "Songti SC", serif; flex-shrink: 0; min-width: 62px; }
@@ -741,10 +732,6 @@ body:has(.demo-page) .app-main { padding: 0; max-width: none; }
 .settings-profile span { font-size: 12px; color: #6b6453; }
 /* ?--text-soft 4.48 ?0.02?*/
 .empty-state { color: #6b6453; }
-
-/* s-vol-r / settings-profile span */
-.bs-vol .bs-vol-r { font-size: 12px; }
-.bs-dir .bs-dir-grp-lb { font-size: 12px; }
 .bs-dir-h { font-size: 12px; }
 .bs-side-h { font-size: 12px; }
 .settings-profile span, .settings-profile b + span { font-size: 12px; color: #6b6453 !important; }
