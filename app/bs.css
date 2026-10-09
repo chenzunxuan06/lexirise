@@ -991,10 +991,51 @@ body:has(.bs-shell) .bs-unit { padding-left: 0; padding-right: 0; }
 /* M1③ /forms 与 /cloze 的「检查」按钮折成竖排（替换者：M5 重做答题页布局）
    输入框与按钮同行时，按钮 71px 宽 − padding 0 22px = 可用 27px，
    而"检查"两个字要 28px → 差 1px 就折行。
-   两个页面共用 .fm-answer + button.fm-btn.primary，一条规则同时修好。 */
+   两个页面共用 .fm-answer + button.fm-btn.primary，一条规则同时修好。
+   （→ 已于 2026-10-09 由 M5① 替换：见下面「M5① · 答题页」那一段。） */
+/* ============================================================
+   M5① · 答题页（/forms 与 /cloze）的手机布局（2026-10-09）
+   ------------------------------------------------------------
+   这一段**替换** M1③ 的那条止血 —— M1 的表格里就写着「替换者：M5 重做
+   答题页布局」，所以这里不是再补一条，是把那件事做完：
+     · 输入框与按钮各占一整行。同行时按钮只剩 27px 可用宽，而「检查」
+       两个字要 28px —— 上面那条 M1 注释记的根因，这里从布局上消掉；
+     · 命中区 ≥48px（两个页面的作答区域本来就都是手指点的）；
+     · 题干 17px / 行高 1.9：19px 的衬线正文在 390px 上每行放不下几个词；
+     · 页边距与反馈块在窄屏上收一收，别把一屏挤满；
+     · 范围芯片是可点的，手指要够得着 → 44px。
+   桌面零改动：全部落在 @media (max-width: 900px) 内。
+   ⚠️ 这两条**不能删**：cdp_m1.js 第 5 条守的就是「按钮 ≥44px 且文字单行」。
+      M5 换了做法，但没有让那条断言变成什么都不测 —— 它测的还是同一个盒子。
+
+   ⚠️⚠️ 每一条都带 .fm-wrap 前缀（= 这一页自己的根元素），这不是啰嗦：
+      2026-10-09 实测发现产物里 **bs.css 排在 globals.css 之前** ——
+      layout.jsx 的 import 顺序是先 globals 后 bs，但 Next 切出来的两个 link 是反的
+      （bs.css = eafac56…，globals.css = 761f43c…，后者在后）。
+      于是特异度相同时 globals 赢。第一版这几条没加前缀，结果
+      .fm-sent / .fm-body / .fm-foot 全部**静默失效**（题干还是 19px、页脚还是横排）——
+      而断言里只测了「≥48px」和「不折行」，两条恰好都由更高特异度的
+      .fm-answer .fm-btn 撑着，所以红不了。加一层 .fm-wrap 就是 0.2.0 打 0.1.0，
+      跟文件顺序无关 —— 这是比 !important 更结实、也更难被下一次改坏的做法。
+      （同类问题还会出现在任何"想覆盖 globals 里已有同名规则"的地方，见 M5④。） */
 @media (max-width: 900px) {
-  .fm-answer { flex-wrap: wrap; }
-  .fm-answer .fm-btn { flex: 1 1 100%; min-height: 48px; }
+  .wrap.fm-wrap { padding: 16px 14px 48px; }
+  .fm-wrap .fm-body { margin-top: 14px; padding: 18px 14px; }
+  .fm-wrap .fm-sent { font-size: 17px; line-height: 1.9; }
+  .fm-wrap .fm-blank { min-width: 66px; }
+  .fm-wrap .fm-hint { margin-top: 12px; font-size: 13.5px; }
+  .fm-wrap .fm-answer { flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  /* 这一条单独写、并且不加 .fm-answer 前缀：/cloze 的输入框在 .cl-row 里
+     （每个空一行），不在 .fm-answer 里 —— 第一版只写了下面那条，
+     结果 /cloze 的输入框量出来是 47px，差 1px 不够手指点（断言当场抓到）。 */
+  .fm-wrap .fm-input { min-height: 48px; }
+  .fm-wrap .fm-answer .fm-input { flex: 1 1 100%; min-height: 48px; }
+  .fm-wrap .fm-answer .fm-btn { flex: 1 1 100%; min-height: 48px; font-size: 15px; }
+  .fm-wrap .fm-fb { margin-top: 16px; }
+  .fm-wrap .fm-fb-s { font-size: 15.5px; }
+  .fm-wrap .fm-foot { display: block; margin-top: 16px; }
+  .fm-wrap .fm-foot .fm-tip { display: block; margin-top: 6px; }
+  .fm-wrap .fm-chip { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; }
 }
 
 /* M2 附带：抽屉是手机端**唯一的全量菜单**（入口就在窄头左侧）。
@@ -1041,3 +1082,4 @@ body:has(.bs-shell) .bs-unit { padding-left: 0; padding-right: 0; }
 .me-row:last-child { border-bottom: none; }
 .me-row em { margin-left: auto; font-style: normal; font-size: 12px; color: var(--soft, #6b6453); }
 .me-row i { font-style: normal; font-size: 15px; color: var(--fox, #c8763a); }
+
