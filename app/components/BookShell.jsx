@@ -38,6 +38,12 @@ const BOOKS = [
   { g: 9, s: 2, short: "九下", name: "九年级下册" },
 ];
 
+/** 全站默认册 = 八年级上册。
+    目录页（BookToc）与窄头（ShellHost）此前各写了一次「catalog.books[2]」，
+    M5⑤ 的 /vocab 默认年级要问的是同一个问题 —— 定义收在这里，别再写第四份
+    （与 lib/nav.js 同一个道理：一个判断只有一个来源）。 */
+export const DEFAULT_BOOK = BOOKS[2];
+
 /**
  * 聚合词库：六册 + 每册单元（单元数来自真实数据，九下=6）
  */

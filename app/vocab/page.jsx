@@ -6,6 +6,8 @@ import { favs } from "@/lib/memory";
 import ExampleBlock from "../components/ExampleBlock";
 import LexiTabs from "../components/LexiTabs";
 import PetEmpty from "../components/PetEmpty";
+import { useBookCtx, DEFAULT_BOOK } from "../components/BookShell";
+import { useNarrow } from "@/lib/useNarrow";
 
 const GRADES = [
   { value: 0, label: "全部" },
@@ -163,6 +165,9 @@ export default function VocabPage() {
   const [unit, setUnit] = useState(null);
   const [typeFilter, setTypeFilter] = useState("all"); // all | word | phrase
   const [tick, setTick] = useState(0);
+  const [urlSeeded, setUrlSeeded] = useState(false);
+  const { book } = useBookCtx();
+  const narrow = useNarrow();
 
   useEffect(() => {
     fetch("/words.json")
@@ -172,6 +177,30 @@ export default function VocabPage() {
     const t = setInterval(() => setTick((x) => x + 1), 30000);
     return () => clearInterval(t);
   }, []);
+
+  // M5⑤：这一页以前一进来就是「先选一个年级」的空态，两步筛选之后才有东西。
+  //   ① URL 带了范围就直接进 —— 首页目录的「查看全部 ›」给的正是
+  //      /vocab?grade=&semester=，而在此之前这两个参数**被完全忽略**
+  //      （切到七上再点「查看全部」，落到的还是"先选一个年级"）。
+  //      这一条对宽窄屏都生效：它只是让那个链接兑现它自己写下的承诺。
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search);
+    const g = Number(q.get("grade"));
+    const s = Number(q.get("semester"));
+    if (!g) return;
+    setGrade(g);
+    if (s) setSemester(s);
+    setUrlSeeded(true);
+  }, []);
+
+  //   ② 没带范围、又是窄屏：默认落在"当前册"，别让人先过一个空屏。
+  //      手机端没有左栏选册，取与 BookToc / 窄头同源的默认册（DEFAULT_BOOK）。
+  //      桌面不自动选（纪律 7：桌面零回归）。
+  useEffect(() => {
+    if (urlSeeded || !narrow || grade !== 0) return;
+    setGrade((book && book.g) || DEFAULT_BOOK.g);
+    setSemester((book && book.s) || DEFAULT_BOOK.s);
+  }, [urlSeeded, narrow, grade, book]);
 
   const words = data ? data.words : [];
 
