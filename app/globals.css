@@ -3775,3 +3775,100 @@ body {
 
 /* 书签条上的「专注」入口 */
 .bs-tab.bs-focus-tab { background: transparent; border: none; cursor: pointer; font: inherit; }
+
+/* ============================================================
+   M6③ · 手机端触控下限：可点元素 ≥44px（2026-10-11）
+   ------------------------------------------------------------
+   依据是新加的 **手机视口全站体检** ui-check/cdp_msweep.js。在此之前 cdp_sweep
+   只跑桌面 1280（它第 67 行写死 setDeviceMetricsOverride），所以"手机视口全站 0 错"
+   这句话从来没有被任何脚本证明过 —— 而 方向D-手机端-UI计划 §4 里
+   /plan /evidence /phrases /affixes /mywords 那五行的验收判据，正是这一条。
+
+   实测（390×844，23 页）：
+     0 个 console 错误、0 处横向溢出 —— "不溢出"这半边本来就满足；
+     但"可点 ≥44px"这半边被系统性地违反，最集中的是 .tab 芯片：
+       .tab             31–33px  出现在 12 个页面（年级/册/题量/筛选/模式）
+       .lexi-tab        35px     /vocab /phrases /affixes
+       .speak           42×42    /recite（M6① 只修了 /train 那一个）
+       .speak.slow      38×38    /recite
+       .reveal-btn      42px     /recite
+       .bs-go           36px     / 与 /unit
+       .bs-back         40px     /unit /unit/words
+       .bs-row          43px     首页与单元页的词行（整行可点）
+       .bs-wlist-all    16px     / 与 /unit
+       .bs-forms-entry  39px     /
+       .bs-only         17px     /unit/words（打印 / 默写卷 / 背这一单元）
+       .bs-wr-spk       34×34    /unit/words 的喇叭
+       .auth-mode-btn   39px     /login
+       .db-go/.db-ghost/button.link  /train
+       select           43px     /train
+       .settings-stepper button 34×34  /settings（− / +）
+     页脚 .icp-bar 的备案链接 16px —— 只加纵向 padding 抬到 44，块高不变形。
+
+   为什么写在 globals.css **末段**，而不是像 M5①/M6① 那样在 bs.css 里凑前缀：
+     这一批要盖的对象散落在两个文件里（.bs-go/.bs-back/.bs-only/.bs-wr-spk 在 bs.css，
+     .tab/.lexi-tab/.reveal-btn/.auth-mode-btn 在 globals）。产物里 bs.css 排在
+     globals.css **之前**，所以同特异度下 globals 赢；而 globals 内部又是"后写的赢"。
+     放在 globals 末尾 = 对两边同时成立，不用逐个去凑 0.3.0 前缀。
+     ⚠️ 只有两个要单独点名：
+        .speak.slow —— 它是 0.2.0（比 .speak 的 0.1.0 高），不点它就不生效；
+        .settings-stepper button —— 那两个 − / + 没有类名，只能从父元素进去。
+
+   这一批**只加 min-height / min-width 这类下限**，不改 padding、字号、颜色，
+   所以视觉上只有"变高一点"。桌面零改动：全部落在 @media (max-width: 900px) 内。
+   ============================================================ */
+@media (max-width: 900px) {
+  /* 芯片：12 个页面共用。inline-flex 是为了让文字垂直居中 ——
+     只写 min-height 的话，多出来的高度会全部落在文字下面。 */
+  .tab { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; }
+  .lexi-tab { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; }
+
+  /* 喇叭：基准 .speak 是 42px、.speak.slow 是 38px */
+  .speak, .speak.slow { width: 44px; height: 44px; }
+  .bs-wr-spk { min-width: 44px; min-height: 44px; }
+
+  /* 按钮/整行：只抬下限 */
+  .reveal-btn, .bs-go, .bs-back, .bs-only, .bs-wlist-all, .bs-forms-entry,
+  .auth-mode-btn, .db-go, .db-ghost, .settings-toggle, button.link { min-height: 44px; }
+  .bs-back, .bs-only, .bs-wlist-all, button.link { display: inline-flex; align-items: center; }
+  .bs-row { min-height: 44px; }
+
+  /* 表单控件 */
+  select { min-height: 44px; }
+  .settings-stepper button { min-width: 44px; min-height: 44px; }
+
+  /* 页脚备案链接：只加纵向内边距，视觉上仍是细排小字 */
+  .icp-bar a { display: inline-flex; align-items: center; min-height: 44px; }
+}
+
+/* M6③ 第二轮（2026-10-11 复测后补）
+   ------------------------------------------------------------
+   第一轮把 23 页里的 19 页清到「小可点 0」；剩下 4 页共 12 个，全是同一族：
+     分页按钮 .pg-btn / .pg-num（32px，在 /affixes）
+     以及"长得像文字的链接" —— /unit 的「查看全部 N 词 ›」「⎙ 打印」、
+     /settings 的两条「去…页查看…」、/login 的「← 先不登录，继续浏览」（都是 16–17px）。
+   这些 display 不是 inline，所以吃不到探针里给"正文行内链接"留的豁免 —— 该修。 */
+@media (max-width: 900px) {
+  .pg-btn, .pg-num { min-height: 44px; }
+  .pg-num { min-width: 44px; }
+  .settings-link a, .bs-unit-words-foot a, .auth-back {
+    display: inline-flex; align-items: center; min-height: 44px;
+  }
+}
+
+/* M6③ 第三轮（2026-10-11 复检截图后补）
+   ------------------------------------------------------------
+   第一轮把 .settings-toggle 也写进了 min-height:44px 的名单里 —— 那是**错的**：
+   这个开关的轨道就是按钮本身（52×30），旋钮 .settings-toggle i 是绝对定位的 24×24。
+   只抬按钮高度，轨道被拉到 44，旋钮还停在 top:2，截图上一眼就是坏掉的
+   （白色圆点溢出到轨道外面）。**下限不能用在"本体即图形"的控件上。**
+   正确做法是按比例整套放大：轨道 76×44，旋钮 35×35，ON 位置 35px。
+   算一遍：轨道内宽 76 − 2×1.5(边框) = 73；ON 时 35 + 35 = 70 ≤ 73 ✓
+   ⚠️ 这条也提醒：cdp_style2 那种"可见节点违例"检查**测不到**这种错 ——
+      旋钮没有溢出父元素，它只是比例不对。所以手机端每批都要有人眼看截图。
+   ============================================================ */
+@media (max-width: 900px) {
+  .settings-toggle { min-height: 0; width: 76px; height: 44px; }
+  .settings-toggle i { top: 3px; left: 3px; width: 35px; height: 35px; }
+  .settings-toggle.on i { left: 35px; }
+}
