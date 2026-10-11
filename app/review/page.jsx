@@ -188,11 +188,11 @@ export default function ReviewPage() {
   }, [filteredReview, showAll]);
 
   if (!data) {
-    return <div className="wrap"><PetEmpty /></div>;
+    return <div className="wrap review-page"><PetEmpty /></div>;
   }
 
   return (
-    <div className="wrap">
+    <div className="wrap review-page">
       <ChapterHead
         variant="mag"
         chNo="01"

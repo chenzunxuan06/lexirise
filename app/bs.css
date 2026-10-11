@@ -1130,3 +1130,77 @@ body:has(.bs-shell) .bs-unit { padding-left: 0; padding-right: 0; }
 
 
 
+
+/* ============================================================
+   M6① · 答题卡（/train，2026-10-11）
+   ------------------------------------------------------------
+   390px 实测（_scratch_20261011/shoot_m6.mjs 量出来的就是下面这三条依据）：
+     · 喇叭 .speak 量到 **39×42** —— 它和单词、提示按钮挤在 .run-head 一行里，
+       flex 把它压到 42px 以下，手指点不准（判据 5「手能点准」要求 ≥44×44）；
+     · 「💡 提示」被挤成**两行**（💡 提 / 示）—— 同一个挤压的另一面：
+       它不是「竖排」，但同样是「被压坏」，判据 5 要点名消掉的就是这类；
+     · 「← 退出本轮」只有 **37px** 高，它也是手指点的；
+     · 选项块本身 50px 够高，但卡片 padding 28px 在 366px 宽的屏上吃掉 56px，
+       选项只剩 308px。
+   修法：三个可点元素各自给足 44/48，提示按钮**不换行**，卡片留白收成 18px 14px，
+   选项字 15 → 16px（对应计划里 /train 那行「答题卡字号偏小」）。
+   ⚠️ 选择器一律带 .wrap 前缀（0.3.0 / 0.4.0）：
+      .speak.big 是 0.2.0、.options .opt 是 0.2.0，而产物里 bs.css 排在
+      globals.css **之前**（原因见 M5① 那段长注释）—— 不加前缀就是静默失效，
+      当年的 .fm-sent 就是这么白写的。
+   桌面零改动：全部落在 @media (max-width: 900px) 内。
+   ⚠️ 对应断言：cdp_mshell.js 的 M6-1（喇叭 ≥44×44、退出本轮 ≥44、提示文字单行）。
+   ============================================================ */
+@media (max-width: 900px) {
+  /* 只修 quiz 模式那个小喇叭（.run-head 里的）；听力模式的 .speak.big 是 54px，
+     它是那一屏的主控件，故意大 —— 别被这条顺手改小。所以选择器写 .run-head 而不是 .train-run。 */
+  .wrap .train-run .run-head .speak { flex: 0 0 44px; width: 44px; height: 44px; font-size: 19px; }
+  .wrap .train-run .hint-btn { flex: 0 0 auto; white-space: nowrap; min-height: 44px; padding: 7px 14px; }
+  .wrap .run-toolbar .run-exit { display: inline-flex; align-items: center; min-height: 44px; }
+  .wrap .train-run .run-card { padding: 18px 14px; }
+  .wrap .train-run .options .opt { min-height: 48px; font-size: 16px; }
+}
+
+/* ============================================================
+   M6② · 复习首页（/review，2026-10-11）
+   ------------------------------------------------------------
+   两个从 390px 截图上一眼看得见的问题：
+     · 大标题 .ch-mag .ch-big 是 24px，而 .ch-side（竖排章号）固定占 64px
+       + 16px 间距 —— 只剩约 286px 去放「到期 0 词，到时间见它们了」，
+       折成两行，第二行**只挂一个「了」**。降一档到 20px，一行放得下。
+     · 「到期复习 / 错题本 / 生词本」是三个独立胶囊（.tabs.review-tabs）：
+       彼此有缝、各自约 31px 高 —— 既不像一组，也不够手指点。
+       改成**分段控件**：三段等宽、连成一体、每段 ≥44px。
+   为什么加 .review-page 根类，而不是直接改 .ch-big：
+      ChapterHead 是**全站共用**组件（/unit /stats /vocab 都用 mag 变体），
+      直接降字号会把那些页面一起改掉 —— 那是「顺手改版式」，不是这批的事，
+      也违反「桌面零回归」的同一条精神。M5④ 给 /stats 加 .stats-page 用的就是这个办法。
+   ⚠️ 特异度：.tab 在 globals 里被写了三处（L358 / L2232 / L2944，都是 0.1.0），
+      这里用 .review-page .tabs.review-tabs .tab（0.4.0）压过去。
+   ⚠️ 对应断言：cdp_mshell.js 的 M6-2（标题单行不溢出、三段等宽且 ≥44px）。
+   ============================================================ */
+@media (max-width: 900px) {
+  .review-page .ch-mag .ch-big { font-size: 20px; }
+  .review-page .tabs.review-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin: 10px 0 18px;
+    border: 1.5px solid var(--ink);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .review-page .tabs.review-tabs .tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 4px;
+    border: none;
+    border-right: 1.5px solid var(--ink);
+    border-radius: 0;
+    font-size: 13px;
+  }
+  .review-page .tabs.review-tabs .tab:last-child { border-right: none; }
+  .review-page .tabs.review-tabs .tab.active { box-shadow: none; }
+}
